@@ -68,7 +68,9 @@ GeminiTelescope/Resources/UnTicked.png -text
 GeminiTelescope/Resources/diamond1-down.gif -text
 GeminiTelescope/Resources/diamond1.gif -text
 GeminiTelescope/Resources/minus.bmp -text
+GeminiTelescope/Resources/no[!!-~]satellite.png -text
 GeminiTelescope/Resources/plus.bmp -text
+GeminiTelescope/Resources/satellite.png -text
 GeminiTelescope/Resources/starfield.png -text
 GeminiTelescope/SharedResources.cs -text
 GeminiTelescope/Speech.cs -text
