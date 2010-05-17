@@ -68,6 +68,7 @@ GeminiTelescope/Resources/UnTicked.png -text
 GeminiTelescope/Resources/diamond1-down.gif -text
 GeminiTelescope/Resources/diamond1.gif -text
 GeminiTelescope/Resources/minus.bmp -text
+GeminiTelescope/Resources/no[!!-~]fix[!!-~]satellite.png -text
 GeminiTelescope/Resources/no[!!-~]satellite.png -text
 GeminiTelescope/Resources/plus.bmp -text
 GeminiTelescope/Resources/satellite.png -text
@@ -81,6 +82,7 @@ GeminiTelescope/TelescopeSetupDialogForm.resx -text
 GeminiTelescope/Tracer.cs -text
 GeminiTelescope/UserCommand.cs -text
 GeminiTelescope/Win32API.cs -text
+GeminiTelescope/app.config -text
 GeminiTelescope/frmAdvancedSettings.Designer.cs -text
 GeminiTelescope/frmAdvancedSettings.cs -text
 GeminiTelescope/frmAdvancedSettings.resx -text
