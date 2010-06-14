@@ -57,8 +57,9 @@ GeminiTelescope/Properties/AssemblyInfo.cs -text
 GeminiTelescope/Properties/Resources.Designer.cs -text
 GeminiTelescope/Properties/Resources.en-GB.Designer.cs -text
 GeminiTelescope/Properties/Resources.en-GB.resx -text
+GeminiTelescope/Properties/Resources.fr.resx -text
 GeminiTelescope/Properties/Resources.resx -text
-GeminiTelescope/Properties/Resources.ru-RU.resx -text
+GeminiTelescope/Properties/Resources.ru.resx -text
 GeminiTelescope/ReadMe.htm -text
 GeminiTelescope/ReferenceCountedObject.cs -text
 GeminiTelescope/Resource1.Designer.cs -text
@@ -78,6 +79,7 @@ GeminiTelescope/Speech.cs -text
 GeminiTelescope/TButton.cs -text
 GeminiTelescope/TelescopeSetupDialogForm.cs -text
 GeminiTelescope/TelescopeSetupDialogForm.designer.cs -text
+GeminiTelescope/TelescopeSetupDialogForm.fr.resx -text
 GeminiTelescope/TelescopeSetupDialogForm.resx -text
 GeminiTelescope/Tracer.cs -text
 GeminiTelescope/UserCommand.cs -text
@@ -97,6 +99,7 @@ GeminiTelescope/frmJoystickConfig.cs -text
 GeminiTelescope/frmJoystickConfig.resx -text
 GeminiTelescope/frmMain.cs -text
 GeminiTelescope/frmMain.designer.cs -text
+GeminiTelescope/frmMain.fr.resx -text
 GeminiTelescope/frmMain.resx -text
 GeminiTelescope/frmModel.Designer.cs -text
 GeminiTelescope/frmModel.cs -text
@@ -113,6 +116,10 @@ GeminiTelescope/frmPassThroughPortSetup.resx -text
 GeminiTelescope/frmProgress.Designer.cs -text
 GeminiTelescope/frmProgress.cs -text
 GeminiTelescope/frmProgress.resx -text
+GeminiTelescope/frmRA_DEC.Designer.cs -text
+GeminiTelescope/frmRA_DEC.cs -text
+GeminiTelescope/frmRA_DEC.fr.resx -text
+GeminiTelescope/frmRA_DEC.resx -text
 GeminiTelescope/frmSafetyLimits.Designer.cs -text
 GeminiTelescope/frmSafetyLimits.cs -text
 GeminiTelescope/frmSafetyLimits.resx -text
