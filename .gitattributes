@@ -34,6 +34,7 @@ GeminiTelescope/AstronomyFunctions.cs -text
 GeminiTelescope/ClassFactory.cs -text
 GeminiTelescope/CollapsibleGroupBox.Designer.cs -text
 GeminiTelescope/CollapsibleGroupBox.cs -text
+GeminiTelescope/Connection.cs -text
 GeminiTelescope/Documentation/Gemini[!!-~]Telescope[!!-~]Net[!!-~]Installation[!!-~]and[!!-~]Operation.docx -text
 GeminiTelescope/Documentation/Gemini[!!-~]Telescope[!!-~]Net[!!-~]Installation[!!-~]and[!!-~]Operation.pdf -text
 GeminiTelescope/Documentation/GeminiHardware.chm -text
@@ -104,6 +105,10 @@ GeminiTelescope/frmMain.resx -text
 GeminiTelescope/frmModel.Designer.cs -text
 GeminiTelescope/frmModel.cs -text
 GeminiTelescope/frmModel.resx -text
+GeminiTelescope/frmNetworkSettings.Designer.cs -text
+GeminiTelescope/frmNetworkSettings.cs -text
+GeminiTelescope/frmNetworkSettings.de.resx -text
+GeminiTelescope/frmNetworkSettings.resx -text
 GeminiTelescope/frmObservationLog.Designer.cs -text
 GeminiTelescope/frmObservationLog.cs -text
 GeminiTelescope/frmObservationLog.resx -text
