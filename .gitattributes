@@ -34,6 +34,7 @@ GeminiTelescope/AstronomyFunctions.cs -text
 GeminiTelescope/ClassFactory.cs -text
 GeminiTelescope/CollapsibleGroupBox.Designer.cs -text
 GeminiTelescope/CollapsibleGroupBox.cs -text
+GeminiTelescope/CommandItem.cs -text
 GeminiTelescope/Connection.cs -text
 GeminiTelescope/Documentation/Gemini[!!-~]Telescope[!!-~]Net[!!-~]Installation[!!-~]and[!!-~]Operation.docx -text
 GeminiTelescope/Documentation/Gemini[!!-~]Telescope[!!-~]Net[!!-~]Installation[!!-~]and[!!-~]Operation.pdf -text
@@ -42,6 +43,7 @@ GeminiTelescope/FocuserSetupDialogForm.Designer.cs -text
 GeminiTelescope/FocuserSetupDialogForm.cs -text
 GeminiTelescope/FocuserSetupDialogForm.resx -text
 GeminiTelescope/GarbageCollection.cs -text
+GeminiTelescope/Gemini5Hardware.cs -text
 GeminiTelescope/GeminiCommands.cs -text
 GeminiTelescope/GeminiError.cs -text
 GeminiTelescope/GeminiHardware.cs -text
@@ -79,9 +81,11 @@ GeminiTelescope/SharedResources.cs -text
 GeminiTelescope/Speech.cs -text
 GeminiTelescope/TButton.cs -text
 GeminiTelescope/TelescopeSetupDialogForm.cs -text
+GeminiTelescope/TelescopeSetupDialogForm.de.resx -text
 GeminiTelescope/TelescopeSetupDialogForm.designer.cs -text
 GeminiTelescope/TelescopeSetupDialogForm.fr.resx -text
 GeminiTelescope/TelescopeSetupDialogForm.resx -text
+GeminiTelescope/TelescopeSetupDialogForm.ru.resx -text
 GeminiTelescope/Tracer.cs -text
 GeminiTelescope/UserCommand.cs -text
 GeminiTelescope/Win32API.cs -text
