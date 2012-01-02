@@ -316,6 +316,8 @@ namespace ASCOM.GeminiTelescope
             set
             {
                 int count = 0;
+                comboBoxSites.Items.Clear();
+
                 foreach (SiteInfo inf in value)
                 {
 
@@ -323,6 +325,25 @@ namespace ASCOM.GeminiTelescope
                         comboBoxSites.Items.Add(inf);
 
                     count ++;
+                }
+
+                // get index of the currently active site, and select it in the combo box:
+                if (GeminiHardware.Instance.Connected && GeminiHardware.Instance.GeminiLevel > 4)
+                {
+                    string c_site = GeminiHardware.Instance.DoCommandResult(":W?", GeminiHardware.Instance.MAX_TIMEOUT, false);
+                    int idx = 0;
+                    int.TryParse(c_site, out idx);
+
+                    string site0 = GeminiHardware.Instance.DoCommandResult(":G0", GeminiHardware.Instance.MAX_TIMEOUT, false);
+                    if (idx == 0) 
+                        comboBoxSites.Items.Insert(0, site0 ?? "[Site 0]");
+                    else
+                        comboBoxSites.Items.Insert(0, "[Site 0]");                    
+
+                    if (idx == -1)
+                        comboBoxSites.SelectedIndex = -1;
+                    else
+                        comboBoxSites.SelectedIndex = idx;
                 }
             }
         }
@@ -639,6 +660,13 @@ namespace ASCOM.GeminiTelescope
                         GeminiHardware.Instance.SetLatitude(Latitude);
                         GeminiHardware.Instance.SetLongitude(Longitude);
                         GeminiHardware.Instance.UTCOffset = -TZ;
+
+                        if (GeminiHardware.Instance.GeminiLevel > 4)
+                        {
+                            GeminiHardware.Instance.SiteName = comboBoxSites.Text;
+                            Sites = GeminiHardware.Instance.Sites;
+                        }
+
                     }
                     catch
                     {
@@ -676,7 +704,7 @@ namespace ASCOM.GeminiTelescope
                     Latitude = GeminiHardware.Instance.Latitude;
                     TZ = -GeminiHardware.Instance.UTCOffset;
                 }
-                else if (comboBoxSites.SelectedIndex == 4)  //restore original values
+                else if ((string)comboBoxSites.SelectedItem == "(Restore Previous)" )  //restore original values
                 {
                     GeminiHardware.Instance.Longitude = m_SaveLongitude;
                     GeminiHardware.Instance.Latitude = m_SaveLatitude;

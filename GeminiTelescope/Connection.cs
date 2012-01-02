@@ -160,7 +160,7 @@ namespace ASCOM.GeminiTelescope
             return null;    // no luck, give up.
         }
 
-        private void TransmitUDP(string s)
+        internal void TransmitUDP(string s)
         {
 
             UDP_buff = (UDP_buff==UDP_datagram1? UDP_datagram2 : UDP_datagram1);
@@ -174,11 +174,11 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Instance.UDP_client.Send(UDP_buff, UDP_len_lastdatagram, GeminiHardware.Instance.UDP_endpoint);
         }
        
-        private void TransmitUDP(byte[] cmd)
+        internal void TransmitUDP(byte[] cmd)
         {
             UDP_buff = (UDP_buff == UDP_datagram1 ? UDP_datagram2 : UDP_datagram1);
             Array.Copy(System.BitConverter.GetBytes(PacketCount), 0, UDP_buff, 0, 4);
-            Trace.Info(0, "TransmitUDP packet#, cmd", PacketCount, cmd);
+            Trace.Info(0, "TransmitUDP packet#, cmd", PacketCount, ASCIIEncoding.ASCII.GetString(cmd));
             PacketCount++; 
             Array.Copy(cmd, 0, UDP_buff, 8, cmd.Length);
             UDP_len_lastdatagram = cmd.Length + 8;
@@ -600,10 +600,10 @@ wait_again:
             // return value for native commands has a checksum appended: validate it and remove it from the return string:
             if (!string.IsNullOrEmpty(result) && (command.m_Command[0] == '<' || command.m_Command[0] == '>') && !command.m_Raw)
             {
-                char chksum = result[result.Length - 1];
+                byte chksum = (byte)result[result.Length - 1];
                 result = result.Substring(0, result.Length - 1); //remove checksum character
 
-                if ((((int)chksum) & 0x7f) != (ComputeChecksum(result) & 0x7f))  // bad checksum -- ignore the return value! 
+                if ((((int)chksum) & m_ChecksumMask) != (ComputeChecksum(result) & m_ChecksumMask))  // bad checksum -- ignore the return value! 
                 {
                     Trace.Error("Bad Checksum", command.m_Command, result);
 
@@ -611,6 +611,7 @@ wait_again:
                     AddOneMoreError();
                     result = null;
                 }
+
             }
 
             Trace.Info(0, "Ethernet received:", command.m_Command, result);
@@ -781,10 +782,11 @@ wait_again:
             // return value for native commands has a checksum appended: validate it and remove it from the return string:
             if (!string.IsNullOrEmpty(result) && (command.m_Command[0] == '<' || command.m_Command[0] == '>') && !command.m_Raw)
             {
-                char chksum = result[result.Length - 1];
+                byte chksum = (byte)result[result.Length - 1];
+
                 result = result.Substring(0, result.Length - 1); //remove checksum character
 
-                if ((((int)chksum) & 0x7f) != (ComputeChecksum(result) & 0x7f))  // bad checksum -- ignore the return value! 
+                if ((((int)chksum) & m_ChecksumMask) != (ComputeChecksum(result) & m_ChecksumMask))  // bad checksum -- ignore the return value! 
                 {
                     Trace.Error("Bad Checksum", command.m_Command, result);
 
@@ -908,7 +910,7 @@ wait_again:
                         // response to commands (longitude, latitude, etc.) 
                         // it must occur inside the string to be a legitimate response,
                         // otherwise consider it part of a binary stream meant for the passthrough port
-                        if ((int)c >= 0x80 && (c != 223 || res.Length == 0)) outp.Append(c);
+                        if (GeminiLevel < 5 && ((int)c >= 0x80 && (c != 223 || res.Length == 0))) outp.Append(c);
                         else
                             res.Append(c);
                     }
@@ -947,7 +949,7 @@ wait_again:
                 while (m_SerialPort.BytesToRead > 0)
                 {
                     byte c = (byte)m_SerialPort.ReadByte();
-                    if ((int)c >= 0x80)
+                    if (GeminiLevel < 5 && (int)c >= 0x80)
                         outp.Append(Convert.ToChar(c));
                     else
                         res.Append(Convert.ToChar(c));
@@ -997,7 +999,7 @@ wait_again:
                     // response to commands (longitude, latitude, etc.) 
                     // it must occur inside the string to be a legitimate response,
                     // otherwise consider it part of a binary stream meant for the passthrough port
-                    if ((int)c >= 0x80 && (c != 223 || res.Length == 0)) outp.Append(c);
+                    if (GeminiLevel < 5 && ((int)c >= 0x80 && (c != 223 || res.Length == 0))) outp.Append(c);
                     else
                     {
                         res.Append(c);
@@ -1042,7 +1044,7 @@ wait_again:
                 byte c = (byte)EthernetResult[0];
                 EthernetResult = EthernetResult.Remove(0, 1);
 
-                if ((int)c >= 0x80)
+                if (GeminiLevel < 5 && (int)c >= 0x80)
                     outp.Append(Convert.ToChar(c));
                 else
                     res.Append(Convert.ToChar(c));
@@ -1110,7 +1112,7 @@ wait_again:
                 while (m_SerialPort.BytesToRead > 0)
                 {
                     int c = m_SerialPort.ReadByte();
-                    if (c >= 0x80) sb.Append(Convert.ToChar(c));
+                    if (GeminiLevel < 5 && c >= 0x80) sb.Append(Convert.ToChar(c));
                 }
                 if (sb.Length > 0 && (m_PassThroughPort != null && m_PassThroughPort.PortActive))
                     m_PassThroughPort.PassStringToPort(sb);

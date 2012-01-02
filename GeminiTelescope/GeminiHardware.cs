@@ -150,6 +150,10 @@ namespace ASCOM.GeminiTelescope
 
         internal bool m_AdditionalAlign;
 
+
+        internal int m_ChecksumMask = 0x7f; // default for L4 and lower, 0xff for level 5 and above
+
+        
         public bool SwapSyncAdditionalAlign
         {
             get { return m_AdditionalAlign; }
@@ -1469,6 +1473,9 @@ namespace ASCOM.GeminiTelescope
 
         }
 
+
+        private int m_GeminiLevel = 4;
+
         /// <summary>
         /// return integer Level number for Gemini (4, 5, etc.)
         /// </summary>
@@ -1476,7 +1483,12 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                return int.Parse(Version.Substring(0,1));
+                return m_GeminiLevel;
+            }
+
+            set
+            {
+                m_GeminiLevel = value;
             }
         }
 
@@ -1795,6 +1807,51 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+
+        public virtual double TimeToWestLimit
+        {
+            get
+            {
+                string safety = DoCommandResult("<230:", MAX_TIMEOUT, false);
+                string position = DoCommandResult("<235:", MAX_TIMEOUT, false);
+                string size = DoCommandResult("<237:", MAX_TIMEOUT, false);
+                if (safety == null || position == null || size == null) throw new TimeoutException(); //???
+
+                string[] sp = safety.Split(new char[] { ';' });
+                if (sp == null || sp.Length != 2) throw new TimeoutException(); //???
+
+                int west_limit = 0;
+
+                // west limit in clusters of 256 motor encoder ticks
+                if (!int.TryParse(sp[1], out west_limit)) throw new TimeoutException(); //???
+
+
+                sp = position.Split(new char[] { ';' });
+                if (sp == null || sp.Length != 2) throw new TimeoutException(); //???
+                int ra_clusters = 0;
+
+                // current RA position in clusters of 256 motor encoder ticks
+                if (!int.TryParse(sp[0], out ra_clusters)) throw new TimeoutException(); //???
+
+                sp = size.Split(new char[] { ';' });
+                if (sp == null || sp.Length != 2) throw new TimeoutException(); //???
+                int size_clusters = 0;
+
+                // size of 1/2 a cirlce (180 degrees) in RA in clusters of 256 motor encoder ticks
+                if (!int.TryParse(sp[0], out size_clusters)) throw new TimeoutException(); //???
+
+                double rate = SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0; //sidereal rate per second
+
+                // sidereal tracking rate in clusters per second:
+                rate = (double)size_clusters * (SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0) / 180.0;
+
+                double distance = ra_clusters - west_limit;
+
+                return distance / rate; // in seconds
+            }
+            set { }
+        }
+
         /// <summary>
         /// select one of 4 pre-defined sites in Gemini memory
         /// </summary>
@@ -1802,7 +1859,15 @@ namespace ASCOM.GeminiTelescope
         /// <returns></returns>
         public bool SetSiteNumber( int siteNumber )
         {
-            if (siteNumber < 0 || siteNumber >= 4) return false; // only 4 supported by Gemini
+            int minSite = 0;
+            int maxSite = 3;
+            // L5 changed site addressing to use 1 to 4 instead of 0 to 3:
+            if (GeminiLevel > 4)
+            {
+                maxSite = 4;
+            }
+
+            if (siteNumber < minSite  || siteNumber > maxSite) return false; // only 4 supported by Gemini
             DoCommandResult(":W" + siteNumber.ToString(), MAX_TIMEOUT, false);
             UpdateSiteInfo();
             return true;
@@ -3217,7 +3282,7 @@ namespace ASCOM.GeminiTelescope
                     }
 
                     m_GeminiVersion = ver;
-
+                    GeminiLevel = int.Parse(ver.Substring(0, 1));
                     // add and remove commands as needed for Level 5
                     if (GeminiLevel > 4) GeminiCommands.GeminiCommandsL5();
                 }
@@ -3281,7 +3346,7 @@ namespace ASCOM.GeminiTelescope
 
         internal int m_PollUpdateCount = 0;    // keep track of number of updates
 
-        internal void UpdatePolledVariables(bool bUpdateAll)
+        internal virtual void UpdatePolledVariables(bool bUpdateAll)
         {
             Trace.Enter("UpdatePolledVariables", bUpdateAll);
             _UpdatePolledVariables();
@@ -3968,6 +4033,31 @@ namespace ASCOM.GeminiTelescope
         }
 
         /// <summary>
+        /// Sets the name of the currently active site
+        /// </summary>
+        /// <param name="name"></param>
+        public string SiteName
+        {
+
+            set
+            {
+                if (GeminiLevel > 4)
+                {
+                    string name = value;
+                    if (string.IsNullOrEmpty(name)) name = "Unknown";
+                    if (name.Length > 15) name = name.Substring(0, 15);
+
+                    string c_site = DoCommandResult(":W?", GeminiHardware.Instance.MAX_TIMEOUT, false);
+                    string[] site_cmd = new string[] { ":S0", ":SM", ":SN", ":SO", ":SP" };
+
+                    int idx = 0;
+                    int.TryParse(c_site, out idx);
+                    DoCommandResult(site_cmd[idx] + name, MAX_TIMEOUT, false);
+                }
+            }
+        }
+
+        /// <summary>
         /// Get current SiderealTime propery
         /// retrieved from the latest polled value from the mount, no actual command is executed
         /// </summary>
@@ -4371,7 +4461,7 @@ namespace ASCOM.GeminiTelescope
         ///     16: PEC training will start soon,
         ///   0xff: failed to get status
         /// </summary>
-        public byte PECStatus
+        public virtual byte PECStatus
         {
             get
             {
@@ -4384,6 +4474,18 @@ namespace ASCOM.GeminiTelescope
             {
                 DoCommand(">509:" + value.ToString(), false);            
             }
+        }
+
+
+        public virtual double HourAngle
+        {
+            get
+            {
+                string res = DoCommandResult(":GH", 2000, false);
+                return m_Util.HMSToHours(res);
+            }
+
+            set { }
         }
 
 
@@ -4618,7 +4720,7 @@ namespace ASCOM.GeminiTelescope
             for (int i = 0; i < p.Length; ++i)
                 chksum ^= (byte)p[i];
 
-            return (char)((chksum & 0x7f) + 0x40);
+            return (char)((chksum & m_ChecksumMask) + 0x40);
         }
 
        
@@ -4701,6 +4803,16 @@ namespace ASCOM.GeminiTelescope
                 m_AppCulture = Application.CurrentCulture;
                 bNeedCulture = (m_CurrCulture.NumberFormat.NumberDecimalSeparator != m_AppCulture.NumberFormat.NumberDecimalSeparator);
             }
+        }
+
+        public bool StringToDouble(string v, out double res)
+        {
+            bool b = false;
+
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            b = double.TryParse(v, out res);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return b;
         }
 
         new public string DegreesToDM(double Degrees)

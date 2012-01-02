@@ -82,6 +82,14 @@ namespace ASCOM.GeminiTelescope
             Trace.Info(2, "Setting DOUBLE PRECISION");
             DoCommandResult(":u", MAX_TIMEOUT, false);
             DoublePrecision = true;
+
+            Trace.Info(2, "Setting extended checksum for L5");
+            DoCommandResult(">91:1", MAX_TIMEOUT, false);
+
+            string res = DoCommandResult("<91:", MAX_TIMEOUT, false);
+            if (res=="1")
+                m_ChecksumMask = 0xff;
+
             base.SendStartUpCommands();
             //Setting double-precision mode:
         }
@@ -216,7 +224,27 @@ namespace ASCOM.GeminiTelescope
                 else
                     return base.MaxCommands;
             }
-        }        
+        }
+
+        internal override void UpdatePolledVariables(bool bUpdateAll)
+        {
+            if (GeminiLevel >= 5)
+            {
+                // use macro command 00 to get all the values in one shot if this is Level 5 using UDP:
+                if (EthernetPort && UDP)
+                {
+                    __UpdatePolledVariablesUDP();
+                    return;
+                }
+            }
+
+            Trace.Enter("UpdatePolledVariables5", bUpdateAll);
+            _UpdatePolledVariables();
+            //two calls needed to fetch all the variables:
+            if (bUpdateAll) _UpdatePolledVariables();
+            Trace.Exit("UpdatePolledVariables5", bUpdateAll);
+        }
+
 
         internal override void _UpdatePolledVariables()
         {
@@ -250,6 +278,155 @@ namespace ASCOM.GeminiTelescope
             base._UpdatePolledVariables();
         }
 
+        static byte [] macro_req = new byte[] { 0x05, 00, 00, 00 };
+
+        private void __UpdatePolledVariablesUDP()
+        {
+
+            Trace.Enter("_UpdatePolledVariablesUDP");
+
+            lock (m_SerialPort)
+            {
+                try
+                {
+                    DiscardInBuffer(); //clear all received data
+                    GeminiHardware.Instance.TransmitUDP(macro_req);
+                }
+                catch
+                {
+                    GeminiHardware.Instance.ResyncEthernet();
+                    TransmitUDP(macro_req);
+                }
+            }
+
+            string macro = getUDPCommandResult(2000);
+            if (macro == null)
+            {
+                Trace.Error("timeout", "UpdatePolledVariablesUDP");
+                return;
+            }
+
+            string [] res = macro.Split(';');
+
+            Trace.Info(4, "UDP Macro 0 result", macro);
+
+            /*
+                0 PRA 2591823;
+                1 PDEC 2592000;
+                2 RA 19.467428;
+                3 DEC +0.179764;
+                4 HA
+             
+                5 Az 270.204063;
+                6 El -28.246181;
+                7 Gv N;
+                8 GW N;
+                9 Gw N;
+                10 Gm E;
+                11 GS 3.350518;
+                12 h? 0;
+                13 PEC 0;
+                14 Western limit 50963.891895;
+                15 <99: 1;
+                16 B076D900;
+             * 
+             */
+
+            try
+            {
+                //m_PollUpdateCount++;
+
+                //Get RA and DEC etc
+
+                string trc = "";
+
+                string RA = res[2];
+                string DEC = res[3];
+                string HA = res[4];
+                string ALT = res[6];
+                string AZ = res[5];
+                string V = res[7];
+                if (RA != null) m_RightAscension = m_Util.HMSToHours(RA);
+                if (DEC != null) m_Declination = m_Util.DMSToDegrees(DEC);
+                if (ALT != null) m_Altitude = m_Util.DMSToDegrees(ALT);
+                if (AZ != null) m_Azimuth = m_Util.DMSToDegrees(AZ);
+                if (V != null) m_Velocity = V;
+                if (HA != null) m_HourAngle = m_Util.HMSToHours(HA);
+
+                trc = "RA=" + RA + ", DEC=" + DEC + "ALT=" + ALT + "HA=" + HA + " AZ=" + AZ + " Velocity=" + Velocity;
+
+                string ST = res[11];
+                string SOP = res[10];
+
+                string STATUS = res[15];
+                string HOME = res[12];
+
+                if (Velocity == "N") m_Tracking = false;
+                else
+                    m_Tracking = true;
+
+
+                m_SiderealTime = m_Util.HMSToHours(ST);
+                m_SideOfPier = SOP;
+
+                m_ParkState = HOME;
+
+                if ((m_ParkWasExecuted || m_AtPark || m_AtHome) && Velocity != "N") //unparked!
+                {
+                    m_AtPark = false;
+                    m_AtHome = false;
+                    LastParkOperation = "";
+                    m_ParkWasExecuted = false;
+                }
+
+                if (STATUS != null)
+                {
+                    int.TryParse(STATUS, out m_GeminiStatusByte);
+
+                    // if reached safety limit, send out one notification 
+                    if ((m_GeminiStatusByte & 16) != 0 && !m_SafetyNotified)
+                    {
+                        if (OnSafetyLimit != null) OnSafetyLimit();
+                        m_SafetyNotified = true;
+                    }
+                    else if ((m_GeminiStatusByte & 16) == 0) m_SafetyNotified = false;
+                }
+
+                trc += " SOP=" + SOP + " HOME=" + HOME + " Status=" + m_GeminiStatusByte.ToString();
+
+                double TOLIMIT = 0;
+                if (m_Util.StringToDouble(res[14], out TOLIMIT))
+                    TimeToWestLimit = TOLIMIT;
+
+
+                byte pec = 0;
+                if (byte.TryParse(res[13], out pec))
+                    m_PECStatus = pec;
+
+                string change = res[16];
+                if (change != null && change.Length == 8)
+                {
+                    m_CurrentUpdateState = change;
+                }
+
+
+
+                if (m_CurrentUpdateState != m_PreviousUpdateState) ProcessUpdates();
+
+                Trace.Info(4, trc);
+                m_LastUpdate = System.DateTime.Now;
+            }
+            catch (Exception e)
+            {
+                Trace.Except(e);
+                m_SerialPort.DiscardOutBuffer();
+                DiscardInBuffer();
+            }
+
+            Trace.Exit("UpdatePolledVariables");
+
+        }
+
         /// <summary>
         /// Fire update delegates if Gemini5 returned a change in status flag
         /// </summary>
@@ -269,5 +446,72 @@ namespace ASCOM.GeminiTelescope
                 ThreadPool.QueueUserWorkItem(new WaitCallback(a => OnSpeedChanged()));
             m_PreviousUpdateState = m_CurrentUpdateState;
         }
+
+
+        private double m_TimeToWestLimit = double.NaN;
+
+        public override double TimeToWestLimit
+        {
+            get
+            {
+                if (EthernetPort && UDP) // this is part of a polled macro command when using UDP
+                {
+                    if (m_TimeToWestLimit == double.NaN) throw new TimeoutException();
+                    return m_TimeToWestLimit;
+                }
+                else return base.TimeToWestLimit;
+            }
+            set
+            {
+                m_TimeToWestLimit = value;
+            }
+        }
+
+        private byte m_PECStatus = 0;
+
+        /// <summary>
+        /// Set/Get PEC Status byte from Gemini
+        ///  PEC status. Decimal
+        ///     1: PEC active,
+        ///     2: freshly trained (not yet altered) PEC data are available as current PEC data,
+        ///     4: PEC training in progress,
+        ///     8: PEC training was just completed,
+        ///     16: PEC training will start soon,
+        ///   0xff: failed to get status
+        /// </summary>
+        public override byte PECStatus
+        {
+            get
+            {
+                if (EthernetPort && UDP) // this is part of a polled macro command when using UDP
+                    return m_PECStatus;
+                else
+                    return base.PECStatus;
+            }
+            set
+            {
+                DoCommand(">509:" + value.ToString(), false);
+            }
+        }
+
+
+
+        private double m_HourAngle = 0;
+
+        public override double HourAngle
+        {
+            get
+            {
+                if (EthernetPort && UDP) // this is part of a polled macro command when using UDP
+                    return m_HourAngle;
+                else
+                    return base.HourAngle;
+            }
+
+            set {
+                m_HourAngle = value;
+            }
+        }
+
     }
 }
