@@ -40,6 +40,8 @@
             this.labelVersion = new System.Windows.Forms.Label();
             this.labelCopyright = new System.Windows.Forms.Label();
             this.linkLabel5 = new System.Windows.Forms.LinkLabel();
+            this.linkLabel6 = new System.Windows.Forms.LinkLabel();
+            this.linkLabel7 = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.GeminiPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ASCOMpictureBox)).BeginInit();
             this.SuspendLayout();
@@ -64,7 +66,7 @@
             this.ASCOMpictureBox.BackgroundImage = global::ASCOM.GeminiTelescope.Properties.Resources.ASCOM;
             this.ASCOMpictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ASCOMpictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.ASCOMpictureBox.Location = new System.Drawing.Point(494, 361);
+            this.ASCOMpictureBox.Location = new System.Drawing.Point(514, 361);
             this.ASCOMpictureBox.Name = "ASCOMpictureBox";
             this.ASCOMpictureBox.Size = new System.Drawing.Size(61, 77);
             this.ASCOMpictureBox.TabIndex = 1;
@@ -130,19 +132,19 @@
             this.label3.ForeColor = System.Drawing.Color.White;
             this.label3.Location = new System.Drawing.Point(13, 204);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(154, 24);
+            this.label3.Size = new System.Drawing.Size(212, 24);
             this.label3.TabIndex = 6;
-            this.label3.Text = "With Help from:";
+            this.label3.Text = "With lots of help from:";
             // 
             // linkLabel3
             // 
             this.linkLabel3.AutoSize = true;
             this.linkLabel3.BackColor = System.Drawing.Color.Transparent;
-            this.linkLabel3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabel3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabel3.LinkColor = System.Drawing.Color.Cyan;
-            this.linkLabel3.Location = new System.Drawing.Point(27, 312);
+            this.linkLabel3.Location = new System.Drawing.Point(141, 313);
             this.linkLabel3.Name = "linkLabel3";
-            this.linkLabel3.Size = new System.Drawing.Size(133, 24);
+            this.linkLabel3.Size = new System.Drawing.Size(113, 20);
             this.linkLabel3.TabIndex = 7;
             this.linkLabel3.TabStop = true;
             this.linkLabel3.Text = "Peter Simpson";
@@ -151,11 +153,11 @@
             // 
             this.linkLabel4.AutoSize = true;
             this.linkLabel4.BackColor = System.Drawing.Color.Transparent;
-            this.linkLabel4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabel4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabel4.LinkColor = System.Drawing.Color.Cyan;
-            this.linkLabel4.Location = new System.Drawing.Point(27, 275);
+            this.linkLabel4.Location = new System.Drawing.Point(141, 274);
             this.linkLabel4.Name = "linkLabel4";
-            this.linkLabel4.Size = new System.Drawing.Size(102, 24);
+            this.linkLabel4.Size = new System.Drawing.Size(85, 20);
             this.linkLabel4.TabIndex = 8;
             this.linkLabel4.TabStop = true;
             this.linkLabel4.Text = "Tom Hilton";
@@ -180,22 +182,48 @@
             this.labelCopyright.ForeColor = System.Drawing.Color.White;
             this.labelCopyright.Location = new System.Drawing.Point(155, 403);
             this.labelCopyright.Name = "labelCopyright";
-            this.labelCopyright.Size = new System.Drawing.Size(323, 18);
+            this.labelCopyright.Size = new System.Drawing.Size(344, 18);
             this.labelCopyright.TabIndex = 11;
-            this.labelCopyright.Text = "Copyright © 2009 Paul Kanevsky, Robert Turner";
+            this.labelCopyright.Text = "Copyright © 2009-12 Paul Kanevsky, Robert Turner";
             // 
             // linkLabel5
             // 
             this.linkLabel5.AutoSize = true;
             this.linkLabel5.BackColor = System.Drawing.Color.Transparent;
-            this.linkLabel5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabel5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabel5.LinkColor = System.Drawing.Color.Cyan;
-            this.linkLabel5.Location = new System.Drawing.Point(27, 237);
+            this.linkLabel5.Location = new System.Drawing.Point(27, 274);
             this.linkLabel5.Name = "linkLabel5";
-            this.linkLabel5.Size = new System.Drawing.Size(128, 24);
+            this.linkLabel5.Size = new System.Drawing.Size(108, 20);
             this.linkLabel5.TabIndex = 12;
             this.linkLabel5.TabStop = true;
             this.linkLabel5.Text = "Mark Crossley";
+            // 
+            // linkLabel6
+            // 
+            this.linkLabel6.AutoSize = true;
+            this.linkLabel6.BackColor = System.Drawing.Color.Transparent;
+            this.linkLabel6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabel6.LinkColor = System.Drawing.Color.Cyan;
+            this.linkLabel6.Location = new System.Drawing.Point(27, 313);
+            this.linkLabel6.Name = "linkLabel6";
+            this.linkLabel6.Size = new System.Drawing.Size(108, 20);
+            this.linkLabel6.TabIndex = 13;
+            this.linkLabel6.TabStop = true;
+            this.linkLabel6.Text = "Benoit Robert";
+            // 
+            // linkLabel7
+            // 
+            this.linkLabel7.AutoSize = true;
+            this.linkLabel7.BackColor = System.Drawing.Color.Transparent;
+            this.linkLabel7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabel7.LinkColor = System.Drawing.Color.Cyan;
+            this.linkLabel7.Location = new System.Drawing.Point(27, 239);
+            this.linkLabel7.Name = "linkLabel7";
+            this.linkLabel7.Size = new System.Drawing.Size(102, 20);
+            this.linkLabel7.TabIndex = 14;
+            this.linkLabel7.TabStop = true;
+            this.linkLabel7.Text = "René Görlich";
             // 
             // AboutBox1
             // 
@@ -203,7 +231,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::ASCOM.GeminiTelescope.Properties.Resources.starfield;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(567, 450);
+            this.ClientSize = new System.Drawing.Size(587, 450);
+            this.Controls.Add(this.linkLabel7);
+            this.Controls.Add(this.linkLabel6);
             this.Controls.Add(this.linkLabel5);
             this.Controls.Add(this.labelCopyright);
             this.Controls.Add(this.labelVersion);
@@ -247,6 +277,8 @@
         private System.Windows.Forms.Label labelVersion;
         private System.Windows.Forms.Label labelCopyright;
         private System.Windows.Forms.LinkLabel linkLabel5;
+        private System.Windows.Forms.LinkLabel linkLabel6;
+        private System.Windows.Forms.LinkLabel linkLabel7;
 
     }
 }
