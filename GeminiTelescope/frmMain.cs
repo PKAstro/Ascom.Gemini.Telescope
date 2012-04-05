@@ -1161,7 +1161,7 @@ namespace ASCOM.GeminiTelescope
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-//            Palette.SetPalette(this.Handle);
+            //Palette.SetPalette(this.Handle);
 
             try
             {
@@ -1277,6 +1277,8 @@ namespace ASCOM.GeminiTelescope
 
         private void ButtonConnect_Click(object sender, EventArgs e)
         {
+            //Palette.SetPalette(this.Handle);
+
             if (GeminiHardware.Instance.IsConnecting)
             {
                 GeminiHardware.Instance.IsConnecting = false;
@@ -1919,9 +1921,44 @@ namespace ASCOM.GeminiTelescope
             frmObject.Show(this);
         }
 
+        private void parkAtZenithToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (GeminiHardware.Instance.Connected)
+            {
+                DialogResult res = MessageBox.Show("Do you really want to " + Resources.ParkAtZenith + "?", "Telescope Park", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if (res == DialogResult.Yes)
+                {
+
+                    this.UseWaitCursor = true;
+                    Speech.SayIt(Resources.ParkAtZenith, Speech.SpeechType.Command);
+                    GeminiHardware.Instance.DoParkAsync(GeminiHardwareBase.GeminiParkMode.SlewZenith);
+                    //                GeminiHardware.Instance.DoCommand(":hP", false);
+                    this.UseWaitCursor = false;
+                }
+            }
+
+        }
+
+        static frmPEC frmPECConfig = null; 
+
+        private void configurePECToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (frmPECConfig == null || frmPECConfig.IsDisposed || !frmPECConfig.Visible)
+                frmPECConfig = new frmPEC();
+
+            frmPECConfig.Visible = false;
+
+            frmPECConfig.Left = this.Right;
+            frmPECConfig.Top = Cursor.Position.Y - frmPECConfig.Height / 2;
+            if (frmPECConfig.Left + frmPECConfig.Width / 2 > Screen.FromControl(this).WorkingArea.Width)
+                frmPECConfig.Left = Screen.FromControl(this).WorkingArea.Width - frmPECConfig.Width;
+
+            frmPECConfig.Show();
+        }
+
     }
 
-#if false
+#if true
     public class Palette
     {
         [System.Runtime.InteropServices.DllImportAttribute("gdi32.dll")]
@@ -1937,6 +1974,7 @@ namespace ASCOM.GeminiTelescope
         static extern IntPtr GetDesktopWindow();
 
 
+        [StructLayout(LayoutKind.Sequential, Pack = 0)]
         public struct PALETTEENTRY
         {
             public byte peRed;
@@ -1953,7 +1991,7 @@ namespace ASCOM.GeminiTelescope
         }
 
 
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        [StructLayout(LayoutKind.Sequential, Pack = 0)]
         public struct LOGPALETTE0
         {
             public short palVersion;
@@ -1994,25 +2032,6 @@ namespace ASCOM.GeminiTelescope
 
         public static void SetPalette(IntPtr handle)
         {
-            {
-                RAMP ramp = new RAMP();
-                ramp.Red = new ushort[256];
-                ramp.Green = new ushort[256];
-                ramp.Blue = new ushort[256];
-
-
-                for (int i = 1; i < 256; i++)
-                {
-                    int iArrayValue = i * (128+ 128);
-
-                    if (iArrayValue > 65535)
-                        iArrayValue = 65535;
-                    ramp.Red[i] = (ushort)iArrayValue;
-                    ramp.Blue[i] = ramp.Green[i] = 0;
-                }
-                SetDeviceGammaRamp(GetDC(IntPtr.Zero), ref ramp);
-                return;
-            }
 
             IntPtr htPalette = IntPtr.Zero; //Graphics.GetHalftonePalette();
             IntPtr hPalPrev = IntPtr.Zero;
@@ -2036,7 +2055,7 @@ namespace ASCOM.GeminiTelescope
                 pe.peBlue = 0;
                 pe.peGreen = 0;
                 pe.peRed = (byte)i;
-                pe.peFlags = 0;
+                pe.peFlags = 0x4;
 
                 Marshal.StructureToPtr(pe, (IntPtr)run, false);
                 run += entrysize;
@@ -2047,15 +2066,14 @@ namespace ASCOM.GeminiTelescope
                 IntPtr hwnd = GetDesktopWindow();
                 IntPtr hdc = GetDC(hwnd);
 
-                int NumEntr = GetSystemPaletteEntries(hdc, 0, 256, IntPtr.Zero);
-
-
                 SetSystemPaletteUse(hdc, 2);
 
                 //htPalette = CreatePalette(hpal);            //  Select the new palette into the memory DC and realize it.            
-                hPalPrev = SelectPalette(hdc, hpal, true);
-                UpdateColors(hdc);
+                hPalPrev = SelectPalette(hdc, hpal, false);
                 int r = RealizePalette(hdc);
+                hPalPrev = SelectPalette(hdc, hpal, false);
+                r = RealizePalette(hdc);
+                UpdateColors(hdc);
                 ReleaseDC(hwnd, hdc);
             }
 

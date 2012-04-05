@@ -594,7 +594,10 @@ namespace ASCOM.GeminiTelescope
         private void pbGeminiSettings_Click(object sender, EventArgs e)
         {
             frmAdvancedSettings settings = new frmAdvancedSettings();
-            DialogResult re = settings.ShowDialog();
+            if (settings != null && !settings.IsDisposed)
+            {
+                DialogResult re = settings.ShowDialog();
+            }
         }
 
         private void chkJoystick_CheckedChanged(object sender, EventArgs e)

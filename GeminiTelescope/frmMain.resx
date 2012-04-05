@@ -642,6 +642,12 @@
   <data name="toolStripMenuItem2.Text" xml:space="preserve">
     <value>Park at Home Position</value>
   </data>
+  <data name="parkAtZenithToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>215, 22</value>
+  </data>
+  <data name="parkAtZenithToolStripMenuItem.Text" xml:space="preserve">
+    <value>Park at Zenith</value>
+  </data>
   <data name="toolStripMenuParkHere.Size" type="System.Drawing.Size, System.Drawing">
     <value>215, 22</value>
   </data>
@@ -664,7 +670,7 @@
     <value>Configure Park Position...</value>
   </data>
   <data name="contextMenuStrip2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>216, 142</value>
+    <value>216, 164</value>
   </data>
   <data name="&gt;&gt;contextMenuStrip2.Name" xml:space="preserve">
     <value>contextMenuStrip2</value>
@@ -765,6 +771,15 @@
   <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
     <value>194, 6</value>
   </data>
+  <data name="configurePECToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>197, 22</value>
+  </data>
+  <data name="configurePECToolStripMenuItem.Text" xml:space="preserve">
+    <value>Configure PEC...</value>
+  </data>
+  <data name="toolStripSeparator6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>194, 6</value>
+  </data>
   <data name="observationLogToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>197, 22</value>
   </data>
@@ -802,7 +817,7 @@
     <value>Exit</value>
   </data>
   <data name="contextMenuStrip1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>198, 198</value>
+    <value>198, 248</value>
   </data>
   <data name="&gt;&gt;contextMenuStrip1.Name" xml:space="preserve">
     <value>contextMenuStrip1</value>
@@ -3750,7 +3765,7 @@
     <value>buttonSlew2</value>
   </data>
   <data name="&gt;&gt;buttonSlew2.Type" xml:space="preserve">
-    <value>ASCOM.GeminiTelescope.TButton, ASCOM.GeminiTelescope, Version=1.0.8.0, Culture=neutral, PublicKeyToken=null</value>
+    <value>ASCOM.GeminiTelescope.TButton, ASCOM.GeminiTelescope, Version=1.0.38.0, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;buttonSlew2.Parent" xml:space="preserve">
     <value>$this</value>
@@ -3789,7 +3804,7 @@
     <value>buttonSlew3</value>
   </data>
   <data name="&gt;&gt;buttonSlew3.Type" xml:space="preserve">
-    <value>ASCOM.GeminiTelescope.TButton, ASCOM.GeminiTelescope, Version=1.0.8.0, Culture=neutral, PublicKeyToken=null</value>
+    <value>ASCOM.GeminiTelescope.TButton, ASCOM.GeminiTelescope, Version=1.0.38.0, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;buttonSlew3.Parent" xml:space="preserve">
     <value>$this</value>
@@ -3828,7 +3843,7 @@
     <value>buttonSlew4</value>
   </data>
   <data name="&gt;&gt;buttonSlew4.Type" xml:space="preserve">
-    <value>ASCOM.GeminiTelescope.TButton, ASCOM.GeminiTelescope, Version=1.0.8.0, Culture=neutral, PublicKeyToken=null</value>
+    <value>ASCOM.GeminiTelescope.TButton, ASCOM.GeminiTelescope, Version=1.0.38.0, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;buttonSlew4.Parent" xml:space="preserve">
     <value>$this</value>
@@ -3867,7 +3882,7 @@
     <value>buttonSlew1</value>
   </data>
   <data name="&gt;&gt;buttonSlew1.Type" xml:space="preserve">
-    <value>ASCOM.GeminiTelescope.TButton, ASCOM.GeminiTelescope, Version=1.0.8.0, Culture=neutral, PublicKeyToken=null</value>
+    <value>ASCOM.GeminiTelescope.TButton, ASCOM.GeminiTelescope, Version=1.0.38.0, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;buttonSlew1.Parent" xml:space="preserve">
     <value>$this</value>
@@ -5580,9 +5595,6 @@
         AAAAAAAAAAAAAACAAQAAwAMAAPgfAAD//wAA
 </value>
   </data>
-  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
   <data name="$this.Text" xml:space="preserve">
     <value>Gemini</value>
   </data>
@@ -5602,6 +5614,12 @@
     <value>toolStripMenuItem2</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;parkAtZenithToolStripMenuItem.Name" xml:space="preserve">
+    <value>parkAtZenithToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;parkAtZenithToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuParkHere.Name" xml:space="preserve">
@@ -5735,6 +5753,18 @@
   </data>
   <data name="&gt;&gt;BalloonIcon.Type" xml:space="preserve">
     <value>System.Windows.Forms.NotifyIcon, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;configurePECToolStripMenuItem.Name" xml:space="preserve">
+    <value>configurePECToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;configurePECToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator6.Name" xml:space="preserve">
+    <value>toolStripSeparator6</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator6.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>frmMain</value>

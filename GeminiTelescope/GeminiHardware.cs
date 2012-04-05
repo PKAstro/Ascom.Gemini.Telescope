@@ -898,6 +898,7 @@ namespace ASCOM.GeminiTelescope
             SlewHome = 1,
             SlewCWD = 2,
             SlewAltAz = 3,
+            SlewZenith = 4,
         }
 
         internal GeminiBootMode m_BootMode = GeminiBootMode.Prompt; 
@@ -3187,9 +3188,9 @@ namespace ASCOM.GeminiTelescope
                     }
                     else
                     {
-                        m_AllowErrorNotify = false; //don't bother the user with timeout errors during polling  -- these are not very important
+//                        m_AllowErrorNotify = false; //don't bother the user with timeout errors during polling  -- these are not very important
                         UpdatePolledVariables(false);
-                        m_AllowErrorNotify = true;
+//                        m_AllowErrorNotify = true;
                     }
                 }
                 catch (Exception ex)
@@ -3659,9 +3660,10 @@ namespace ASCOM.GeminiTelescope
 
             bool found = GeminiCommands.Commands.ContainsKey(full_cmd);
 
-            if (full_cmd.StartsWith("<") && !found)       // native get command is always '#' terminated
-                return new GeminiCommand(GeminiCommand.ResultType.HashChar, 0);
-            else if (full_cmd.StartsWith(">"))  // native set command always no return value
+            //if (full_cmd.StartsWith("<") && !found)       // native get command is always '#' terminated
+            //    return new GeminiCommand(GeminiCommand.ResultType.HashChar, 0);
+            //else 
+            if (full_cmd.StartsWith(">"))  // native set command always no return value
             {
                 int idx = full_cmd.IndexOf(':');
                 if (idx > 0)
@@ -3827,6 +3829,25 @@ namespace ASCOM.GeminiTelescope
                     break;
                 case GeminiParkMode.SlewHome:
                     DoCommandResult(":hP", MAX_TIMEOUT, false);
+                    break;
+                case GeminiParkMode.SlewZenith:
+                    if (GeminiLevel > 4)
+                        DoCommandResult(":hZ", MAX_TIMEOUT, false);
+                    else
+                    {
+                        // simulate goto zenith for L4:
+                        m_TargetAltitude = 90.0*Math.PI/180.0;
+                        m_TargetAzimuth = Azimuth;
+                        try
+                        {
+                            SlewHorizonAsync();
+                        }
+                        catch (Exception ex)
+                        {
+                            m_Trace.Error(ex.Message);
+                            return;
+                        }
+                    }
                     break;
                 case GeminiParkMode.SlewAltAz:
                     m_TargetAltitude = ParkAlt;

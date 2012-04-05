@@ -13,5 +13,17 @@
     </ErrorReportUrlHistory>
     <FallbackCulture>en-US</FallbackCulture>
     <VerifyUploadedFiles>true</VerifyUploadedFiles>
+    <ProjectView>ShowAllFiles</ProjectView>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <StartArguments>
+    </StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <StartArguments>
+    </StartArguments>
+    <StartAction>Project</StartAction>
+    <StartProgram>C:\Program Files\Common Files\ASCOM\Dome\ASCOMDome.exe</StartProgram>
+    <StartWorkingDirectory>D:\proj\GeminiUpdateDriver\GeminiTelescope\bin\x86\Debug</StartWorkingDirectory>
   </PropertyGroup>
 </Project>

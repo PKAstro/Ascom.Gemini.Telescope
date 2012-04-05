@@ -79,16 +79,21 @@ namespace ASCOM.GeminiTelescope
 
         internal override void SendStartUpCommands()
         {
-            Trace.Info(2, "Setting DOUBLE PRECISION");
-            DoCommandResult(":u", MAX_TIMEOUT, false);
-            DoublePrecision = true;
 
-            Trace.Info(2, "Setting extended checksum for L5");
-            DoCommandResult(">91:1", MAX_TIMEOUT, false);
+            if (GeminiLevel >= 5)
+            {
 
-            string res = DoCommandResult("<91:", MAX_TIMEOUT, false);
-            if (res=="1")
-                m_ChecksumMask = 0xff;
+                Trace.Info(2, "Setting DOUBLE PRECISION");
+                DoCommandResult(":u", MAX_TIMEOUT, false);
+                DoublePrecision = true;
+
+                Trace.Info(2, "Setting extended checksum for L5");
+                DoCommandResult(">91:1", MAX_TIMEOUT, false);
+
+                string res = DoCommandResult("<91:", MAX_TIMEOUT, false);
+                if (res == "1")
+                    m_ChecksumMask = 0xff;
+            } 
 
             base.SendStartUpCommands();
             //Setting double-precision mode:
@@ -101,12 +106,25 @@ namespace ASCOM.GeminiTelescope
             {
                 try
                 {
-                    if (UDP_client != null)
+//                    if (UDP_client != null)
                     {
-                        UDP_client.Close();
-                        //UDP_client = null;
+                        DisconnectToEthernet();
+//                        UDP_client.Close();
                     }
-                    UDP_client = new UdpClient(UDPPort);
+
+                    //UDP_client = new UdpClient(UDPPort);
+                    for (int i = 0; i < 3; ++i)
+                    {
+                        try
+                        {
+                            ConnectToEthernet();
+                            System.Threading.Thread.Sleep(500);
+                        }
+                        catch
+                        {
+                            break;
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -153,6 +171,7 @@ namespace ASCOM.GeminiTelescope
             if (UDP && UDP_client==null)
             {
 
+                System.Threading.Thread.Sleep(500);
                 Trace.Info(2, "UDP connection", GeminiDHCPName, UDPPort);
 
                 IPAddress addr = null;
@@ -294,7 +313,10 @@ namespace ASCOM.GeminiTelescope
                 }
                 catch
                 {
-                    GeminiHardware.Instance.ResyncEthernet();
+                    lock (m_CommandQueue)
+                    {
+                        GeminiHardware.Instance.ResyncEthernet();
+                    }
                     TransmitUDP(macro_req);
                 }
             }

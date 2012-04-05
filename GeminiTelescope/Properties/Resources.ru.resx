@@ -707,4 +707,7 @@ Are you sure you want to use these new values?</value>
   <data name="WaitingForData" xml:space="preserve">
     <value>Waiting for data...</value>
   </data>
+  <data name="ParkAtZenith" xml:space="preserve">
+    <value>Парк в зенитe</value>
+  </data>
 </root>

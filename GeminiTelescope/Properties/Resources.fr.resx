@@ -748,4 +748,7 @@ RA</value>
   <data name="Track" xml:space="preserve">
     <value>Suivi</value>
   </data>
+  <data name="ParkAtZenith" xml:space="preserve">
+    <value>Parking au zenith</value>
+  </data>
 </root>

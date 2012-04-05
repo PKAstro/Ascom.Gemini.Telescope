@@ -806,4 +806,7 @@ RA</value>
   <data name="EthernetTimeout" xml:space="preserve">
     <value>Command timed out</value>
   </data>
+  <data name="ParkAtZenith" xml:space="preserve">
+    <value>Park at Zenith</value>
+  </data>
 </root>

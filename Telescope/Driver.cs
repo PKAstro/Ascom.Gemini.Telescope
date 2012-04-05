@@ -605,9 +605,9 @@ namespace ASCOM.GeminiTelescope
             if (Command == String.Empty) throw new ASCOM.InvalidValueException("CommandNative", Command, "valid Gemini command");
             string result = GeminiHardware.Instance.DoCommandResult(Command, 1000, false);
 
-            if (result == null) return "";
-            else            
-            if (result.EndsWith("#")) return result.Substring(result.Length-1);
+            if (result == null) return null;
+            else
+                if (result.EndsWith("#")) return result.Substring(result.Length - 1);
 
             GeminiHardware.Instance.Trace.Exit("IT:CommandNative", Command, result);
             return result;
@@ -632,6 +632,7 @@ namespace ASCOM.GeminiTelescope
             if (Command == "") throw new InvalidValueException("CommandBool", "", "valid Gemini command");
             Command = PrepareCommand(Command); // Add leading colon if required
             string result = GeminiHardware.Instance.DoCommandResult(Command, GeminiHardware.Instance.MAX_TIMEOUT, Raw);
+            if (result == null) throw new TimeoutException("CommandString: " + Command);
 
             bool bRes = (result!=null && result.StartsWith("1"));
             GeminiHardware.Instance.Trace.Exit("IT:CommandBool", Command, bRes);
@@ -646,7 +647,7 @@ namespace ASCOM.GeminiTelescope
             if (Command == String.Empty) throw new ASCOM.InvalidValueException("CommandString", Command, "valid Gemini command");
             Command = PrepareCommand(Command); // Add leading colon if required
             string result = GeminiHardware.Instance.DoCommandResult(Command, GeminiHardware.Instance.MAX_TIMEOUT, Raw);
-            if (result == null) return null;
+            if (result == null) throw new TimeoutException("CommandString: " + Command);
             if (!Raw & result.EndsWith("#")) return result.Substring(1,result.Length - 1);//Added Start value substring parameter and handling of Raw values
             GeminiHardware.Instance.Trace.Exit("IT:CommandString", Command, result);
             return result;

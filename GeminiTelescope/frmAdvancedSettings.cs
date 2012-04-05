@@ -52,14 +52,18 @@ namespace ASCOM.GeminiTelescope
 
             GeminiProperties props = new GeminiProperties();
 
+            bool bDefaultLoaded = false;
+
             // read default profile
             if (props.Serialize(false, null))
+            {
                 this.Text = Cap + " (" + SharedResources.DEAULT_PROFILE + ")";
-
+                bDefaultLoaded = true;
+            }
 
             if (props.SyncWithGemini(false))    // read all the properties from the mount
                 this.Text = Cap + " " + Resources.SettingsFromGemini;
-            else
+            else if (!bDefaultLoaded)
             {
                 MessageBox.Show(Resources.EthernetError, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();

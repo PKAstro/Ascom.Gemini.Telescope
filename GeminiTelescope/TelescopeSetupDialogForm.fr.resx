@@ -164,18 +164,6 @@
   <data name="labelTime.Location" type="System.Drawing.Point, System.Drawing">
     <value>491, 488</value>
   </data>
-  <data name="groupBox3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 366</value>
-  </data>
-  <data name="groupBox3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>223, 114</value>
-  </data>
-  <data name="groupBox3.Text" xml:space="preserve">
-    <value>Temps</value>
-  </data>
-  <data name="tableLayoutPanel4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>217, 95</value>
-  </data>
   <data name="pbSetTimeNow.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 65</value>
   </data>
@@ -198,14 +186,20 @@
   <data name="label5.Text" xml:space="preserve">
     <value>Temps Universel:</value>
   </data>
+  <data name="tableLayoutPanel4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>217, 95</value>
+  </data>
+  <data name="groupBox3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 366</value>
+  </data>
+  <data name="groupBox3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>223, 114</value>
+  </data>
+  <data name="groupBox3.Text" xml:space="preserve">
+    <value>Temps</value>
+  </data>
   <data name="checkBoxShowHandbox.Location" type="System.Drawing.Point, System.Drawing">
     <value>516, 169</value>
-  </data>
-  <data name="groupBox2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>223, 143</value>
-  </data>
-  <data name="tableLayoutPanel2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>217, 124</value>
   </data>
   <data name="label4.AutoSize" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -237,14 +231,11 @@
   <data name="chkPortScan.Text" xml:space="preserve">
     <value>Détection automatique du Gemini</value>
   </data>
-  <data name="groupBox5.Location" type="System.Drawing.Point, System.Drawing">
-    <value>266, 12</value>
-  </data>
-  <data name="groupBox5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>223, 143</value>
-  </data>
-  <data name="tableLayoutPanel6.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="tableLayoutPanel2.Size" type="System.Drawing.Size, System.Drawing">
     <value>217, 124</value>
+  </data>
+  <data name="groupBox2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>223, 143</value>
   </data>
   <data name="radioButtonPrompt.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 96</value>
@@ -254,6 +245,15 @@
   </data>
   <data name="radioButtonWarmStart.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 34</value>
+  </data>
+  <data name="tableLayoutPanel6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>217, 124</value>
+  </data>
+  <data name="groupBox5.Location" type="System.Drawing.Point, System.Drawing">
+    <value>266, 12</value>
+  </data>
+  <data name="groupBox5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>223, 143</value>
   </data>
   <data name="chkJoystick.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -429,9 +429,6 @@
   <data name="tableLayoutPanel8.ColumnCount" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
-  <data name="tableLayoutPanel8.RowCount" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
   <data name="radioButton1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -476,6 +473,9 @@
   </data>
   <data name="radioButton3.Text" xml:space="preserve">
     <value>Warm Start</value>
+  </data>
+  <data name="tableLayoutPanel8.RowCount" type="System.Int32, mscorlib">
+    <value>4</value>
   </data>
   <data name="radioButton4.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>

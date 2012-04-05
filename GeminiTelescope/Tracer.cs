@@ -134,7 +134,7 @@ namespace ASCOM.GeminiTelescope
 
         public void Error(string s, params object[] values)
         {
-            if (m_Log != null && m_Log.Enabled)
+             if (m_Log != null && m_Log.Enabled)
             {
                 lock (m_Log)
                 {

@@ -86,7 +86,10 @@ namespace ASCOM.GeminiTelescope
                 if (trynbr > 0)
                 {
                     // since we didn't get a proper response, try to reset the socket and see if can get a response:
-                    GeminiHardware.Instance.ResyncEthernet();
+                    lock (GeminiHardware.Instance.m_CommandQueue)
+                    {
+                        GeminiHardware.Instance.ResyncEthernet();
+                    }
                 }
 
                 DiscardInBuffer();
@@ -155,7 +158,7 @@ namespace ASCOM.GeminiTelescope
 
                 }
             }
-
+            AddOneMoreError();
             Trace.Exit("RetransmitUDP", "Failed to retransmit!");
             return null;    // no luck, give up.
         }

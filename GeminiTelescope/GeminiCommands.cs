@@ -257,6 +257,7 @@ namespace ASCOM.GeminiTelescope
                 Commands.Add(":W?", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
                 Commands.Add(":S0", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
                 Commands.Add("<91:", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
+                Commands.Add("<551", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
             }
         }
 

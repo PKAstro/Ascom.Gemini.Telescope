@@ -156,9 +156,6 @@
   <data name="button2.TabIndex" type="System.Int32, mscorlib">
     <value>25</value>
   </data>
-  <data name="checkBoxUseDriverTime.Size" type="System.Drawing.Size, System.Drawing">
-    <value>161, 17</value>
-  </data>
   <data name="label5.Text" xml:space="preserve">
     <value>Universal Time:</value>
   </data>
@@ -201,17 +198,20 @@
   <data name="radioButtonmillimeters.TabIndex" type="System.Int32, mscorlib">
     <value>42</value>
   </data>
-  <data name="label5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>80, 13</value>
+  <data name="&gt;&gt;textBoxAperture.Name" xml:space="preserve">
+    <value>textBoxAperture</value>
   </data>
   <data name="&gt;&gt;comboBox2.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="label15.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 35</value>
+  </data>
   <data name="label16.TabIndex" type="System.Int32, mscorlib">
     <value>40</value>
   </data>
-  <data name="&gt;&gt;btnJoysticConfig.Name" xml:space="preserve">
-    <value>btnJoysticConfig</value>
+  <data name="&gt;&gt;groupBox3.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
   <data name="&gt;&gt;label11.Name" xml:space="preserve">
     <value>label11</value>
@@ -222,11 +222,11 @@
   <data name="groupBox8.Location" type="System.Drawing.Point, System.Drawing">
     <value>241, 146</value>
   </data>
-  <data name="groupBox4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
   <data name="radioButtonPrompt.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
+  </data>
+  <data name="groupBox2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 12</value>
   </data>
   <data name="label10.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -260,6 +260,9 @@
   </data>
   <data name="tableLayoutPanel6.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
+  </data>
+  <data name="&gt;&gt;groupBox8.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="picASCOM.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -296,9 +299,6 @@
   </data>
   <data name="label6.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
-  </data>
-  <data name="&gt;&gt;groupBox8.Name" xml:space="preserve">
-    <value>groupBox8</value>
   </data>
   <data name="&gt;&gt;pbSiteConfig.ZOrder" xml:space="preserve">
     <value>1</value>
@@ -345,17 +345,14 @@
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>634, 468</value>
   </data>
-  <data name="tableLayoutPanel9.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 16</value>
+  <data name="&gt;&gt;cmdOK.Name" xml:space="preserve">
+    <value>cmdOK</value>
   </data>
   <data name="&gt;&gt;buttonGps.Name" xml:space="preserve">
     <value>buttonGps</value>
   </data>
   <data name="labelTime.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
-  </data>
-  <data name="label11.Location" type="System.Drawing.Point, System.Drawing">
-    <value>274, 407</value>
   </data>
   <data name="radioButtonInches.TabIndex" type="System.Int32, mscorlib">
     <value>41</value>
@@ -414,6 +411,9 @@
   <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
     <value>61, 13</value>
   </data>
+  <data name="comboBox1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>103, 3</value>
+  </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>TelescopeSetupDialogForm</value>
   </data>
@@ -422,6 +422,12 @@
   </data>
   <data name="&gt;&gt;pbSetTimeNow.Parent" xml:space="preserve">
     <value>tableLayoutPanel4</value>
+  </data>
+  <data name="label10.Size" type="System.Drawing.Size, System.Drawing">
+    <value>61, 25</value>
+  </data>
+  <data name="radioButtonInches.Size" type="System.Drawing.Size, System.Drawing">
+    <value>56, 17</value>
   </data>
   <data name="textBoxElevation.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -459,17 +465,14 @@
   <data name="radioButtonWarmStart.Size" type="System.Drawing.Size, System.Drawing">
     <value>88, 17</value>
   </data>
-  <data name="&gt;&gt;comboBoxSavedOptics.Parent" xml:space="preserve">
-    <value>tableLayoutPanel9</value>
-  </data>
   <data name="&gt;&gt;label14.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;pbGeminiSettings.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="label7.TabIndex" type="System.Int32, mscorlib">
-    <value>23</value>
+  <data name="chkPierSide.Text" xml:space="preserve">
+    <value>Report Pier Side</value>
   </data>
   <data name="label2.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -518,9 +521,6 @@
   </data>
   <data name="&gt;&gt;labelVersion.ZOrder" xml:space="preserve">
     <value>17</value>
-  </data>
-  <data name="tableLayoutPanel7.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
   </data>
   <data name="&gt;&gt;chkAsyncPulseGuide.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -572,9 +572,6 @@
   </data>
   <data name="label6.Size" type="System.Drawing.Size, System.Drawing">
     <value>31, 6</value>
-  </data>
-  <data name="&gt;&gt;picASCOM.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="radioButton3.Size" type="System.Drawing.Size, System.Drawing">
     <value>104, 14</value>
@@ -684,8 +681,8 @@
   <data name="buttonVirtualPort.Text" xml:space="preserve">
     <value>Configure Pass-Through Port...</value>
   </data>
-  <data name="&gt;&gt;radioButtonmillimeters.Parent" xml:space="preserve">
-    <value>tableLayoutPanel9</value>
+  <data name="checkBoxUseDriverTime.Size" type="System.Drawing.Size, System.Drawing">
+    <value>161, 17</value>
   </data>
   <data name="label1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -711,8 +708,8 @@
   <data name="&gt;&gt;radioButtonmillimeters.Name" xml:space="preserve">
     <value>radioButtonmillimeters</value>
   </data>
-  <data name="radioButton3.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
+  <data name="&gt;&gt;tableLayoutPanel6.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="comboBoxBaudRate.Items4" xml:space="preserve">
     <value>38400</value>
@@ -735,11 +732,8 @@
   <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
     <value>61, 25</value>
   </data>
-  <data name="cmdCancel.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;textBoxLongitudeDegrees.Parent" xml:space="preserve">
-    <value>tableLayoutPanel1</value>
+  <data name="groupBox7.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
   </data>
   <data name="radioButtonmillimeters.Size" type="System.Drawing.Size, System.Drawing">
     <value>72, 17</value>
@@ -777,8 +771,8 @@
   <data name="tableLayoutPanel1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
     <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="comboBoxSites" Row="0" RowSpan="1" Column="1" ColumnSpan="3" /&gt;&lt;Control Name="pbSiteConfig" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="label10" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBoxLongitudeMinutes" Row="2" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="textBoxLatitudeMinutes" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="textBoxLatitudeDegrees" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="comboBoxLatitude" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label1" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="label2" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="label3" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBoxElevation" Row="3" RowSpan="1" Column="1" ColumnSpan="2" /&gt;&lt;Control Name="comboBoxLongitude" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="textBoxLongitudeDegrees" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="pbSetSiteNow" Row="6" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="checkBoxUseDriverSite" Row="5" RowSpan="1" Column="0" ColumnSpan="4" /&gt;&lt;Control Name="comboBoxTZ" Row="4" RowSpan="1" Column="1" ColumnSpan="3" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,31.31422,Percent,23.79664,Percent,21.63332,Percent,23.25581" /&gt;&lt;Rows Styles="Absolute,25,Absolute,25,Absolute,25,Absolute,25,Absolute,25,Absolute,25,Absolute,25" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
-  <data name="&gt;&gt;tableLayoutPanel5.Name" xml:space="preserve">
-    <value>tableLayoutPanel5</value>
+  <data name="&gt;&gt;btnJoysticConfig.Name" xml:space="preserve">
+    <value>btnJoysticConfig</value>
   </data>
   <data name="labelUtc.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 0</value>
@@ -810,8 +804,11 @@
   <data name="checkBoxUseDriverSite.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 128</value>
   </data>
-  <data name="comboBox2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>103, 3</value>
+  <data name="tableLayoutPanel5.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="comboBox2" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <data name="label11.Size" type="System.Drawing.Size, System.Drawing">
     <value>142, 13</value>
@@ -831,9 +828,6 @@
   <data name="tableLayoutPanel9.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="comboBox2.TabIndex" type="System.Int32, mscorlib">
-    <value>22</value>
-  </data>
   <data name="labelVersion.Location" type="System.Drawing.Point, System.Drawing">
     <value>9, 453</value>
   </data>
@@ -843,14 +837,8 @@
   <data name="&gt;&gt;label11.ZOrder" xml:space="preserve">
     <value>5</value>
   </data>
-  <data name="&gt;&gt;textBoxLatitudeDegrees.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;textBoxElevation.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>
-  </data>
-  <data name="radioButtonInches.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 143</value>
   </data>
   <data name="label13.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 23</value>
@@ -867,8 +855,8 @@
   <data name="&gt;&gt;textBoxLatitudeDegrees.Name" xml:space="preserve">
     <value>textBoxLatitudeDegrees</value>
   </data>
-  <data name="comboBox4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>142, 34</value>
+  <data name="tableLayoutPanel2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>217, 109</value>
   </data>
   <data name="label15.Size" type="System.Drawing.Size, System.Drawing">
     <value>43, 26</value>
@@ -984,9 +972,6 @@
   <data name="&gt;&gt;radioButtonColdStart.Type" xml:space="preserve">
     <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;label2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="label3.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
   </data>
@@ -1029,8 +1014,11 @@
   <data name="&gt;&gt;pbEditSavedOptics.Parent" xml:space="preserve">
     <value>tableLayoutPanel9</value>
   </data>
-  <data name="&gt;&gt;cmdOK.Name" xml:space="preserve">
-    <value>cmdOK</value>
+  <data name="cbLogging.Items2" xml:space="preserve">
+    <value>3: Some Detail</value>
+  </data>
+  <data name="cmdCancel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
   </data>
   <data name="comboBoxSavedOptics.Size" type="System.Drawing.Size, System.Drawing">
     <value>144, 23</value>
@@ -1038,8 +1026,8 @@
   <data name="pbSetSiteNow.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 150</value>
   </data>
-  <data name="&gt;&gt;groupBox7.Name" xml:space="preserve">
-    <value>groupBox7</value>
+  <data name="cmdCancel.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
   </data>
   <data name="comboBoxBaudRate.Size" type="System.Drawing.Size, System.Drawing">
     <value>85, 21</value>
@@ -1062,20 +1050,17 @@
   <data name="&gt;&gt;tableLayoutPanel9.Parent" xml:space="preserve">
     <value>groupBox8</value>
   </data>
-  <data name="&gt;&gt;radioButtonPrompt.Name" xml:space="preserve">
-    <value>radioButtonPrompt</value>
-  </data>
   <data name="&gt;&gt;tableLayoutPanel9.ZOrder" xml:space="preserve">
     <value>0</value>
+  </data>
+  <data name="&gt;&gt;textBoxLongitudeDegrees.Name" xml:space="preserve">
+    <value>textBoxLongitudeDegrees</value>
   </data>
   <data name="&gt;&gt;cmbJoystick.Name" xml:space="preserve">
     <value>cmbJoystick</value>
   </data>
   <data name="radioButtonColdStart.Size" type="System.Drawing.Size, System.Drawing">
     <value>81, 17</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel6.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="pbSiteConfig.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 0</value>
@@ -1095,20 +1080,23 @@
   <data name="&gt;&gt;label12.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;tableLayoutPanel5.Name" xml:space="preserve">
+    <value>tableLayoutPanel5</value>
+  </data>
   <data name="radioButtonColdStart.Text" xml:space="preserve">
     <value>Cold Start</value>
   </data>
   <data name="&gt;&gt;btnJoysticConfig.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="label10.Size" type="System.Drawing.Size, System.Drawing">
-    <value>61, 25</value>
+  <data name="&gt;&gt;comboBox3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="groupBox2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 12</value>
+  <data name="groupBox4.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
   </data>
-  <data name="tableLayoutPanel2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>217, 109</value>
+  <data name="&gt;&gt;label2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;comboBoxTZ.Type" xml:space="preserve">
     <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -1134,8 +1122,8 @@
   <data name="cmdCancel.Location" type="System.Drawing.Point, System.Drawing">
     <value>563, 413</value>
   </data>
-  <data name="&gt;&gt;textBoxLongitudeDegrees.ZOrder" xml:space="preserve">
-    <value>12</value>
+  <data name="&gt;&gt;radioButtonPrompt.Name" xml:space="preserve">
+    <value>radioButtonPrompt</value>
   </data>
   <data name="tableLayoutPanel5.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
@@ -1161,8 +1149,8 @@
   <data name="textBoxAperture.TabIndex" type="System.Int32, mscorlib">
     <value>39</value>
   </data>
-  <data name="label7.Text" xml:space="preserve">
-    <value>xxxxxxxxxx</value>
+  <data name="tableLayoutPanel7.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
   </data>
   <data name="checkBoxUseDriverTime.Text" xml:space="preserve">
     <value>Set Gemini Time on Connect</value>
@@ -1191,14 +1179,14 @@
   <data name="cmdCancel.Size" type="System.Drawing.Size, System.Drawing">
     <value>59, 25</value>
   </data>
-  <data name="chkPierSide.Text" xml:space="preserve">
-    <value>Report Pier Side</value>
-  </data>
   <data name="label15.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="label5.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
+  </data>
+  <data name="cbLogging.Items5" xml:space="preserve">
+    <value>6: All Available</value>
   </data>
   <data name="radioButtonWarmStart.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>10, 0, 0, 0</value>
@@ -1209,8 +1197,8 @@
   <data name="chkPortScan.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="&gt;&gt;radioButtonmillimeters.ZOrder" xml:space="preserve">
-    <value>8</value>
+  <data name="tableLayoutPanel9.RowCount" type="System.Int32, mscorlib">
+    <value>5</value>
   </data>
   <data name="&gt;&gt;label13.ZOrder" xml:space="preserve">
     <value>2</value>
@@ -1230,6 +1218,9 @@
   <data name="cmdCancel.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
   </data>
+  <data name="label7.Text" xml:space="preserve">
+    <value>xxxxxxxxxx</value>
+  </data>
   <data name="&gt;&gt;tableLayoutPanel9.Type" xml:space="preserve">
     <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -1248,6 +1239,9 @@
   <data name="label9.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="comboBoxComPort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>85, 21</value>
+  </data>
   <data name="checkBox1.TabIndex" type="System.Int32, mscorlib">
     <value>24</value>
   </data>
@@ -1256,6 +1250,9 @@
   </data>
   <data name="&gt;&gt;chkVoice.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;radioButtonPrompt.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <data name="pbSiteConfig.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
@@ -1266,8 +1263,8 @@
   <data name="&gt;&gt;comboBoxComPort.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="&gt;&gt;label5.Parent" xml:space="preserve">
-    <value>tableLayoutPanel4</value>
+  <data name="&gt;&gt;groupBox1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="comboBox3.Location" type="System.Drawing.Point, System.Drawing">
     <value>119, 3</value>
@@ -1365,17 +1362,17 @@
   <data name="label2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="&gt;&gt;textBoxLongitudeDegrees.Name" xml:space="preserve">
-    <value>textBoxLongitudeDegrees</value>
+  <data name="&gt;&gt;radioButton2.Name" xml:space="preserve">
+    <value>radioButton2</value>
+  </data>
+  <data name="&gt;&gt;groupBox8.Name" xml:space="preserve">
+    <value>groupBox8</value>
   </data>
   <data name="&gt;&gt;groupBox4.Name" xml:space="preserve">
     <value>groupBox4</value>
   </data>
-  <data name="radioButton4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="label4.TabIndex" type="System.Int32, mscorlib">
-    <value>23</value>
+  <data name="tableLayoutPanel9.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
   </data>
   <data name="checkBoxShowHandbox.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1385,9 +1382,6 @@
   </data>
   <data name="textBoxFocalLength.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 20</value>
-  </data>
-  <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
-    <value>0</value>
   </data>
   <data name="label7.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 20</value>
@@ -1410,8 +1404,11 @@
   <data name="label14.Size" type="System.Drawing.Size, System.Drawing">
     <value>52, 26</value>
   </data>
-  <data name="tableLayoutPanel4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 16</value>
+  <data name="&gt;&gt;textBoxLongitudeDegrees.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="comboBox2.TabIndex" type="System.Int32, mscorlib">
+    <value>22</value>
   </data>
   <data name="label5.Location" type="System.Drawing.Point, System.Drawing">
     <value>97, 0</value>
@@ -1422,8 +1419,8 @@
   <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing">
     <value>12, 146</value>
   </data>
-  <data name="&gt;&gt;comboBox3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;textBoxLatitudeMinutes.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="labelUtc.Text" xml:space="preserve">
     <value>00:00:00</value>
@@ -1476,8 +1473,8 @@
   <data name="&gt;&gt;label15.Name" xml:space="preserve">
     <value>label15</value>
   </data>
-  <data name="chkAsyncPulseGuide.Text" xml:space="preserve">
-    <value>Asynchronous Pulse Guide</value>
+  <data name="&gt;&gt;pbSetTimeNow.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <data name="label10.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 100</value>
@@ -1536,6 +1533,9 @@
   <data name="cbLogging.Location" type="System.Drawing.Point, System.Drawing">
     <value>274, 423</value>
   </data>
+  <data name="label5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 13</value>
+  </data>
   <data name="label5.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
   </data>
@@ -1566,8 +1566,8 @@
   <data name="&gt;&gt;textBoxLongitudeMinutes.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="&gt;&gt;pbSetTimeNow.ZOrder" xml:space="preserve">
-    <value>0</value>
+  <data name="tableLayoutPanel8.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 100</value>
   </data>
   <data name="labelVersion.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1587,11 +1587,11 @@
   <data name="chkJoystick.Text" xml:space="preserve">
     <value>Enable Joystick</value>
   </data>
-  <data name="radioButtonInches.Size" type="System.Drawing.Size, System.Drawing">
-    <value>56, 17</value>
+  <data name="&gt;&gt;comboBoxComPort.Parent" xml:space="preserve">
+    <value>tableLayoutPanel2</value>
   </data>
-  <data name="label15.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 35</value>
+  <data name="tableLayoutPanel1.ColumnCount" type="System.Int32, mscorlib">
+    <value>4</value>
   </data>
   <data name="&gt;&gt;checkBoxUseDriverTime.Parent" xml:space="preserve">
     <value>tableLayoutPanel4</value>
@@ -3385,14 +3385,11 @@
   <data name="groupBox6.Size" type="System.Drawing.Size, System.Drawing">
     <value>200, 100</value>
   </data>
-  <data name="comboBoxComPort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>85, 21</value>
+  <data name="radioButtonInches.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 143</value>
   </data>
   <data name="textBoxFocalLength.TabIndex" type="System.Int32, mscorlib">
     <value>38</value>
-  </data>
-  <data name="textBoxLatitudeDegrees.TabIndex" type="System.Int32, mscorlib">
-    <value>9</value>
   </data>
   <data name="&gt;&gt;button2.Name" xml:space="preserve">
     <value>button2</value>
@@ -3406,11 +3403,8 @@
   <data name="&gt;&gt;comboBoxLatitude.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>
   </data>
-  <data name="cmdCancel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Right</value>
-  </data>
-  <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>61, 25</value>
+  <data name="&gt;&gt;radioButtonWarmRestart.Name" xml:space="preserve">
+    <value>radioButtonWarmRestart</value>
   </data>
   <data name="chkPortScan.TabIndex" type="System.Int32, mscorlib">
     <value>26</value>
@@ -3442,8 +3436,11 @@
   <data name="label11.Text" xml:space="preserve">
     <value>Logging/Diagnostic Options:</value>
   </data>
-  <data name="&gt;&gt;groupBox8.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;textBoxLongitudeDegrees.ZOrder" xml:space="preserve">
+    <value>12</value>
+  </data>
+  <data name="pbEditSavedOptics.TabIndex" type="System.Int32, mscorlib">
+    <value>38</value>
   </data>
   <data name="&gt;&gt;button1.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -3462,6 +3459,9 @@
   </data>
   <data name="checkBoxUseDriverTime.TabIndex" type="System.Int32, mscorlib">
     <value>23</value>
+  </data>
+  <data name="textBoxLatitudeDegrees.Size" type="System.Drawing.Size, System.Drawing">
+    <value>34, 20</value>
   </data>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>6, 13</value>
@@ -3487,17 +3487,17 @@
   <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 25</value>
   </data>
-  <data name="comboBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>103, 3</value>
+  <data name="&gt;&gt;radioButtonmillimeters.ZOrder" xml:space="preserve">
+    <value>8</value>
   </data>
   <data name="label14.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 70</value>
   </data>
+  <data name="pbSetTimeNow.Size" type="System.Drawing.Size, System.Drawing">
+    <value>62, 21</value>
+  </data>
   <data name="&gt;&gt;cbLogging.Parent" xml:space="preserve">
     <value>$this</value>
-  </data>
-  <data name="&gt;&gt;label1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="picASCOM.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
     <value>AutoSize</value>
@@ -3514,8 +3514,8 @@
   <data name="&gt;&gt;textBoxElevation.ZOrder" xml:space="preserve">
     <value>10</value>
   </data>
-  <data name="&gt;&gt;comboBox1.Parent" xml:space="preserve">
-    <value>tableLayoutPanel3</value>
+  <data name="label7.TabIndex" type="System.Int32, mscorlib">
+    <value>23</value>
   </data>
   <data name="&gt;&gt;label7.ZOrder" xml:space="preserve">
     <value>0</value>
@@ -3534,9 +3534,6 @@
   </data>
   <data name="&gt;&gt;textBoxObstruction.Name" xml:space="preserve">
     <value>textBoxObstruction</value>
-  </data>
-  <data name="&gt;&gt;label14.Name" xml:space="preserve">
-    <value>label14</value>
   </data>
   <data name="&gt;&gt;checkBox1.Name" xml:space="preserve">
     <value>checkBox1</value>
@@ -3559,8 +3556,8 @@
   <data name="chkAsyncPulseGuide.TabIndex" type="System.Int32, mscorlib">
     <value>37</value>
   </data>
-  <data name="labelTime.Size" type="System.Drawing.Size, System.Drawing">
-    <value>185, 13</value>
+  <data name="&gt;&gt;groupBox7.Name" xml:space="preserve">
+    <value>groupBox7</value>
   </data>
   <data name="&gt;&gt;comboBox3.Parent" xml:space="preserve">
     <value>tableLayoutPanel7</value>
@@ -3568,8 +3565,8 @@
   <data name="&gt;&gt;pbSiteConfig.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>
   </data>
-  <data name="pbEditSavedOptics.TabIndex" type="System.Int32, mscorlib">
-    <value>38</value>
+  <data name="&gt;&gt;groupBox5.Name" xml:space="preserve">
+    <value>groupBox5</value>
   </data>
   <data name="label13.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 0</value>
@@ -3579,9 +3576,6 @@
   </data>
   <data name="radioButtonPrompt.Text" xml:space="preserve">
     <value>Prompt if not Started</value>
-  </data>
-  <data name="&gt;&gt;label1.Name" xml:space="preserve">
-    <value>label1</value>
   </data>
   <data name="&gt;&gt;chkPortScan.ZOrder" xml:space="preserve">
     <value>5</value>
@@ -3616,8 +3610,8 @@
   <data name="&gt;&gt;pbSetSiteNow.Name" xml:space="preserve">
     <value>pbSetSiteNow</value>
   </data>
-  <data name="tableLayoutPanel9.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
+  <data name="comboBox4.Location" type="System.Drawing.Point, System.Drawing">
+    <value>142, 34</value>
   </data>
   <data name="textBoxLongitudeMinutes.Size" type="System.Drawing.Size, System.Drawing">
     <value>34, 20</value>
@@ -3673,8 +3667,8 @@
   <data name="textBoxElevation.Size" type="System.Drawing.Size, System.Drawing">
     <value>85, 20</value>
   </data>
-  <data name="&gt;&gt;radioButtonPrompt.ZOrder" xml:space="preserve">
-    <value>0</value>
+  <data name="label4.TabIndex" type="System.Int32, mscorlib">
+    <value>23</value>
   </data>
   <data name="tableLayoutPanel6.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 16</value>
@@ -3684,6 +3678,9 @@
   </data>
   <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
     <value>8</value>
+  </data>
+  <data name="chkAsyncPulseGuide.Text" xml:space="preserve">
+    <value>Asynchronous Pulse Guide</value>
   </data>
   <data name="btnJoysticConfig.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -3697,8 +3694,8 @@
   <data name="&gt;&gt;tableLayoutPanel8.Name" xml:space="preserve">
     <value>tableLayoutPanel8</value>
   </data>
-  <data name="&gt;&gt;chkPrecisionPulse.Name" xml:space="preserve">
-    <value>chkPrecisionPulse</value>
+  <data name="comboBox2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>103, 3</value>
   </data>
   <data name="&gt;&gt;textBoxLatitudeDegrees.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>
@@ -3733,8 +3730,8 @@
   <data name="&gt;&gt;comboBoxBaudRate.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="&gt;&gt;groupBox1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="radioButton4.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
   </data>
   <data name="label13.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -3753,9 +3750,6 @@
   </data>
   <data name="chkPrecisionPulse.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
-  </data>
-  <data name="tableLayoutPanel9.RowCount" type="System.Int32, mscorlib">
-    <value>5</value>
   </data>
   <data name="&gt;&gt;checkBoxUseDriverTime.ZOrder" xml:space="preserve">
     <value>1</value>
@@ -3795,6 +3789,9 @@
   </data>
   <data name="radioButtonPrompt.Size" type="System.Drawing.Size, System.Drawing">
     <value>131, 17</value>
+  </data>
+  <data name="&gt;&gt;label5.Parent" xml:space="preserve">
+    <value>tableLayoutPanel4</value>
   </data>
   <data name="&gt;&gt;textBoxElevation.Name" xml:space="preserve">
     <value>textBoxElevation</value>
@@ -3847,8 +3844,8 @@
   <data name="&gt;&gt;timerUpdate.Name" xml:space="preserve">
     <value>timerUpdate</value>
   </data>
-  <data name="cbLogging.Items5" xml:space="preserve">
-    <value>6: All Available</value>
+  <data name="&gt;&gt;label1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="labelTime.TabIndex" type="System.Int32, mscorlib">
     <value>19</value>
@@ -3892,8 +3889,8 @@
   <data name="&gt;&gt;cbLogging.Type" xml:space="preserve">
     <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;comboBoxComPort.Parent" xml:space="preserve">
-    <value>tableLayoutPanel2</value>
+  <data name="label10.TabIndex" type="System.Int32, mscorlib">
+    <value>35</value>
   </data>
   <data name="pbGeminiSettings.TabIndex" type="System.Int32, mscorlib">
     <value>30</value>
@@ -3901,8 +3898,8 @@
   <data name="tableLayoutPanel3.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="&gt;&gt;textBoxAperture.Name" xml:space="preserve">
-    <value>textBoxAperture</value>
+  <data name="&gt;&gt;picASCOM.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="labelUtc.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -3910,8 +3907,8 @@
   <data name="radioButtonWarmRestart.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>10, 0, 0, 0</value>
   </data>
-  <data name="tableLayoutPanel8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 100</value>
+  <data name="labelTime.Size" type="System.Drawing.Size, System.Drawing">
+    <value>185, 13</value>
   </data>
   <data name="comboBoxBaudRate.Items3" xml:space="preserve">
     <value>28800</value>
@@ -3931,8 +3928,8 @@
   <data name="btnJoysticConfig.Location" type="System.Drawing.Point, System.Drawing">
     <value>576, 274</value>
   </data>
-  <data name="&gt;&gt;radioButtonWarmRestart.Name" xml:space="preserve">
-    <value>radioButtonWarmRestart</value>
+  <data name="&gt;&gt;comboBoxSavedOptics.Parent" xml:space="preserve">
+    <value>tableLayoutPanel9</value>
   </data>
   <data name="labelUtc.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -3958,8 +3955,8 @@
   <data name="radioButtonWarmStart.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 30</value>
   </data>
-  <data name="tableLayoutPanel1.ColumnCount" type="System.Int32, mscorlib">
-    <value>4</value>
+  <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>61, 25</value>
   </data>
   <data name="&gt;&gt;label3.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>
@@ -3973,8 +3970,8 @@
   <data name="radioButtonInches.Text" xml:space="preserve">
     <value>inches</value>
   </data>
-  <data name="checkBoxUseDriverSite.Size" type="System.Drawing.Size, System.Drawing">
-    <value>156, 17</value>
+  <data name="&gt;&gt;label14.Name" xml:space="preserve">
+    <value>label14</value>
   </data>
   <data name="chkVoice.Text" xml:space="preserve">
     <value>Use Voice Announcer</value>
@@ -3994,8 +3991,8 @@
   <data name="comboBoxLongitude.Location" type="System.Drawing.Point, System.Drawing">
     <value>70, 53</value>
   </data>
-  <data name="textBoxLatitudeDegrees.Size" type="System.Drawing.Size, System.Drawing">
-    <value>34, 20</value>
+  <data name="radioButton3.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
   </data>
   <data name="pbGeminiSettings.Text" xml:space="preserve">
     <value>Gemini Settings...</value>
@@ -4039,8 +4036,8 @@
   <data name="textBoxLongitudeMinutes.TabIndex" type="System.Int32, mscorlib">
     <value>12</value>
   </data>
-  <data name="pbSetTimeNow.Size" type="System.Drawing.Size, System.Drawing">
-    <value>62, 21</value>
+  <data name="textBoxLatitudeDegrees.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
   </data>
   <data name="pbSetSiteNow.Size" type="System.Drawing.Size, System.Drawing">
     <value>61, 23</value>
@@ -4057,11 +4054,14 @@
   <data name="&gt;&gt;tableLayoutPanel2.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="&gt;&gt;chkPrecisionPulse.Name" xml:space="preserve">
+    <value>chkPrecisionPulse</value>
+  </data>
   <data name="chkJoystick.TabIndex" type="System.Int32, mscorlib">
     <value>31</value>
   </data>
-  <data name="&gt;&gt;groupBox5.Name" xml:space="preserve">
-    <value>groupBox5</value>
+  <data name="&gt;&gt;textBoxLatitudeDegrees.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="pbEditSavedOptics.Text" xml:space="preserve">
     <value>Edit</value>
@@ -4087,8 +4087,8 @@
   <data name="label9.Text" xml:space="preserve">
     <value>Com Port:</value>
   </data>
-  <data name="tableLayoutPanel5.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="comboBox2" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  <data name="&gt;&gt;label1.Name" xml:space="preserve">
+    <value>label1</value>
   </data>
   <data name="btnJoysticConfig.TabIndex" type="System.Int32, mscorlib">
     <value>33</value>
@@ -4099,20 +4099,20 @@
   <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
-  <data name="&gt;&gt;textBoxLatitudeMinutes.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;tableLayoutPanel4.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <data name="cmdOK.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
   </data>
-  <data name="groupBox7.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
+  <data name="&gt;&gt;radioButtonmillimeters.Parent" xml:space="preserve">
+    <value>tableLayoutPanel9</value>
   </data>
   <data name="&gt;&gt;radioButtonWarmStart.Type" xml:space="preserve">
     <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;radioButton2.Name" xml:space="preserve">
-    <value>radioButton2</value>
+  <data name="tableLayoutPanel4.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 16</value>
   </data>
   <data name="&gt;&gt;pbEditSavedOptics.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -4159,8 +4159,8 @@
   <data name="label10.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="&gt;&gt;tableLayoutPanel4.ZOrder" xml:space="preserve">
-    <value>0</value>
+  <data name="tableLayoutPanel9.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 16</value>
   </data>
   <data name="label9.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -4168,8 +4168,8 @@
   <data name="cmbJoystick.TabIndex" type="System.Int32, mscorlib">
     <value>32</value>
   </data>
-  <data name="&gt;&gt;groupBox3.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="label11.Location" type="System.Drawing.Point, System.Drawing">
+    <value>274, 407</value>
   </data>
   <data name="comboBoxBaudRate.Location" type="System.Drawing.Point, System.Drawing">
     <value>129, 30</value>
@@ -4198,8 +4198,8 @@
   <data name="label15.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
   </data>
-  <data name="cbLogging.Items2" xml:space="preserve">
-    <value>3: Some Detail</value>
+  <data name="checkBoxUseDriverSite.Size" type="System.Drawing.Size, System.Drawing">
+    <value>156, 17</value>
   </data>
   <data name="&gt;&gt;pbGeminiSettings.ZOrder" xml:space="preserve">
     <value>10</value>
@@ -4219,8 +4219,8 @@
   <data name="labelTime.Text" xml:space="preserve">
     <value>&lt;run time - time zone and UTC offset&gt;</value>
   </data>
-  <data name="label10.TabIndex" type="System.Int32, mscorlib">
-    <value>35</value>
+  <data name="&gt;&gt;comboBox1.Parent" xml:space="preserve">
+    <value>tableLayoutPanel3</value>
   </data>
   <data name="&gt;&gt;pbSiteConfig.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

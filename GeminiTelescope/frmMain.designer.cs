@@ -54,6 +54,7 @@ namespace ASCOM.GeminiTelescope
             this.parkAtCustomParkPositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.parkAtZenithToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuParkHere = new System.Windows.Forms.ToolStripMenuItem();
             this.unparkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
@@ -93,6 +94,8 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew3 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew4 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew1 = new ASCOM.GeminiTelescope.TButton();
+            this.configurePECToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.TableLayoutPanel3.SuspendLayout();
@@ -236,6 +239,7 @@ namespace ASCOM.GeminiTelescope
             this.parkAtCustomParkPositionToolStripMenuItem,
             this.toolStripMenuItem1,
             this.toolStripMenuItem2,
+            this.parkAtZenithToolStripMenuItem,
             this.toolStripMenuParkHere,
             this.unparkToolStripMenuItem,
             this.toolStripSeparator4,
@@ -265,6 +269,13 @@ namespace ASCOM.GeminiTelescope
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
             resources.ApplyResources(this.toolStripMenuItem2, "toolStripMenuItem2");
             this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuParkHome_Click);
+            // 
+            // parkAtZenithToolStripMenuItem
+            // 
+            this.parkAtZenithToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.parkAtZenithToolStripMenuItem.Name = "parkAtZenithToolStripMenuItem";
+            resources.ApplyResources(this.parkAtZenithToolStripMenuItem, "parkAtZenithToolStripMenuItem");
+            this.parkAtZenithToolStripMenuItem.Click += new System.EventHandler(this.parkAtZenithToolStripMenuItem_Click);
             // 
             // toolStripMenuParkHere
             // 
@@ -323,6 +334,8 @@ namespace ASCOM.GeminiTelescope
             this.focuserSetupDialogToolStripMenuItem,
             this.mountParametersToolStripMenuItem,
             this.toolStripSeparator3,
+            this.configurePECToolStripMenuItem,
+            this.toolStripSeparator6,
             this.observationLogToolStripMenuItem,
             this.configureCatalogsToolStripMenuItem,
             this.toolStripSeparator5,
@@ -587,6 +600,18 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlew1_MouseDown);
             this.buttonSlew1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlew1_MouseUp);
             // 
+            // configurePECToolStripMenuItem
+            // 
+            this.configurePECToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.configurePECToolStripMenuItem.Name = "configurePECToolStripMenuItem";
+            resources.ApplyResources(this.configurePECToolStripMenuItem, "configurePECToolStripMenuItem");
+            this.configurePECToolStripMenuItem.Click += new System.EventHandler(this.configurePECToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            resources.ApplyResources(this.toolStripSeparator6, "toolStripSeparator6");
+            // 
             // frmMain
             // 
             resources.ApplyResources(this, "$this");
@@ -691,6 +716,9 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.Label labelHA;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ToolStripMenuItem objectAndCoordinatesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem parkAtZenithToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem configurePECToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
 
 
     }
