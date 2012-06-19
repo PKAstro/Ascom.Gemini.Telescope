@@ -436,7 +436,7 @@ namespace ASCOM.GeminiTelescope
                 string [] bn = Brightness_names;
                 if (GeminiHardware.Instance.GeminiLevel > 4)
                     bn  = Brightness_namesL5;
-                if (res <= bn.Length) return bn.ToString();
+                if (res <= bn.Length) return res.ToString();
                 else
                     return bn[res];
             }
