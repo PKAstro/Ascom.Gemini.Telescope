@@ -63,8 +63,9 @@ namespace ASCOM.GeminiTelescope
         static public string[] Mount_names = {"Custom", "GM-8", "G-11", "HGM-200", "MI-250", "Titan", "Titan50"};
         static public string[] TrackingRate_names = { "Sidereal", "King Rate", "Lunar", "Solar", "Terrestrial", "Closed Loop", "Comet Rate" };
         static public string[] HandController_names = { "Visual", "Photo", "All Speeds" };
-        static public string[] Brightness_names = { "100%", "53%", "40%", "27%", "20%", "13%", "6.6%" };
+        static public string[] Brightness_names = { "100%", "53%", "40%", "27%", "20%", "13%", "6.6%"  };
 
+        static public string[] Brightness_namesL5 = {"100%", "53%", "40%", "27%", "20%", "13%", "6.6%", "0%", "-6.6%", "-13%", "-20%"};
         /// <summary>
         /// true if these properties have not been sync'ed with Gemini yet
         /// false if no changes since the last sync (to Gemini) or since props were downloaded from Gemini:
@@ -432,11 +433,20 @@ namespace ASCOM.GeminiTelescope
         {
             get {
                 int res = get_int_Prop(":GB");
-                return Brightness_names[res];
+                string [] bn = Brightness_names;
+                if (GeminiHardware.Instance.GeminiLevel > 4)
+                    bn  = Brightness_namesL5;
+                if (res <= bn.Length) return bn.ToString();
+                else
+                    return bn[res];
             }
             set {
-                for (int i = 0; i < Brightness_names.Length; ++i)
-                    if (Brightness_names[i].Equals(value))
+                string [] bn = Brightness_names;
+                if (GeminiHardware.Instance.GeminiLevel > 4)
+                    bn  = Brightness_namesL5;
+
+                for (int i = 0; i < bn.Length; ++i)
+                    if (bn[i].Equals(value))
                         GeminiHardware.Instance.DoCommandResult(":SB" + i.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
             }
         }

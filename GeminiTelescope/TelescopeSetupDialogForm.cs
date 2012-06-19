@@ -141,7 +141,9 @@ namespace ASCOM.GeminiTelescope
             {
                 int idx = comboBoxTZ.Items.Add(tz);
             }
-            
+
+            chkSetLanguage.Checked = GeminiHardware.Instance.SetLanguage;
+
             m_DoneInitialize = true;
         }
 
@@ -511,13 +513,18 @@ namespace ASCOM.GeminiTelescope
             m_SaveLongitude = Longitude;
             m_SaveUTCOffset = TZ;
 
-            // Gemini L5 and above: support only precision pulse guiding:
+            // Gemini L5 and above: support only precision pulse guiding, language setting
             if (GeminiHardware.Instance.GeminiLevel > 4)
             {
                 this.chkPrecisionPulse.Checked = true;
                 this.chkAsyncPulseGuide.Checked = true;
                 this.chkAsyncPulseGuide.Enabled = false;
                 this.chkPrecisionPulse.Enabled = false;
+                this.chkSetLanguage.Visible = true;
+            }
+            else
+            {
+                this.chkSetLanguage.Visible = false;
             }
         }
 

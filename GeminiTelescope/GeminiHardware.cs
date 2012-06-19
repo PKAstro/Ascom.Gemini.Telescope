@@ -938,6 +938,14 @@ namespace ASCOM.GeminiTelescope
         internal int m_BacklashSize = 0;
         internal int m_BrakeSize = 0;
         internal int m_Speed = 1;
+
+        internal System.Collections.Generic.Dictionary<string, string> m_LanguageCommands = new System.Collections.Generic.Dictionary<string, string>()
+        { {"en",">601:"},
+          {"de",">602:"},
+          {"fr",">603:"},
+          {"es",">604:"}
+        };
+
 #endregion
 
 #region Public Events
@@ -1093,6 +1101,9 @@ namespace ASCOM.GeminiTelescope
                 m_UseDriverSite= false;
             if (!bool.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Use Driver Time", ""), out m_UseDriverTime))
                 m_UseDriverTime = false;
+
+            if (!bool.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Set Language", ""), out m_SetLanguage))
+                m_SetLanguage = false;
 
             if (!int.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "TraceLevel", ""), out m_TraceLevel))
                 m_TraceLevel = 3;
@@ -1534,6 +1545,21 @@ namespace ASCOM.GeminiTelescope
                 m_UseDriverSite = value;
             }
         }
+
+
+
+        private bool m_SetLanguage = false;
+
+        public bool SetLanguage
+        {
+            get { return m_SetLanguage; }
+            set {
+                Profile.DeviceType = "Telescope";
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Set Language", value.ToString());                
+                m_SetLanguage = value; 
+            }
+        }
+
         /// <summary>
         /// Get/Set Use Gemini Time 
         /// </summary>
@@ -2709,6 +2735,20 @@ namespace ASCOM.GeminiTelescope
                 SetLatitude(m_Latitude);
                 SetLongitude(m_Longitude);
                 UTCOffset = m_UTCOffset;
+            }
+
+            //Set HC language, if required
+            if (m_SetLanguage && GeminiLevel > 4)
+            {
+                Trace.Info(2, "Set Language from PC", System.Globalization.CultureInfo.CurrentCulture.Name);
+
+                string cn = System.Globalization.CultureInfo.CurrentCulture.Name.Substring(0, 2);
+                if (m_LanguageCommands.ContainsKey(cn.ToLower()))
+                {
+                    string cmd = m_LanguageCommands[cn.ToLower()];
+                    Trace.Info(2, "Set Language cmd", cmd);
+                    DoCommand(cmd, false);
+                }
             }
             
             if (m_UseDriverTime)
