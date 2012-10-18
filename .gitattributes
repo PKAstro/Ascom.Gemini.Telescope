@@ -119,6 +119,12 @@ GeminiTelescope/frmObservationLog.resx -text
 GeminiTelescope/frmOpticsSetup.Designer.cs -text
 GeminiTelescope/frmOpticsSetup.cs -text
 GeminiTelescope/frmOpticsSetup.resx -text
+GeminiTelescope/frmPEC.Designer.cs -text
+GeminiTelescope/frmPEC.cs -text
+GeminiTelescope/frmPEC.resx -text
+GeminiTelescope/frmPECChart.Designer.cs -text
+GeminiTelescope/frmPECChart.cs -text
+GeminiTelescope/frmPECChart.resx -text
 GeminiTelescope/frmParkPosition.Designer.cs -text
 GeminiTelescope/frmParkPosition.cs -text
 GeminiTelescope/frmParkPosition.resx -text
