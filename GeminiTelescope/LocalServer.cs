@@ -18,9 +18,13 @@ using System.Drawing;
 using System.Collections;
 using System.Runtime.InteropServices;
 using System.Reflection;
+using ASCOM.Utilities;
 using Microsoft.Win32;
 using System.Text;
 using System.Threading;
+using System.Security.Principal;
+using System.Diagnostics;
+using ASCOM;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -111,7 +115,7 @@ namespace ASCOM.GeminiTelescope
         private static ArrayList m_ComObjectAssys;				// Dynamically loaded assemblies containing served COM objects
         private static ArrayList m_ComObjectTypes;				// Served COM object types
         private static ArrayList m_ClassFactories;				// Served COM object class factories
-        private static string m_sAppId = "{fbe30603-14ea-45ed-96d5-98c5e00f9c1c}";	// Our AppId
+        private static string s_appId = "{fbe30603-14ea-45ed-96d5-98c5e00f9c1c}";	// Our AppId
         private static bool m_UnregisterASCOM = false;
 
         #endregion
@@ -237,19 +241,33 @@ namespace ASCOM.GeminiTelescope
                 try
                 {
                     Assembly so = Assembly.LoadFrom(aPath);
-
-                    //Added check to see if the dll has the ServedClassNameAttribute
-                    object[] attributes = so.GetCustomAttributes(typeof(ASCOM.ServedClassNameAttribute), false);
-                    if (attributes.Length > 0)
+                    //PWGS Get the types in the assembly
+                    Type[] types = so.GetTypes();
+                    foreach (Type type in types)
                     {
-                        m_ComObjectTypes.Add(so.GetType(fqClassName, true));
-                        m_ComObjectAssys.Add(so);
+                        // PWGS Now checks the type rather than the assembly
+                        // Check to see if the type has the ServedClassName attribute, only use it if it does.
+                        MemberInfo info = type;
+
+                        object[] attrbutes = info.GetCustomAttributes(typeof(ServedClassNameAttribute), false);
+                        if (attrbutes.Length > 0)
+                        {
+                            //MessageBox.Show("Adding Type: " + type.Name + " " + type.FullName);
+                            m_ComObjectTypes.Add(type); //PWGS - much simpler
+                            m_ComObjectAssys.Add(so);
+                        }
                     }
+                }
+                catch (BadImageFormatException)
+                {
+                    // Probably an attempt to load a Win32 DLL (i.e. not a .net assembly)
+                    // Just swallow the exception and continue to the next item.
+                    continue;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show("Failed to load served COM class assembly " + fi.Name + " - " + e.Message,
-                        "GeminiTelescope", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                        "test", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     return false;
                 }
 
@@ -259,6 +277,42 @@ namespace ASCOM.GeminiTelescope
         #endregion
 
         #region COM Registration and Unregistration
+        //
+        // Test if running elevated
+        //
+        private static bool IsAdministrator
+        {
+            get
+            {
+                WindowsIdentity i = WindowsIdentity.GetCurrent();
+                WindowsPrincipal p = new WindowsPrincipal(i);
+                return p.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+        }
+
+        //
+        // Elevate by re-running ourselves with elevation dialog
+        //
+        private static void ElevateSelf(string arg)
+        {
+            ProcessStartInfo si = new ProcessStartInfo();
+            si.Arguments = arg;
+            si.WorkingDirectory = Environment.CurrentDirectory;
+            si.FileName = Application.ExecutablePath;
+            si.Verb = "runas";
+            try { Process.Start(si); }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                MessageBox.Show("The test was not " + (arg == "/register" ? "registered" : "unregistered") +
+                    " because you did not allow it.", "test", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "test", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            }
+            return;
+        }
+
         //
         // Do everything to register this for COM. Never use REGASM on
         // this exe assembly! It would create InProcServer32 entries 
@@ -272,9 +326,14 @@ namespace ASCOM.GeminiTelescope
         //
         private static void RegisterObjects()
         {
-            RegistryKey key = null;
-            RegistryKey key2 = null;
-            RegistryKey key3 = null;
+            if (!IsAdministrator)
+            {
+                ElevateSelf("/register");
+                return;
+            }
+            //
+            // If reached here, we're running elevated
+            //
 
             Assembly assy = Assembly.GetExecutingAssembly();
             Attribute attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyTitleAttribute));
@@ -290,37 +349,31 @@ namespace ASCOM.GeminiTelescope
                 //
                 // HKCR\APPID\appid
                 //
-                key = Registry.ClassesRoot.CreateSubKey("APPID\\" + m_sAppId);
-                key.SetValue(null, assyDescription);
-                key.SetValue("AppID", m_sAppId);
-                key.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord);
-                key.Close();
-                key = null;
+                using (RegistryKey key = Registry.ClassesRoot.CreateSubKey("APPID\\" + s_appId))
+                {
+                    key.SetValue(null, assyDescription);
+                    key.SetValue("AppID", s_appId);
+                    key.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord);
+                }
                 //
                 // HKCR\APPID\exename.ext
                 //
-                key = Registry.ClassesRoot.CreateSubKey("APPID\\" +
-                            Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1));
-                key.SetValue("AppID", m_sAppId);
-                key.Close();
-                key = null;
-
+                using (RegistryKey key = Registry.ClassesRoot.CreateSubKey(string.Format("APPID\\{0}",
+                            Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1))))
+                {
+                    key.SetValue("AppID", s_appId);
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error while registering the server:\n" + ex.ToString(),
-                        "GeminiTelescope", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                        "test", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
             finally
             {
-                if (key != null) key.Close();
             }
 
-
-            //Initialise registered classes counter
-            int ClassCount = 0;
-            
             //
             // For each of the driver assemblies
             //
@@ -333,81 +386,64 @@ namespace ASCOM.GeminiTelescope
                     // HKCR\CLSID\clsid
                     //
                     string clsid = Marshal.GenerateGuidForType(type).ToString("B");
+                    string progid = Marshal.GenerateProgIdForType(type);
+                    //PWGS Generate device type from the Class name
+                    string deviceType = type.Name;
 
-                    assy = type.Assembly;
-                    attr = Attribute.GetCustomAttribute(assy, typeof(ASCOM.DeviceIdAttribute));
-                    string progid = ((ASCOM.DeviceIdAttribute)attr).DeviceId;
-
-                    key = Registry.ClassesRoot.CreateSubKey("CLSID\\" + clsid);
-                    key.SetValue(null, progid);						// Could be assyTitle/Desc??, but .NET components show ProgId here
-                    key.SetValue("AppId", m_sAppId);
-                    key2 = key.CreateSubKey("Implemented Categories");
-                    key3 = key2.CreateSubKey("{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}");
-                    key3.Close();
-                    key3 = null;
-                    key2.Close();
-                    key2 = null;
-                    key2 = key.CreateSubKey("ProgId");
-                    key2.SetValue(null, progid);
-                    key2.Close();
-                    key2 = null;
-                    key2 = key.CreateSubKey("Programmable");
-                    key2.Close();
-                    key2 = null;
-                    key2 = key.CreateSubKey("LocalServer32");
-                    key2.SetValue(null, Application.ExecutablePath);
-                    key2.Close();
-                    key2 = null;
-                    key.Close();
-                    key = null;
+                    using (RegistryKey key = Registry.ClassesRoot.CreateSubKey(string.Format("CLSID\\{0}", clsid)))
+                    {
+                        key.SetValue(null, progid);						// Could be assyTitle/Desc??, but .NET components show ProgId here
+                        key.SetValue("AppId", s_appId);
+                        using (RegistryKey key2 = key.CreateSubKey("Implemented Categories"))
+                        {
+                            key2.CreateSubKey("{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}");
+                        }
+                        using (RegistryKey key2 = key.CreateSubKey("ProgId"))
+                        {
+                            key2.SetValue(null, progid);
+                        }
+                        key.CreateSubKey("Programmable");
+                        using (RegistryKey key2 = key.CreateSubKey("LocalServer32"))
+                        {
+                            key2.SetValue(null, Application.ExecutablePath);
+                        }
+                    }
                     //
                     // HKCR\CLSID\progid
                     //
-                    key = Registry.ClassesRoot.CreateSubKey(progid);
-                    key.SetValue(null, assyTitle);
-                    key2 = key.CreateSubKey("CLSID");
-                    key2.SetValue(null, clsid);
-                    key2.Close();
-                    key2 = null;
-                    key.Close();
-                    key = null;
+                    using (RegistryKey key = Registry.ClassesRoot.CreateSubKey(progid))
+                    {
+                        key.SetValue(null, assyTitle);
+                        using (RegistryKey key2 = key.CreateSubKey("CLSID"))
+                        {
+                            key2.SetValue(null, clsid);
+                        }
+                    }
                     //
                     // ASCOM 
                     //
                     assy = type.Assembly;
-                    attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyProductAttribute));
-                    attr = Attribute.GetCustomAttribute(assy, typeof(ASCOM.ServedClassNameAttribute));
-                    string chooserName = ((ASCOM.ServedClassNameAttribute)attr).DisplayName;
-                    ASCOM.Utilities.Profile P = new ASCOM.Utilities.Profile();
-                    P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.0.3 or later
-                    P.Register(progid, chooserName);
 
-                    ClassCount += 1; //Increment class counter
-
-                    try										// In case Helper becomes native .NET
+                    // Pull the display name from the ServedClassName attribute.
+                    attr = Attribute.GetCustomAttribute(type, typeof(ServedClassNameAttribute)); //PWGS Changed to search type for attribute rather than assembly
+                    string chooserName = ((ServedClassNameAttribute)attr).DisplayName ?? "MultiServer";
+                    using (var P = new ASCOM.Utilities.Profile())
                     {
-                        Marshal.ReleaseComObject(P);
+                        P.DeviceType = deviceType;
+                        P.Register(progid, chooserName);
                     }
-                    catch (Exception) { }
-                    P = null;
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error while registering the server:\n" + ex.ToString(),
-                            "GeminiTelescope", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                            "test", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     bFail = true;
                 }
                 finally
                 {
-                    if (key != null) key.Close();
-                    if (key2 != null) key2.Close();
-                    if (key3 != null) key3.Close();
                 }
                 if (bFail) break;
             }
-
-            if (ClassCount == 0) MessageBox.Show("No registerable drivers were found");
-
         }
 
         //
@@ -418,12 +454,18 @@ namespace ASCOM.GeminiTelescope
         //
         private static void UnregisterObjects()
         {
+            if (!IsAdministrator)
+            {
+                ElevateSelf("/unregister");
+                return;
+            }
+
             //
             // Local server's DCOM/AppID information
             //
-            Registry.ClassesRoot.DeleteSubKey("APPID\\" + m_sAppId, false);
-            Registry.ClassesRoot.DeleteSubKey("APPID\\" +
-                    Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1), false);
+            Registry.ClassesRoot.DeleteSubKey(string.Format("APPID\\{0}", s_appId), false);
+            Registry.ClassesRoot.DeleteSubKey(string.Format("APPID\\{0}",
+                    Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1)), false);
 
             //
             // For each of the driver assemblies
@@ -431,47 +473,37 @@ namespace ASCOM.GeminiTelescope
             foreach (Type type in m_ComObjectTypes)
             {
                 string clsid = Marshal.GenerateGuidForType(type).ToString("B");
-
-                Assembly assy = type.Assembly;
-
-                Attribute attr = Attribute.GetCustomAttribute(assy, typeof(ASCOM.DeviceIdAttribute));
-                string progid = ((ASCOM.DeviceIdAttribute)attr).DeviceId;
+                string progid = Marshal.GenerateProgIdForType(type);
+                string deviceType = type.Name;
                 //
                 // Best efforts
                 //
                 //
                 // HKCR\progid
                 //
-                Registry.ClassesRoot.DeleteSubKey(progid + "\\CLSID", false);
+                Registry.ClassesRoot.DeleteSubKey(String.Format("{0}\\CLSID", progid), false);
                 Registry.ClassesRoot.DeleteSubKey(progid, false);
                 //
                 // HKCR\CLSID\clsid
                 //
-                Registry.ClassesRoot.DeleteSubKey("CLSID\\" + clsid + "\\Implemented Categories\\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}", false);
-                Registry.ClassesRoot.DeleteSubKey("CLSID\\" + clsid + "\\Implemented Categories", false);
-                Registry.ClassesRoot.DeleteSubKey("CLSID\\" + clsid + "\\ProgId", false);
-                Registry.ClassesRoot.DeleteSubKey("CLSID\\" + clsid + "\\LocalServer32", false);
-                Registry.ClassesRoot.DeleteSubKey("CLSID\\" + clsid + "\\Programmable", false);
-                Registry.ClassesRoot.DeleteSubKey("CLSID\\" + clsid, false);
-                if (m_UnregisterASCOM)
+                Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\Implemented Categories\\{{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}}", clsid), false);
+                Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\Implemented Categories", clsid), false);
+                Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\ProgId", clsid), false);
+                Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\LocalServer32", clsid), false);
+                Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\Programmable", clsid), false);
+                Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}", clsid), false);
+                try
                 {
-                    try
+                    //
+                    // ASCOM
+                    //
+                    using (var P = new ASCOM.Utilities.Profile())
                     {
-                        //
-                        // ASCOM
-                        //
-                        ASCOM.Utilities.Profile P = new ASCOM.Utilities.Profile();
-                        P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.0.3 or later
+                        P.DeviceType = deviceType;
                         P.Unregister(progid);
-                        try										// In case Helper becomes native .NET
-                        {
-                            Marshal.ReleaseComObject(P);
-                        }
-                        catch (Exception) { }
-                        P = null;
                     }
-                    catch (Exception) { }
                 }
+                catch (Exception) { }
             }
         }
         #endregion

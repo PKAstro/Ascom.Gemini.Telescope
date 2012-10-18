@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeminiTelescope", "GeminiTelescope\GeminiTelescope.csproj", "{6DD9248B-EB0E-4076-9F50-1B206B695AFB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telescope", "Telescope\Telescope.csproj", "{12633CA2-397C-4924-B924-5BCC119B9077}"

@@ -43,11 +43,19 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.chkSavePEC = new System.Windows.Forms.CheckBox();
-            this.geminiPropertiesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.pbModel = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.menuUpdate = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.menuItemGetSettings = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemSendSettings = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.pbFromGemini = new System.Windows.Forms.Button();
+            this.pbSaveDefault = new System.Windows.Forms.Button();
             this.groupBox1 = new Indigo.CollapsibleGroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.cbGeometry = new System.Windows.Forms.ComboBox();
+            this.geminiPropertiesBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.label23 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.cbMountType = new System.Windows.Forms.ComboBox();
@@ -63,9 +71,6 @@
             this.pbSetSafetyLimit = new System.Windows.Forms.Button();
             this.checkBox7 = new System.Windows.Forms.CheckBox();
             this.pbController = new System.Windows.Forms.Button();
-            this.menuUpdate = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.menuItemGetSettings = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuItemSendSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox2 = new Indigo.CollapsibleGroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.pbTracking = new System.Windows.Forms.Button();
@@ -117,15 +122,13 @@
             this.numericUpDown18 = new System.Windows.Forms.NumericUpDown();
             this.label22 = new System.Windows.Forms.Label();
             this.checkBox5 = new System.Windows.Forms.CheckBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.pbFromGemini = new System.Windows.Forms.Button();
-            this.pbSaveDefault = new System.Windows.Forms.Button();
             this.menuSafetyPopup.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
+            this.menuUpdate.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            this.menuUpdate.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -152,7 +155,6 @@
             this.tableLayoutPanel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown18)).BeginInit();
-            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuSafetyPopup
@@ -294,10 +296,6 @@
             this.chkSavePEC.UseVisualStyleBackColor = false;
             this.chkSavePEC.CheckedChanged += new System.EventHandler(this.SavePEC_CheckedChanged);
             // 
-            // geminiPropertiesBindingSource
-            // 
-            this.geminiPropertiesBindingSource.DataSource = typeof(ASCOM.GeminiTelescope.GeminiProperties);
-            // 
             // pbModel
             // 
             this.pbModel.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
@@ -322,280 +320,8 @@
             this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 12);
             this.flowLayoutPanel1.MaximumSize = new System.Drawing.Size(550, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(481, 735);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(481, 736);
             this.flowLayoutPanel1.TabIndex = 39;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
-            this.groupBox1.Controls.Add(this.tableLayoutPanel1);
-            this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.ForeColor = System.Drawing.Color.White;
-            this.groupBox1.FullSize = new System.Drawing.Size(471, 156);
-            this.groupBox1.Location = new System.Drawing.Point(3, 3);
-            this.groupBox1.MinimumSize = new System.Drawing.Size(471, 0);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(471, 156);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Controller Settings";
-            this.groupBox1.CollapseBoxClickedEvent += new Indigo.CollapsibleGroupBox.CollapseBoxClickedEventHandler(this.groupBox_CollapseBoxClickedEvent);
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.ColumnCount = 4;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.tableLayoutPanel1.Controls.Add(this.label21, 2, 4);
-            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 4);
-            this.tableLayoutPanel1.Controls.Add(this.cbMountType, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label15, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.checkBox2, 2, 1);
-            this.tableLayoutPanel1.Controls.Add(this.label3, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.comboBox1, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.comboBox2, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.checkBox1, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.checkBox3, 2, 2);
-            this.tableLayoutPanel1.Controls.Add(this.dateTimePicker1, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.pbSetSafetyLimit, 2, 3);
-            this.tableLayoutPanel1.Controls.Add(this.checkBox7, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.pbController, 3, 4);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
-            this.tableLayoutPanel1.MaximumSize = new System.Drawing.Size(540, 137);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 5;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(465, 137);
-            this.tableLayoutPanel1.TabIndex = 0;
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.BackColor = System.Drawing.Color.Transparent;
-            this.label21.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "WestSafetyLimit", true));
-            this.label21.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label21.ForeColor = System.Drawing.Color.Lime;
-            this.label21.Location = new System.Drawing.Point(223, 108);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(214, 29);
-            this.label21.TabIndex = 15;
-            this.label21.Text = "West Safety Limit: 000 deg";
-            this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.tableLayoutPanel1.SetColumnSpan(this.label2, 2);
-            this.label2.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "EastSafetyLimit", true));
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.ForeColor = System.Drawing.Color.Lime;
-            this.label2.Location = new System.Drawing.Point(3, 108);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(214, 29);
-            this.label2.TabIndex = 13;
-            this.label2.Text = "East Safety Limit: 000 deg";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // cbMountType
-            // 
-            this.cbMountType.BackColor = System.Drawing.Color.Black;
-            this.cbMountType.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "MountTypeSetting", true));
-            this.cbMountType.DisplayMember = "name";
-            this.cbMountType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbMountType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cbMountType.ForeColor = System.Drawing.Color.Lime;
-            this.cbMountType.FormattingEnabled = true;
-            this.cbMountType.Location = new System.Drawing.Point(113, 3);
-            this.cbMountType.Name = "cbMountType";
-            this.cbMountType.Size = new System.Drawing.Size(104, 21);
-            this.cbMountType.TabIndex = 0;
-            this.cbMountType.SelectedIndexChanged += new System.EventHandler(this.cbMountType_SelectedIndexChanged);
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.BackColor = System.Drawing.Color.Transparent;
-            this.label15.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label15.ForeColor = System.Drawing.Color.Lime;
-            this.label15.Location = new System.Drawing.Point(3, 0);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(104, 27);
-            this.label15.TabIndex = 11;
-            this.label15.Text = "Mount Type:";
-            this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // checkBox2
-            // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.BackColor = System.Drawing.Color.Transparent;
-            this.checkBox2.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.checkBox2.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.geminiPropertiesBindingSource, "DoesPrecession", true));
-            this.checkBox2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.checkBox2.ForeColor = System.Drawing.Color.Lime;
-            this.checkBox2.Location = new System.Drawing.Point(243, 30);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(194, 21);
-            this.checkBox2.TabIndex = 5;
-            this.checkBox2.Text = "Gemini expects J2000 co-ordinates:";
-            this.checkBox2.UseVisualStyleBackColor = false;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.BackColor = System.Drawing.Color.Transparent;
-            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.ForeColor = System.Drawing.Color.Lime;
-            this.label3.Location = new System.Drawing.Point(3, 54);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(104, 27);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Hand Controller Mode:";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.ForeColor = System.Drawing.Color.Lime;
-            this.label1.Location = new System.Drawing.Point(3, 27);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(104, 27);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "LED Brightness:";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.BackColor = System.Drawing.Color.Black;
-            this.comboBox1.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "LEDBrightness", true));
-            this.comboBox1.DisplayMember = "name";
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.comboBox1.ForeColor = System.Drawing.Color.Lime;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(113, 30);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(104, 21);
-            this.comboBox1.TabIndex = 1;
-            // 
-            // comboBox2
-            // 
-            this.comboBox2.BackColor = System.Drawing.Color.Black;
-            this.comboBox2.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "HandController", true));
-            this.comboBox2.DisplayMember = "name";
-            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.comboBox2.ForeColor = System.Drawing.Color.Lime;
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(113, 57);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(104, 21);
-            this.comboBox2.TabIndex = 2;
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.BackColor = System.Drawing.Color.Transparent;
-            this.checkBox1.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.checkBox1.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.geminiPropertiesBindingSource, "SyncDoesAlign", true));
-            this.checkBox1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.checkBox1.ForeColor = System.Drawing.Color.Lime;
-            this.checkBox1.Location = new System.Drawing.Point(266, 3);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(171, 21);
-            this.checkBox1.TabIndex = 4;
-            this.checkBox1.Text = "Sync performs Additional Align:";
-            this.checkBox1.UseVisualStyleBackColor = false;
-            // 
-            // checkBox3
-            // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.BackColor = System.Drawing.Color.Transparent;
-            this.checkBox3.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.checkBox3.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.geminiPropertiesBindingSource, "DoesRefraction", true));
-            this.checkBox3.Dock = System.Windows.Forms.DockStyle.Right;
-            this.checkBox3.ForeColor = System.Drawing.Color.Lime;
-            this.checkBox3.Location = new System.Drawing.Point(272, 57);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(165, 21);
-            this.checkBox3.TabIndex = 6;
-            this.checkBox3.Text = "Gemini Calculates Refraction:";
-            this.checkBox3.UseVisualStyleBackColor = false;
-            // 
-            // dateTimePicker1
-            // 
-            this.dateTimePicker1.CalendarForeColor = System.Drawing.Color.Black;
-            this.dateTimePicker1.CalendarMonthBackground = System.Drawing.Color.Black;
-            this.dateTimePicker1.Checked = false;
-            this.dateTimePicker1.CustomFormat = "HH:mm:ss";
-            this.dateTimePicker1.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "AlarmTime", true));
-            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePicker1.Location = new System.Drawing.Point(113, 84);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.ShowUpDown = true;
-            this.dateTimePicker1.Size = new System.Drawing.Size(104, 20);
-            this.dateTimePicker1.TabIndex = 3;
-            // 
-            // pbSetSafetyLimit
-            // 
-            this.pbSetSafetyLimit.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.pbSetSafetyLimit.ContextMenuStrip = this.menuSafetyPopup;
-            this.pbSetSafetyLimit.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pbSetSafetyLimit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.pbSetSafetyLimit.ForeColor = System.Drawing.Color.Black;
-            this.pbSetSafetyLimit.Image = ((System.Drawing.Image)(resources.GetObject("pbSetSafetyLimit.Image")));
-            this.pbSetSafetyLimit.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.pbSetSafetyLimit.Location = new System.Drawing.Point(296, 81);
-            this.pbSetSafetyLimit.Margin = new System.Windows.Forms.Padding(0);
-            this.pbSetSafetyLimit.Name = "pbSetSafetyLimit";
-            this.pbSetSafetyLimit.Size = new System.Drawing.Size(144, 27);
-            this.pbSetSafetyLimit.TabIndex = 8;
-            this.pbSetSafetyLimit.Tag = "EastSafetyLimitDegrees,WestSafetyLimitDegrees,GotoLimitDegrees";
-            this.pbSetSafetyLimit.Text = "Set Safety Limits";
-            this.pbSetSafetyLimit.UseVisualStyleBackColor = false;
-            this.pbSetSafetyLimit.Click += new System.EventHandler(this.pbSetSafetyLimit_Click);
-            // 
-            // checkBox7
-            // 
-            this.checkBox7.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.checkBox7.AutoSize = true;
-            this.checkBox7.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.geminiPropertiesBindingSource, "AlarmSet", true));
-            this.checkBox7.Location = new System.Drawing.Point(10, 86);
-            this.checkBox7.Name = "checkBox7";
-            this.checkBox7.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkBox7.Size = new System.Drawing.Size(97, 17);
-            this.checkBox7.TabIndex = 12;
-            this.checkBox7.Text = "Set Alarm Time";
-            this.checkBox7.UseVisualStyleBackColor = true;
-            // 
-            // pbController
-            // 
-            this.pbController.AutoSize = true;
-            this.pbController.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.pbController.ContextMenuStrip = this.menuUpdate;
-            this.pbController.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.pbController.FlatAppearance.BorderSize = 0;
-            this.pbController.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.pbController.Image = ((System.Drawing.Image)(resources.GetObject("pbController.Image")));
-            this.pbController.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.pbController.Location = new System.Drawing.Point(440, 108);
-            this.pbController.Margin = new System.Windows.Forms.Padding(0);
-            this.pbController.Name = "pbController";
-            this.pbController.Size = new System.Drawing.Size(22, 22);
-            this.pbController.TabIndex = 35;
-            this.pbController.UseVisualStyleBackColor = true;
-            this.pbController.Click += new System.EventHandler(this.pbUpdate_Click);
             // 
             // menuUpdate
             // 
@@ -624,6 +350,356 @@
             this.menuItemSendSettings.Text = "Send Settings To Gemini";
             this.menuItemSendSettings.Click += new System.EventHandler(this.menuItemSendSettings_Click);
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.pbFromGemini);
+            this.panel1.Controls.Add(this.pbSaveDefault);
+            this.panel1.Controls.Add(this.pbOK);
+            this.panel1.Controls.Add(this.pbModel);
+            this.panel1.Controls.Add(this.pbApply);
+            this.panel1.Controls.Add(this.chkSavePEC);
+            this.panel1.Controls.Add(this.button3);
+            this.panel1.Controls.Add(this.pbReboot);
+            this.panel1.Controls.Add(this.pbSave);
+            this.panel1.Controls.Add(this.chkSendSettings);
+            this.panel1.Controls.Add(this.pbLoad);
+            this.panel1.Location = new System.Drawing.Point(3, 616);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(471, 117);
+            this.panel1.TabIndex = 5;
+            // 
+            // pbFromGemini
+            // 
+            this.pbFromGemini.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.pbFromGemini.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.pbFromGemini.Location = new System.Drawing.Point(396, 94);
+            this.pbFromGemini.Name = "pbFromGemini";
+            this.pbFromGemini.Size = new System.Drawing.Size(75, 23);
+            this.pbFromGemini.TabIndex = 40;
+            this.pbFromGemini.Text = "From Gemini";
+            this.pbFromGemini.UseVisualStyleBackColor = true;
+            this.pbFromGemini.Click += new System.EventHandler(this.pbFromGemini_Click);
+            // 
+            // pbSaveDefault
+            // 
+            this.pbSaveDefault.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.pbSaveDefault.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.pbSaveDefault.Location = new System.Drawing.Point(269, 32);
+            this.pbSaveDefault.Name = "pbSaveDefault";
+            this.pbSaveDefault.Size = new System.Drawing.Size(95, 23);
+            this.pbSaveDefault.TabIndex = 39;
+            this.pbSaveDefault.Text = "Save Default";
+            this.pbSaveDefault.UseVisualStyleBackColor = true;
+            this.pbSaveDefault.Click += new System.EventHandler(this.pbSaveDefault_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
+            this.groupBox1.Controls.Add(this.tableLayoutPanel1);
+            this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox1.ForeColor = System.Drawing.Color.White;
+            this.groupBox1.FullSize = new System.Drawing.Size(471, 157);
+            this.groupBox1.Location = new System.Drawing.Point(3, 3);
+            this.groupBox1.MinimumSize = new System.Drawing.Size(471, 0);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(471, 157);
+            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Controller Settings";
+            this.groupBox1.CollapseBoxClickedEvent += new Indigo.CollapsibleGroupBox.CollapseBoxClickedEventHandler(this.groupBox_CollapseBoxClickedEvent);
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 4;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel1.Controls.Add(this.cbGeometry, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label23, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label21, 2, 4);
+            this.tableLayoutPanel1.Controls.Add(this.label2, 1, 5);
+            this.tableLayoutPanel1.Controls.Add(this.cbMountType, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label15, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.checkBox2, 2, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label3, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.comboBox1, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.comboBox2, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.checkBox1, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.checkBox3, 2, 2);
+            this.tableLayoutPanel1.Controls.Add(this.dateTimePicker1, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.pbSetSafetyLimit, 2, 3);
+            this.tableLayoutPanel1.Controls.Add(this.checkBox7, 0, 4);
+            this.tableLayoutPanel1.Controls.Add(this.pbController, 3, 5);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
+            this.tableLayoutPanel1.MaximumSize = new System.Drawing.Size(540, 137);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 6;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(465, 137);
+            this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // cbGeometry
+            // 
+            this.cbGeometry.BackColor = System.Drawing.Color.Black;
+            this.cbGeometry.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "MountGeometrySetting", true));
+            this.cbGeometry.DisplayMember = "name";
+            this.cbGeometry.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbGeometry.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbGeometry.ForeColor = System.Drawing.Color.Lime;
+            this.cbGeometry.FormattingEnabled = true;
+            this.cbGeometry.Location = new System.Drawing.Point(113, 26);
+            this.cbGeometry.Name = "cbGeometry";
+            this.cbGeometry.Size = new System.Drawing.Size(104, 21);
+            this.cbGeometry.TabIndex = 37;
+            // 
+            // geminiPropertiesBindingSource
+            // 
+            this.geminiPropertiesBindingSource.DataSource = typeof(ASCOM.GeminiTelescope.GeminiProperties);
+            this.geminiPropertiesBindingSource.CurrentChanged += new System.EventHandler(this.geminiPropertiesBindingSource_CurrentChanged);
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.BackColor = System.Drawing.Color.Transparent;
+            this.label23.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label23.ForeColor = System.Drawing.Color.Lime;
+            this.label23.Location = new System.Drawing.Point(3, 23);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(104, 23);
+            this.label23.TabIndex = 36;
+            this.label23.Text = "Mount Design:";
+            this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.BackColor = System.Drawing.Color.Transparent;
+            this.label21.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "WestSafetyLimit", true));
+            this.label21.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label21.ForeColor = System.Drawing.Color.Lime;
+            this.label21.Location = new System.Drawing.Point(223, 92);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(214, 23);
+            this.label21.TabIndex = 15;
+            this.label21.Text = "West Safety Limit: 000 deg";
+            this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.Transparent;
+            this.tableLayoutPanel1.SetColumnSpan(this.label2, 2);
+            this.label2.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "EastSafetyLimit", true));
+            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label2.ForeColor = System.Drawing.Color.Lime;
+            this.label2.Location = new System.Drawing.Point(113, 115);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(324, 22);
+            this.label2.TabIndex = 13;
+            this.label2.Text = "East Safety Limit: 000 deg";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label2.Click += new System.EventHandler(this.label2_Click);
+            // 
+            // cbMountType
+            // 
+            this.cbMountType.BackColor = System.Drawing.Color.Black;
+            this.cbMountType.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "MountTypeSetting", true));
+            this.cbMountType.DisplayMember = "name";
+            this.cbMountType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbMountType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbMountType.ForeColor = System.Drawing.Color.Lime;
+            this.cbMountType.FormattingEnabled = true;
+            this.cbMountType.Location = new System.Drawing.Point(113, 3);
+            this.cbMountType.Name = "cbMountType";
+            this.cbMountType.Size = new System.Drawing.Size(104, 21);
+            this.cbMountType.TabIndex = 0;
+            this.cbMountType.SelectedIndexChanged += new System.EventHandler(this.cbMountType_SelectedIndexChanged);
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.BackColor = System.Drawing.Color.Transparent;
+            this.label15.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label15.ForeColor = System.Drawing.Color.Lime;
+            this.label15.Location = new System.Drawing.Point(3, 0);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(104, 23);
+            this.label15.TabIndex = 11;
+            this.label15.Text = "Mount Type:";
+            this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.BackColor = System.Drawing.Color.Transparent;
+            this.checkBox2.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBox2.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.geminiPropertiesBindingSource, "DoesPrecession", true));
+            this.checkBox2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.checkBox2.ForeColor = System.Drawing.Color.Lime;
+            this.checkBox2.Location = new System.Drawing.Point(243, 26);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(194, 17);
+            this.checkBox2.TabIndex = 5;
+            this.checkBox2.Text = "Gemini expects J2000 co-ordinates:";
+            this.checkBox2.UseVisualStyleBackColor = false;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.Color.Transparent;
+            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label3.ForeColor = System.Drawing.Color.Lime;
+            this.label3.Location = new System.Drawing.Point(3, 69);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(104, 23);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Hand Controller Mode:";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.ForeColor = System.Drawing.Color.Lime;
+            this.label1.Location = new System.Drawing.Point(3, 46);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(104, 23);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "LED Brightness:";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.BackColor = System.Drawing.Color.Black;
+            this.comboBox1.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "LEDBrightness", true));
+            this.comboBox1.DisplayMember = "name";
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboBox1.ForeColor = System.Drawing.Color.Lime;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(113, 49);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(104, 21);
+            this.comboBox1.TabIndex = 1;
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.BackColor = System.Drawing.Color.Black;
+            this.comboBox2.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "HandController", true));
+            this.comboBox2.DisplayMember = "name";
+            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboBox2.ForeColor = System.Drawing.Color.Lime;
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Location = new System.Drawing.Point(113, 72);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(104, 21);
+            this.comboBox2.TabIndex = 2;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.BackColor = System.Drawing.Color.Transparent;
+            this.checkBox1.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBox1.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.geminiPropertiesBindingSource, "SyncDoesAlign", true));
+            this.checkBox1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.checkBox1.ForeColor = System.Drawing.Color.Lime;
+            this.checkBox1.Location = new System.Drawing.Point(266, 3);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(171, 17);
+            this.checkBox1.TabIndex = 4;
+            this.checkBox1.Text = "Sync performs Additional Align:";
+            this.checkBox1.UseVisualStyleBackColor = false;
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.BackColor = System.Drawing.Color.Transparent;
+            this.checkBox3.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBox3.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.geminiPropertiesBindingSource, "DoesRefraction", true));
+            this.checkBox3.Dock = System.Windows.Forms.DockStyle.Right;
+            this.checkBox3.ForeColor = System.Drawing.Color.Lime;
+            this.checkBox3.Location = new System.Drawing.Point(272, 49);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(165, 17);
+            this.checkBox3.TabIndex = 6;
+            this.checkBox3.Text = "Gemini Calculates Refraction:";
+            this.checkBox3.UseVisualStyleBackColor = false;
+            // 
+            // dateTimePicker1
+            // 
+            this.dateTimePicker1.CalendarForeColor = System.Drawing.Color.Black;
+            this.dateTimePicker1.CalendarMonthBackground = System.Drawing.Color.Black;
+            this.dateTimePicker1.Checked = false;
+            this.dateTimePicker1.CustomFormat = "HH:mm:ss";
+            this.dateTimePicker1.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "AlarmTime", true));
+            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePicker1.Location = new System.Drawing.Point(113, 95);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.ShowUpDown = true;
+            this.dateTimePicker1.Size = new System.Drawing.Size(104, 20);
+            this.dateTimePicker1.TabIndex = 3;
+            // 
+            // pbSetSafetyLimit
+            // 
+            this.pbSetSafetyLimit.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.pbSetSafetyLimit.ContextMenuStrip = this.menuSafetyPopup;
+            this.pbSetSafetyLimit.Dock = System.Windows.Forms.DockStyle.Right;
+            this.pbSetSafetyLimit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.pbSetSafetyLimit.ForeColor = System.Drawing.Color.Black;
+            this.pbSetSafetyLimit.Image = ((System.Drawing.Image)(resources.GetObject("pbSetSafetyLimit.Image")));
+            this.pbSetSafetyLimit.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.pbSetSafetyLimit.Location = new System.Drawing.Point(296, 69);
+            this.pbSetSafetyLimit.Margin = new System.Windows.Forms.Padding(0);
+            this.pbSetSafetyLimit.Name = "pbSetSafetyLimit";
+            this.pbSetSafetyLimit.Size = new System.Drawing.Size(144, 23);
+            this.pbSetSafetyLimit.TabIndex = 8;
+            this.pbSetSafetyLimit.Tag = "EastSafetyLimitDegrees,WestSafetyLimitDegrees,GotoLimitDegrees";
+            this.pbSetSafetyLimit.Text = "Set Safety Limits";
+            this.pbSetSafetyLimit.UseVisualStyleBackColor = false;
+            this.pbSetSafetyLimit.Click += new System.EventHandler(this.pbSetSafetyLimit_Click);
+            // 
+            // checkBox7
+            // 
+            this.checkBox7.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.checkBox7.AutoSize = true;
+            this.checkBox7.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.geminiPropertiesBindingSource, "AlarmSet", true));
+            this.checkBox7.Location = new System.Drawing.Point(10, 95);
+            this.checkBox7.Name = "checkBox7";
+            this.checkBox7.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBox7.Size = new System.Drawing.Size(97, 17);
+            this.checkBox7.TabIndex = 12;
+            this.checkBox7.Text = "Set Alarm Time";
+            this.checkBox7.UseVisualStyleBackColor = true;
+            // 
+            // pbController
+            // 
+            this.pbController.AutoSize = true;
+            this.pbController.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.pbController.ContextMenuStrip = this.menuUpdate;
+            this.pbController.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.pbController.FlatAppearance.BorderSize = 0;
+            this.pbController.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.pbController.Image = ((System.Drawing.Image)(resources.GetObject("pbController.Image")));
+            this.pbController.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.pbController.Location = new System.Drawing.Point(440, 115);
+            this.pbController.Margin = new System.Windows.Forms.Padding(0);
+            this.pbController.Name = "pbController";
+            this.pbController.Size = new System.Drawing.Size(22, 22);
+            this.pbController.TabIndex = 35;
+            this.pbController.UseVisualStyleBackColor = true;
+            this.pbController.Click += new System.EventHandler(this.pbUpdate_Click);
+            // 
             // groupBox2
             // 
             this.groupBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
@@ -631,7 +707,7 @@
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.ForeColor = System.Drawing.Color.White;
             this.groupBox2.FullSize = new System.Drawing.Size(471, 81);
-            this.groupBox2.Location = new System.Drawing.Point(3, 165);
+            this.groupBox2.Location = new System.Drawing.Point(3, 166);
             this.groupBox2.MinimumSize = new System.Drawing.Size(471, 0);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(471, 81);
@@ -806,7 +882,7 @@
             this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox3.ForeColor = System.Drawing.Color.White;
             this.groupBox3.FullSize = new System.Drawing.Size(471, 115);
-            this.groupBox3.Location = new System.Drawing.Point(3, 252);
+            this.groupBox3.Location = new System.Drawing.Point(3, 253);
             this.groupBox3.MinimumSize = new System.Drawing.Size(471, 0);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(471, 115);
@@ -1100,7 +1176,7 @@
             this.groupBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox4.ForeColor = System.Drawing.Color.White;
             this.groupBox4.FullSize = new System.Drawing.Size(471, 153);
-            this.groupBox4.Location = new System.Drawing.Point(3, 373);
+            this.groupBox4.Location = new System.Drawing.Point(3, 374);
             this.groupBox4.MinimumSize = new System.Drawing.Size(471, 0);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(471, 153);
@@ -1453,7 +1529,7 @@
             this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox5.ForeColor = System.Drawing.Color.White;
             this.groupBox5.FullSize = new System.Drawing.Size(471, 77);
-            this.groupBox5.Location = new System.Drawing.Point(3, 532);
+            this.groupBox5.Location = new System.Drawing.Point(3, 533);
             this.groupBox5.MinimumSize = new System.Drawing.Size(471, 0);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(471, 77);
@@ -1604,48 +1680,6 @@
             this.checkBox5.Text = "Use Encoders:";
             this.checkBox5.UseVisualStyleBackColor = false;
             // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.pbFromGemini);
-            this.panel1.Controls.Add(this.pbSaveDefault);
-            this.panel1.Controls.Add(this.pbOK);
-            this.panel1.Controls.Add(this.pbModel);
-            this.panel1.Controls.Add(this.pbApply);
-            this.panel1.Controls.Add(this.chkSavePEC);
-            this.panel1.Controls.Add(this.button3);
-            this.panel1.Controls.Add(this.pbReboot);
-            this.panel1.Controls.Add(this.pbSave);
-            this.panel1.Controls.Add(this.chkSendSettings);
-            this.panel1.Controls.Add(this.pbLoad);
-            this.panel1.Location = new System.Drawing.Point(3, 615);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(471, 117);
-            this.panel1.TabIndex = 5;
-            // 
-            // pbFromGemini
-            // 
-            this.pbFromGemini.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.pbFromGemini.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.pbFromGemini.Location = new System.Drawing.Point(396, 94);
-            this.pbFromGemini.Name = "pbFromGemini";
-            this.pbFromGemini.Size = new System.Drawing.Size(75, 23);
-            this.pbFromGemini.TabIndex = 40;
-            this.pbFromGemini.Text = "From Gemini";
-            this.pbFromGemini.UseVisualStyleBackColor = true;
-            this.pbFromGemini.Click += new System.EventHandler(this.pbFromGemini_Click);
-            // 
-            // pbSaveDefault
-            // 
-            this.pbSaveDefault.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.pbSaveDefault.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.pbSaveDefault.Location = new System.Drawing.Point(269, 32);
-            this.pbSaveDefault.Name = "pbSaveDefault";
-            this.pbSaveDefault.Size = new System.Drawing.Size(95, 23);
-            this.pbSaveDefault.TabIndex = 39;
-            this.pbSaveDefault.Text = "Save Default";
-            this.pbSaveDefault.UseVisualStyleBackColor = true;
-            this.pbSaveDefault.Click += new System.EventHandler(this.pbSaveDefault_Click);
-            // 
             // frmAdvancedSettings
             // 
             this.AcceptButton = this.pbOK;
@@ -1668,12 +1702,14 @@
             this.Text = "Advanced Gemini Settings";
             this.Load += new System.EventHandler(this.frmAdvancedSettings_Load);
             this.menuSafetyPopup.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).EndInit();
             this.flowLayoutPanel1.ResumeLayout(false);
+            this.menuUpdate.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            this.menuUpdate.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
@@ -1704,8 +1740,6 @@
             this.tableLayoutPanel5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown18)).EndInit();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1787,7 +1821,6 @@
         private System.Windows.Forms.Button pbModel;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.CheckBox checkBox7;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.ContextMenuStrip menuSafetyPopup;
         private System.Windows.Forms.ToolStripMenuItem menuSetSafetyHere;
@@ -1804,5 +1837,8 @@
         private System.Windows.Forms.ToolStripMenuItem menuItemSendSettings;
         private System.Windows.Forms.Button pbSaveDefault;
         private System.Windows.Forms.Button pbFromGemini;
+        private System.Windows.Forms.ComboBox cbGeometry;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label label2;
     }
 }

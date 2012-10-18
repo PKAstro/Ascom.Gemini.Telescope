@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -11,8 +12,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("ASCOM Focuser Driver for Gemini")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ASCOM Initiative")]
-[assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyProduct("Gemini Focuser Driver")]
+[assembly: AssemblyCopyright("Copyright © 2009-12 Paul Kanevsky")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -35,8 +36,8 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 //
 // TODO - Set your driver's version here
-[assembly: AssemblyVersion("1.0.3.0")]
-[assembly: AssemblyFileVersion("1.0.3.0")]
-
-[assembly: ASCOM.ServedClassNameAttribute("Gemini Focuser .NET")]
+[assembly: AssemblyVersion("1.0.46.0")]
+[assembly: AssemblyFileVersion("1.0.46.0")]
 [assembly: ASCOM.DeviceIdAttribute("ASCOM.GeminiTelescope.Focuser")]
+
+

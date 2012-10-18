@@ -250,9 +250,12 @@ namespace ASCOM.GeminiTelescope
             if (GeminiLevel >= 5)
             {
                 // use macro command 00 to get all the values in one shot if this is Level 5 using UDP:
-                if (EthernetPort && UDP)
+                if (EthernetPort)
                 {
-                    __UpdatePolledVariablesUDP();
+                    if (UDP)
+                        __UpdatePolledVariablesUDP();
+                    else
+                        __UpdatePolledVariablesSerial();
                     return;
                 }
             }
@@ -299,6 +302,7 @@ namespace ASCOM.GeminiTelescope
 
         static byte [] macro_req = new byte[] { 0x05, 00, 00, 00 };
 
+
         private void __UpdatePolledVariablesUDP()
         {
 
@@ -328,9 +332,53 @@ namespace ASCOM.GeminiTelescope
                 return;
             }
 
-            string [] res = macro.Split(';');
-
             Trace.Info(4, "UDP Macro 0 result", macro);
+            _UpdatePolledVariablesFromMacro(macro);
+            Trace.Exit("_UpdatePolledVariablesUDP");
+        }
+
+        private void __UpdatePolledVariablesSerial()
+        {
+
+            Trace.Enter("_UpdatePolledVariablesSerial");
+
+            string macro = "";
+
+            //lock (m_SerialPort)
+            {
+                try
+                {
+                    DiscardInBuffer(); //clear all received data
+                    string cmd = CompleteNativeCommand("<81:");
+                    Transmit(cmd);
+                    CommandItem command = new CommandItem("<81:", 2000, true);
+                    macro = GetCommandResult(command);
+                }
+                catch
+                {
+                    return;
+                }
+            }
+
+            if (macro == null)
+            {
+                Trace.Error("timeout", "UpdatePolledVariablesSerial");
+                return;
+            }
+
+            Trace.Info(4, "Serial Macro 0 result", macro);
+            _UpdatePolledVariablesFromMacro(macro);
+            Trace.Exit("_UpdatePolledVariablesSerial");
+        }
+
+
+        
+        
+        private void _UpdatePolledVariablesFromMacro(string macro)
+        {
+            string[] res = macro.Split(';');
+
+            Trace.Enter("_UpdatePolledVariablesFromacro", macro);
 
             /*
                 0 PRA 2591823;
@@ -445,9 +493,11 @@ namespace ASCOM.GeminiTelescope
                 DiscardInBuffer();
             }
 
-            Trace.Exit("UpdatePolledVariables");
-
+            Trace.Exit("_UpdatePolledVariablesFromMacro");
         }
+
+
+
 
         /// <summary>
         /// Fire update delegates if Gemini5 returned a change in status flag

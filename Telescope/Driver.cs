@@ -226,6 +226,9 @@ namespace ASCOM.GeminiTelescope
     // The ClassInterface/None addribute prevents an empty interface called
     // _Telescope from being created and used as the [default] interface
     //
+
+    [ASCOM.DeviceId("ASCOM.GeminiTelescope.Telescope", DeviceName = "ASCOM.GeminiTelescope.Telescope")]
+    [ASCOM.ServedClassNameAttribute("Gemini Telescope .NET")]
     [Guid("7e30c546-1a9a-4ed4-98d7-03eb167e2c9a")]
     [ClassInterface(ClassInterfaceType.None)]
     public class Telescope : ReferenceCountedObjectBase, IGeminiTelescope
@@ -346,8 +349,14 @@ namespace ASCOM.GeminiTelescope
         {
 
             get {
-                GeminiHardware.Instance.Trace.Enter("IT:AlignmentMode.Get", AlignmentModes.algGermanPolar);
-                return AlignmentModes.algGermanPolar; 
+
+                AlignmentModes res = AlignmentModes.algPolar;
+                if (GeminiHardware.Instance.AltAzMode)
+                    res = AlignmentModes.algAltAz;
+                GeminiHardware.Instance.Trace.Enter("IT:AlignmentMode.Get", res);
+                
+                return res;
+
             }
         }
 

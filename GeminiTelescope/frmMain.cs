@@ -54,6 +54,9 @@ namespace ASCOM.GeminiTelescope
         Keys m_LastKey = Keys.None;
         Keys m_LastModifiers = Keys.None;
 
+        bool m_LastAltAzMode = false;
+
+
         public frmMain()
         {
 
@@ -726,6 +729,14 @@ namespace ASCOM.GeminiTelescope
             checkboxPEC.BackColor = (checkboxPEC.Enabled ? Color.Transparent : Color.FromArgb(64, 64, 64));
 
 
+            if (GeminiHardware.Instance.AltAzMode != m_LastAltAzMode)
+            {
+                if (GeminiHardware.Instance.AltAzMode)
+                    this.Text = "Gemini - ALT/AZ";
+                else
+                    this.Text = "Gemini";
+                m_LastAltAzMode = GeminiHardware.Instance.AltAzMode;
+            }
             BalloonIcon.Text = ""; // tooltip;    
 
         }
@@ -777,11 +788,15 @@ namespace ASCOM.GeminiTelescope
             try
             {
                 seconds = GeminiHardware.Instance.TimeToWestLimit;
+
             }
             catch
             {
                 return; //error
             }
+
+
+            if (double.IsNaN(seconds)) return;
 
             if (seconds <= 0)
             {

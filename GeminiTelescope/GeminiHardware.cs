@@ -166,6 +166,13 @@ namespace ASCOM.GeminiTelescope
         internal bool m_UseDriverSite;
         internal bool m_UseDriverTime;
 
+        private bool m_AltAzMode = false;
+
+        public bool AltAzMode
+        {
+            get { return m_AltAzMode; }
+            set { m_AltAzMode = value; }
+        }
 
         internal bool m_SendAdvancedSettings;
 
@@ -1485,6 +1492,19 @@ namespace ASCOM.GeminiTelescope
 
         }
 
+        public virtual double dVersion
+        {
+            get
+            {
+                double result = 4;
+
+                if (!double.TryParse(m_GeminiVersion, System.Globalization.NumberStyles.Float, m_GeminiCulture, out result))
+                    return 4;
+                else
+                    return result;
+            }
+
+        }
 
         private int m_GeminiLevel = 4;
 
@@ -2904,7 +2924,14 @@ namespace ASCOM.GeminiTelescope
 
             Trace.Exit("Start Gemini", sRes);
 
-            return sRes == "G"; // true if startup completed, otherwise false
+            if (sRes == "A")  //Alt-Az mode
+            {
+                AltAzMode = true;
+            }
+            else
+                AltAzMode = false;
+
+            return sRes == "G" || sRes == "A"; // true if startup completed, otherwise false
         }
 
         /// <summary>
@@ -3655,9 +3682,9 @@ namespace ASCOM.GeminiTelescope
                             Trace.Except(ex);
                         }
 
-                    } while (sRes != "G" && --count > 0);
+                    } while (sRes != "G" && sRes !="A" && --count > 0);
 
-                    if (sRes=="G")
+                    if (sRes=="G" || sRes=="A")
                     {
                         Trace.Info(2, "Got a sync");
                         System.Threading.Thread.Sleep(1000);

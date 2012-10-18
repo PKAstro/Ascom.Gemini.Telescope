@@ -61,6 +61,7 @@ namespace ASCOM.GeminiTelescope
         }
 
         static public string[] Mount_names = {"Custom", "GM-8", "G-11", "HGM-200", "MI-250", "Titan", "Titan50"};
+        static public string[] Geometry_names = { "GEM", "Alt/Az" };
         static public string[] TrackingRate_names = { "Sidereal", "King Rate", "Lunar", "Solar", "Terrestrial", "Closed Loop", "Comet Rate" };
         static public string[] HandController_names = { "Visual", "Photo", "All Speeds" };
         static public string[] Brightness_names = { "100%", "53%", "40%", "27%", "20%", "13%", "6.6%"  };
@@ -236,10 +237,23 @@ namespace ASCOM.GeminiTelescope
             {
                 string res = get_PropAsync("<0:");
                 int idx = 0;
-                if (!int.TryParse(res, out idx)) return null;
+                if (!int.TryParse(res, out idx) || idx >= Mount_names.Length) return null;
                 return Mount_names[idx];
             }
         }
+
+
+        public string MountGeometry
+        {
+            get
+            {
+                string res = get_PropAsync("<700:");
+                int idx = 0;
+                if (!int.TryParse(res, out idx)) return Geometry_names[0];
+                return Geometry_names[idx-700];
+            }
+        }
+
 
         public string LocalTime
         {
@@ -421,6 +435,26 @@ namespace ASCOM.GeminiTelescope
                         GeminiHardware.Instance.DoCommandResult(">" + i.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
             }
         }
+
+        [Sequence(1)]
+        public string MountGeometrySetting
+        {
+            get { return (string)get_Profile("MountGeometrySetting", Geometry_names[0]); }
+            set { mProfile["MountGeometrySetting"] = value; IsDirty = true; }
+        }
+
+        private string MountGeometrySetting_Gemini
+        {
+            get { return MountGeometry ?? Geometry_names[0]; }
+            set
+            {
+                for (int i = 0; i < Geometry_names.Length; ++i)
+                    if (Geometry_names[i].Equals((string)value))
+                        GeminiHardware.Instance.DoCommandResult(">" + (700+i).ToString()+":", GeminiHardware.Instance.MAX_TIMEOUT, false);
+            }
+        }
+
+
 
         [Sequence(99)]
         public string LEDBrightness

@@ -45,10 +45,15 @@ namespace ASCOM.GeminiTelescope
                 numericUpDown1.Minimum = new decimal(new int[] { 256, 0, 0, 0 });
                 numericUpDown2.Minimum = numericUpDown2.Minimum = new decimal(new int[] { 0, 0, 0, 0 });
             }
+
+            if (GeminiHardware.Instance.dVersion < 5.1)
+                cbGeometry.Enabled = false;
+
             comboBox1.Items.AddRange(GeminiProperties.Brightness_names);
             comboBox2.Items.AddRange(GeminiProperties.HandController_names);
             comboBox3.Items.AddRange(GeminiProperties.TrackingRate_names);
             cbMountType.Items.AddRange(GeminiProperties.Mount_names);
+            cbGeometry.Items.AddRange(GeminiProperties.Geometry_names);
 
             GeminiProperties props = new GeminiProperties();
 
@@ -66,9 +71,9 @@ namespace ASCOM.GeminiTelescope
             else if (!bDefaultLoaded)
             {
                 MessageBox.Show(Resources.EthernetError, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                this.Close();
-                this.UseWaitCursor = false;
-                return;
+                //this.Close();
+                //this.UseWaitCursor = false;
+                //return;
             }
 
             this.geminiPropertiesBindingSource.Add(props);
@@ -168,6 +173,12 @@ namespace ASCOM.GeminiTelescope
 
             menuItemGetSettings.Enabled = GeminiHardware.Instance.Connected;
             menuItemSendSettings.Enabled = GeminiHardware.Instance.Connected;
+
+            if (GeminiHardware.Instance.dVersion < 5.1)
+                cbGeometry.Enabled = false;
+            else
+                cbGeometry.Enabled = true;
+
 
         }
 
@@ -561,6 +572,16 @@ namespace ASCOM.GeminiTelescope
                 else
                     this.groupBox4.IsCollapsed = true;
             }
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void geminiPropertiesBindingSource_CurrentChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
