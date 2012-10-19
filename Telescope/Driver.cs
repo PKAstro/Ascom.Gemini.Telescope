@@ -350,7 +350,7 @@ namespace ASCOM.GeminiTelescope
 
             get {
 
-                AlignmentModes res = AlignmentModes.algPolar;
+                AlignmentModes res = AlignmentModes.algGermanPolar;
                 if (GeminiHardware.Instance.AltAzMode)
                     res = AlignmentModes.algAltAz;
                 GeminiHardware.Instance.Trace.Enter("IT:AlignmentMode.Get", res);
@@ -1661,7 +1661,11 @@ namespace ASCOM.GeminiTelescope
             get 
             {
                 AssertConnect();
-                if (!GeminiHardware.Instance.ReportPierSide) return PierSide.pierUnknown;
+                if (!GeminiHardware.Instance.ReportPierSide)
+                {
+                    GeminiHardware.Instance.Trace.Enter("IT:SideOfPier.Get", "ReportPierSide is false, throwing PropertyNotImplementedException");
+                    throw new PropertyNotImplementedException("SideOfPier", false); // PWGS - was return PierSide.pierUnknown;
+                }
 
                 double mech_declination  = 0;
 
@@ -1690,6 +1694,13 @@ namespace ASCOM.GeminiTelescope
             {
                 GeminiHardware.Instance.Trace.Enter("IT:SideOfPier.Set", value);
                 AssertConnect();
+
+                // PWGS - If we aren't reporting SideOfPier then it shouldn't be possible to set it either
+                if (!GeminiHardware.Instance.ReportPierSide)
+                {
+                    GeminiHardware.Instance.Trace.Exit("IT:SideOfPier.Set", "ReportPierSide is false, throwing PropertyNotImplementedException");
+                    throw new PropertyNotImplementedException("SideOfPier", true);
+                }
 
                 if ((value == PierSide.pierEast && GeminiHardware.Instance.SideOfPier == "W") || (value == PierSide.pierWest && GeminiHardware.Instance.SideOfPier == "E"))
                 {
