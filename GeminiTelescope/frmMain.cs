@@ -77,6 +77,12 @@ namespace ASCOM.GeminiTelescope
             MenuItem connectMenu = new MenuItem(Resources.Connect, new EventHandler(ConnectMenu));
             connectMenu.Name = Resources.Connect;
 
+            // Read persisted values for Show Notifications and Show Status Panel
+            if (!bool.TryParse(GeminiHardware.Instance.Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Show Notifications", "", true.ToString()), out m_ShowNotifications))
+                m_ShowNotifications = true;
+            if (!bool.TryParse(GeminiHardware.Instance.Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Show Status Panel", "", true.ToString()), out m_ShowStatusPanel))
+                m_ShowStatusPanel = true;
+
             MenuItem notifyMenu = new MenuItem(Resources.ShowNotifications, new EventHandler(ShowNotificationsMenu));
             notifyMenu.Name = Resources.Notifications;
             notifyMenu.Checked = m_ShowNotifications;
@@ -438,6 +444,8 @@ namespace ASCOM.GeminiTelescope
         void ShowNotificationsMenu(object sender, EventArgs e)
         {
             m_ShowNotifications = !m_ShowNotifications;
+            // Persist new Show Notifications state
+            GeminiHardware.Instance.Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Show Notifications", m_ShowNotifications.ToString());
             m_BalloonMenu.MenuItems[Resources.Notifications].Checked = m_ShowNotifications;
             if (m_ShowNotifications)
                 Speech.SayIt(Resources.ShowNotifications, Speech.SpeechType.Command);
@@ -449,6 +457,8 @@ namespace ASCOM.GeminiTelescope
         void ShowStatusPanel(object sender, EventArgs e)
         {
             m_ShowStatusPanel = !m_ShowStatusPanel;
+            // Persist new Show Status Panel state
+            GeminiHardware.Instance.Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Show Status Panel", m_ShowStatusPanel.ToString());
             m_BalloonMenu.MenuItems[Resources.StatusPanel].Checked = m_ShowStatusPanel;
             if (m_ShowStatusPanel)
                 Speech.SayIt(Resources.ShowStatusPanel, Speech.SpeechType.Command);
@@ -1954,7 +1964,7 @@ namespace ASCOM.GeminiTelescope
 
         }
 
-        static frmPEC frmPECConfig = null; 
+        static frmPEC frmPECConfig = null;
 
         private void configurePECToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -2032,15 +2042,15 @@ namespace ASCOM.GeminiTelescope
         public static extern bool SetDeviceGammaRamp(IntPtr hDC, ref RAMP lpRamp);
 
 
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)] 
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public struct RAMP
         {
-          [ MarshalAs(UnmanagedType.ByValArray, SizeConst=256)] 
-          public UInt16[] Red;
-          [ MarshalAs(UnmanagedType.ByValArray, SizeConst=256)] 
-          public UInt16[] Green;
-          [ MarshalAs(UnmanagedType.ByValArray, SizeConst=256)] 
-          public UInt16[] Blue;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
+            public UInt16[] Red;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
+            public UInt16[] Green;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
+            public UInt16[] Blue;
         }
 
 

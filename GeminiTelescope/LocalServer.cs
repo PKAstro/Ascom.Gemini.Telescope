@@ -492,18 +492,22 @@ namespace ASCOM.GeminiTelescope
                 Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\LocalServer32", clsid), false);
                 Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\Programmable", clsid), false);
                 Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}", clsid), false);
-                try
+
+                if (m_UnregisterASCOM) // Added to ensure that we don't unregister during a driver upgrade
                 {
-                    //
-                    // ASCOM
-                    //
-                    using (var P = new ASCOM.Utilities.Profile())
+                    try
                     {
-                        P.DeviceType = deviceType;
-                        P.Unregister(progid);
+                        //
+                        // ASCOM
+                        //
+                        using (var P = new ASCOM.Utilities.Profile())
+                        {
+                            P.DeviceType = deviceType;
+                            P.Unregister(progid);
+                        }
                     }
+                    catch (Exception) { }
                 }
-                catch (Exception) { }
             }
         }
         #endregion
@@ -555,7 +559,7 @@ namespace ASCOM.GeminiTelescope
             //
             if (args.Length > 0)
             {
-                
+
                 switch (args[0].ToLower())
                 {
                     case "-embedding":
@@ -691,7 +695,7 @@ namespace ASCOM.GeminiTelescope
                             GeminiHardware.Instance.Trace.Except(ex);
                             GeminiHardware.Instance.Trace.Error("CurrentDomain_Exception", ex.Message, ex.Source, ex.StackTrace, ex.InnerException);
                         }
-                        MessageBox.Show(SharedResources.TELESCOPE_DRIVER_NAME + " has encountered an error and must now close\r\n\r\n"+ex.ToString(), SharedResources.TELESCOPE_DRIVER_NAME + "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(SharedResources.TELESCOPE_DRIVER_NAME + " has encountered an error and must now close\r\n\r\n" + ex.ToString(), SharedResources.TELESCOPE_DRIVER_NAME + "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
