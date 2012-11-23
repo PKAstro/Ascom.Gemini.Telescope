@@ -247,10 +247,15 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                string res = get_PropAsync("<700:");
-                int idx = 0;
-                if (!int.TryParse(res, out idx)) return Geometry_names[0];
-                return Geometry_names[idx-700];
+                if (GeminiHardware.Instance.dVersion >= 5.1)
+                {
+                    string res = get_PropAsync("<700:");
+                    int idx = 0;
+                    if (!int.TryParse(res, out idx)) return Geometry_names[0];
+                    return Geometry_names[idx - 700];
+                }
+                else
+                    return Geometry_names[0];
             }
         }
 
@@ -448,9 +453,12 @@ namespace ASCOM.GeminiTelescope
             get { return MountGeometry ?? Geometry_names[0]; }
             set
             {
-                for (int i = 0; i < Geometry_names.Length; ++i)
-                    if (Geometry_names[i].Equals((string)value))
-                        GeminiHardware.Instance.DoCommandResult(">" + (700+i).ToString()+":", GeminiHardware.Instance.MAX_TIMEOUT, false);
+                if (GeminiHardware.Instance.dVersion >= 5.1)
+                {
+                    for (int i = 0; i < Geometry_names.Length; ++i)
+                        if (Geometry_names[i].Equals((string)value))
+                            GeminiHardware.Instance.DoCommandResult(">" + (700 + i).ToString() + ":", GeminiHardware.Instance.MAX_TIMEOUT, false);
+                }
             }
         }
 
