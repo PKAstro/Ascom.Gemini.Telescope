@@ -1535,7 +1535,7 @@ namespace ASCOM.GeminiTelescope
                 if (!double.TryParse(m_GeminiVersion, System.Globalization.NumberStyles.Float, m_GeminiCulture, out result))
                     return 4;
                 else
-                    return result;
+                    return result/100.0;
             }
 
         }
@@ -2433,26 +2433,34 @@ namespace ASCOM.GeminiTelescope
 
         internal void StartStatus(object arg)
         {
-            System.Threading.Thread.CurrentThread.CurrentUICulture = System.Threading.Thread.CurrentThread.CurrentCulture;
+            try
+            {
+                System.Threading.Thread.CurrentThread.CurrentUICulture = System.Threading.Thread.CurrentThread.CurrentCulture;
 
-            Point pt = (Point)arg;
-            Screen scr = Screen.FromPoint(pt);
+                Point pt = (Point)arg;
+                Screen scr = Screen.FromPoint(pt);
 
-            m_StatusForm = new frmStatus();
-            m_StatusForm.AutoHide = true;
+                m_StatusForm = new frmStatus();
+                m_StatusForm.AutoHide = true;
 
-            Point top = (pt);
-            top.Y -= m_StatusForm.Bounds.Height + 32;
-            top.X -= 32;
+                Point top = (pt);
+                top.Y -= m_StatusForm.Bounds.Height + 32;
+                top.X -= 32;
 
-            top.Y = Math.Min(top.Y, scr.WorkingArea.Height - m_StatusForm.Bounds.Height - 32);
-            top.X = Math.Min(top.X, scr.WorkingArea.Width - m_StatusForm.Bounds.Width - 32);
+                top.Y = Math.Min(top.Y, scr.WorkingArea.Height - m_StatusForm.Bounds.Height - 32);
+                top.X = Math.Min(top.X, scr.WorkingArea.Width - m_StatusForm.Bounds.Width - 32);
 
-            m_StatusForm.Location = top;
+                m_StatusForm.Location = top;
 
-            m_StatusForm.Visible = true;
-            m_StatusForm.Show();
-            Application.Run(m_StatusForm);
+                m_StatusForm.Visible = true;
+                m_StatusForm.Show();
+                Application.Run(m_StatusForm);
+            }
+            catch (Exception ex)
+            {
+                GeminiHardware.Instance.Trace.Error("Unexpected exception", ex.ToString());
+
+            }
         }
 
         internal System.Threading.Thread statusThread = null;
