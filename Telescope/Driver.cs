@@ -1012,7 +1012,7 @@ namespace ASCOM.GeminiTelescope
             {
                 if (destination_hour_angle < east_limit) // Destination Region A
                 {
-                    retVal = SideOfPier; // No flip
+                    retVal = PierSide.pierWest; // No flip, always pierWest
                     GeminiHardware.Instance.Trace.Info(1, "IT:DestinationSideOfPier", "From Region A to Region A, Retval: ", retVal.ToString());
                 }
                 else if (destination_hour_angle > gotolimit) // Destination Region C
@@ -1037,7 +1037,7 @@ namespace ASCOM.GeminiTelescope
                 }
                 else if (destination_hour_angle > gotolimit) // Destination Region C
                 {
-                    retVal = SideOfPier; // No flip
+                    retVal = PierSide.pierEast; // No flip, always pierEast
                     GeminiHardware.Instance.Trace.Info(1, "IT:DestinationSideOfPier", "From Region C to Region C, Retval: ", retVal.ToString());
                 }
                 else // Destination Region B
