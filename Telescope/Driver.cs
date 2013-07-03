@@ -2241,13 +2241,13 @@ namespace ASCOM.GeminiTelescope
                 GeminiHardware.Instance.Trace.Enter("IT:Tracking.Set", value);
 
                 AssertConnect();
-                if (value && !GeminiHardware.Instance.Tracking)
+                if (value /*&& !GeminiHardware.Instance.Tracking*/)
                 {
                     GeminiHardware.Instance.DoCommandResult(":hW", GeminiHardware.Instance.MAX_TIMEOUT, false);
                     GeminiHardware.Instance.WaitForVelocity("TG", GeminiHardware.Instance.MAX_TIMEOUT);
                     GeminiHardware.Instance.Tracking = true;
                 }
-                if (!value && GeminiHardware.Instance.Tracking)
+                if (!value /*&& GeminiHardware.Instance.Tracking*/)
                 {
                     GeminiHardware.Instance.DoCommandResult(":hN", GeminiHardware.Instance.MAX_TIMEOUT, false);
                     GeminiHardware.Instance.WaitForVelocity("N", GeminiHardware.Instance.MAX_TIMEOUT);
