@@ -47,6 +47,7 @@
             // 
             // groupBox1
             // 
+            resources.ApplyResources(this.groupBox1, "groupBox1");
             this.groupBox1.Controls.Add(this.rbCWD);
             this.groupBox1.Controls.Add(this.rbAltAz);
             this.groupBox1.Controls.Add(this.rbHome);
@@ -57,159 +58,102 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.txtAz);
             this.groupBox1.ForeColor = System.Drawing.Color.White;
-            this.groupBox1.Location = new System.Drawing.Point(13, 13);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(298, 195);
-            this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Set Coordinates for Park Position";
             // 
             // rbCWD
             // 
-            this.rbCWD.AutoSize = true;
-            this.rbCWD.Location = new System.Drawing.Point(16, 65);
+            resources.ApplyResources(this.rbCWD, "rbCWD");
             this.rbCWD.Name = "rbCWD";
-            this.rbCWD.Size = new System.Drawing.Size(161, 17);
-            this.rbCWD.TabIndex = 7;
             this.rbCWD.TabStop = true;
-            this.rbCWD.Text = "Slew to CWD before Parking";
             this.rbCWD.UseVisualStyleBackColor = true;
             // 
             // rbAltAz
             // 
-            this.rbAltAz.AutoSize = true;
-            this.rbAltAz.Location = new System.Drawing.Point(16, 88);
+            resources.ApplyResources(this.rbAltAz, "rbAltAz");
             this.rbAltAz.Name = "rbAltAz";
-            this.rbAltAz.Size = new System.Drawing.Size(222, 17);
-            this.rbAltAz.TabIndex = 8;
             this.rbAltAz.TabStop = true;
-            this.rbAltAz.Text = "Slew to Alt/Az coordinates before Parking";
             this.rbAltAz.UseVisualStyleBackColor = true;
             // 
             // rbHome
             // 
-            this.rbHome.AutoSize = true;
-            this.rbHome.Location = new System.Drawing.Point(16, 42);
+            resources.ApplyResources(this.rbHome, "rbHome");
             this.rbHome.Name = "rbHome";
-            this.rbHome.Size = new System.Drawing.Size(151, 17);
-            this.rbHome.TabIndex = 6;
             this.rbHome.TabStop = true;
-            this.rbHome.Text = "Slew Home before Parking";
             this.rbHome.UseVisualStyleBackColor = true;
             // 
             // pbGetPos
             // 
-            this.pbGetPos.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pbGetPos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            resources.ApplyResources(this.pbGetPos, "pbGetPos");
             this.pbGetPos.ForeColor = System.Drawing.Color.White;
-            this.pbGetPos.Location = new System.Drawing.Point(146, 120);
             this.pbGetPos.Name = "pbGetPos";
-            this.pbGetPos.Size = new System.Drawing.Size(126, 54);
-            this.pbGetPos.TabIndex = 4;
-            this.pbGetPos.Text = "Get Current Alt/Az Coordinates";
             this.pbGetPos.UseVisualStyleBackColor = true;
             this.pbGetPos.Click += new System.EventHandler(this.pbGetPos_Click);
             // 
             // txtAlt
             // 
-            this.txtAlt.Location = new System.Drawing.Point(63, 120);
+            resources.ApplyResources(this.txtAlt, "txtAlt");
             this.txtAlt.Name = "txtAlt";
-            this.txtAlt.Size = new System.Drawing.Size(67, 20);
-            this.txtAlt.TabIndex = 2;
             // 
             // rbNoSlew
             // 
-            this.rbNoSlew.AutoSize = true;
-            this.rbNoSlew.Location = new System.Drawing.Point(16, 19);
+            resources.ApplyResources(this.rbNoSlew, "rbNoSlew");
             this.rbNoSlew.Name = "rbNoSlew";
-            this.rbNoSlew.Size = new System.Drawing.Size(135, 17);
-            this.rbNoSlew.TabIndex = 5;
             this.rbNoSlew.TabStop = true;
-            this.rbNoSlew.Text = "No slew before Parking";
             this.rbNoSlew.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 123);
+            resources.ApplyResources(this.label1, "label1");
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(45, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Altitude:";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(10, 157);
+            resources.ApplyResources(this.label2, "label2");
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(47, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Azimuth:";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // txtAz
             // 
-            this.txtAz.Location = new System.Drawing.Point(63, 157);
+            resources.ApplyResources(this.txtAz, "txtAz");
             this.txtAz.Name = "txtAz";
-            this.txtAz.Size = new System.Drawing.Size(67, 20);
-            this.txtAz.TabIndex = 3;
             // 
             // pbOK
             // 
-            this.pbOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.pbOK, "pbOK");
             this.pbOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.pbOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.pbOK.ForeColor = System.Drawing.Color.White;
-            this.pbOK.Location = new System.Drawing.Point(323, 22);
             this.pbOK.Name = "pbOK";
-            this.pbOK.Size = new System.Drawing.Size(75, 23);
-            this.pbOK.TabIndex = 1;
-            this.pbOK.Text = "OK";
             this.pbOK.UseVisualStyleBackColor = true;
             this.pbOK.Click += new System.EventHandler(this.pbOK_Click);
             // 
             // pbCancel
             // 
-            this.pbCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.pbCancel, "pbCancel");
             this.pbCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.pbCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.pbCancel.ForeColor = System.Drawing.Color.White;
-            this.pbCancel.Location = new System.Drawing.Point(323, 51);
             this.pbCancel.Name = "pbCancel";
-            this.pbCancel.Size = new System.Drawing.Size(75, 23);
-            this.pbCancel.TabIndex = 1;
-            this.pbCancel.Text = "Cancel";
             this.pbCancel.UseVisualStyleBackColor = true;
             // 
             // chkUnparkMode
             // 
+            resources.ApplyResources(this.chkUnparkMode, "chkUnparkMode");
             this.chkUnparkMode.ForeColor = System.Drawing.Color.White;
-            this.chkUnparkMode.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.chkUnparkMode.Location = new System.Drawing.Point(13, 214);
             this.chkUnparkMode.Name = "chkUnparkMode";
-            this.chkUnparkMode.Size = new System.Drawing.Size(332, 24);
-            this.chkUnparkMode.TabIndex = 2;
-            this.chkUnparkMode.Text = "Prevent accidental unparking by software";
             this.chkUnparkMode.UseVisualStyleBackColor = true;
             // 
             // frmParkPosition
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(413, 248);
             this.Controls.Add(this.chkUnparkMode);
             this.Controls.Add(this.pbCancel);
             this.Controls.Add(this.pbOK);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmParkPosition";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Driver Park Behavior Settings";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmParkPosition_FormClosed);
             this.Load += new System.EventHandler(this.frmParkPosition_Load);
             this.groupBox1.ResumeLayout(false);

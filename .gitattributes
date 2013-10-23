@@ -113,8 +113,10 @@ GeminiTelescope/frmModel.resx -text
 GeminiTelescope/frmNetworkSettings.Designer.cs -text
 GeminiTelescope/frmNetworkSettings.cs -text
 GeminiTelescope/frmNetworkSettings.de.resx -text
+GeminiTelescope/frmNetworkSettings.en.resx -text
 GeminiTelescope/frmNetworkSettings.fr.resx -text
 GeminiTelescope/frmNetworkSettings.resx -text
+GeminiTelescope/frmNetworkSettings.ru.resx -text
 GeminiTelescope/frmObservationLog.Designer.cs -text
 GeminiTelescope/frmObservationLog.cs -text
 GeminiTelescope/frmObservationLog.resx -text
@@ -129,6 +131,7 @@ GeminiTelescope/frmPECChart.cs -text
 GeminiTelescope/frmPECChart.resx -text
 GeminiTelescope/frmParkPosition.Designer.cs -text
 GeminiTelescope/frmParkPosition.cs -text
+GeminiTelescope/frmParkPosition.fr.resx -text
 GeminiTelescope/frmParkPosition.resx -text
 GeminiTelescope/frmPassThroughPortSetup.Designer.cs -text
 GeminiTelescope/frmPassThroughPortSetup.cs -text

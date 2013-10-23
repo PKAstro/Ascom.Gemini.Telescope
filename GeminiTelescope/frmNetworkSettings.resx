@@ -188,9 +188,6 @@
   <data name="&gt;&gt;label3.Parent" xml:space="preserve">
     <value>groupBox1</value>
   </data>
-  <data name="label2.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
   <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
     <value>56, 13</value>
   </data>
@@ -324,9 +321,6 @@
   <data name="label3.Text" xml:space="preserve">
     <value>Password:</value>
   </data>
-  <data name="&gt;&gt;rbUDP.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
   <data name="txtUser.Size" type="System.Drawing.Size, System.Drawing">
     <value>126, 20</value>
   </data>
@@ -360,11 +354,11 @@
   <data name="&gt;&gt;txtPassword.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="label2.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
   <data name="&gt;&gt;rbHTTP.Name" xml:space="preserve">
     <value>rbHTTP</value>
-  </data>
-  <data name="&gt;&gt;btnCancel.ZOrder" xml:space="preserve">
-    <value>11</value>
   </data>
   <data name="&gt;&gt;chkNoProxy.Parent" xml:space="preserve">
     <value>groupBox1</value>
@@ -2104,6 +2098,9 @@
   <data name="chkNoProxy.RightToLeft" type="System.Windows.Forms.RightToLeft, System.Windows.Forms">
     <value>Yes</value>
   </data>
+  <data name="&gt;&gt;chkNoProxy.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
   <data name="&gt;&gt;rbHTTP.Parent" xml:space="preserve">
     <value>groupBox1</value>
   </data>
@@ -2161,14 +2158,17 @@
   <data name="chkDHCP.Location" type="System.Drawing.Point, System.Drawing">
     <value>115, 17</value>
   </data>
+  <data name="&gt;&gt;btnCancel.ZOrder" xml:space="preserve">
+    <value>11</value>
+  </data>
   <data name="&gt;&gt;txtUser.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>299, 266</value>
   </data>
-  <data name="&gt;&gt;chkNoProxy.ZOrder" xml:space="preserve">
-    <value>4</value>
+  <data name="&gt;&gt;rbUDP.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <data name="&gt;&gt;groupBox1.Parent" xml:space="preserve">
     <value>$this</value>
@@ -2195,6 +2195,6 @@
     <value>True</value>
   </metadata>
   <metadata name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>fr</value>
+    <value>ru</value>
   </metadata>
 </root>

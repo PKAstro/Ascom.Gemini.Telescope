@@ -335,8 +335,17 @@
     <EmbeddedResource Include="AboutBox\AboutBox1.resx">
       <DependentUpon>AboutBox1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmNetworkSettings.en.resx">
+      <DependentUpon>frmNetworkSettings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmNetworkSettings.fr.resx">
       <DependentUpon>frmNetworkSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmNetworkSettings.ru.resx">
+      <DependentUpon>frmNetworkSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmParkPosition.fr.resx">
+      <DependentUpon>frmParkPosition.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmPEC.resx">
       <DependentUpon>frmPEC.cs</DependentUpon>
