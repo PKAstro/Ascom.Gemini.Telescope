@@ -1149,6 +1149,9 @@ namespace ASCOM.GeminiTelescope
             if (!int.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "TraceLevel", ""), out m_TraceLevel))
                 m_TraceLevel = 3;
 
+            if (!int.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "GeminiStopMode", ""), out m_GeminiStopMode))
+                m_GeminiStopMode = 0;
+
             TraceLevel = m_TraceLevel;
 
             Trace.Info(2, "User Settings", m_AdditionalAlign, m_Precession, m_Refraction, m_ShowHandbox, m_UseDriverSite, m_UseDriverTime);
@@ -1956,6 +1959,42 @@ namespace ASCOM.GeminiTelescope
             UpdateSiteInfo();
             return true;
         }
+
+        internal int m_GeminiStopMode = 0;
+
+        /// <summary>
+        /// Return preferred GeminiStopMode 
+        ///     0:    Every command that moves the mount wakes the mount up (current state). This includes pressing the directional buttons.
+        ///     1:    HC directional buttons, classical HC and AG inputs are ignored, but GoTo commands wake it up.
+        ///     2:    Only a WakeUp command :hW# will wake the mount up.
+        /// </summary>
+        public int GeminiStopMode
+        {
+            get
+            {
+                Trace.Enter("GeminiStopMode.Get", m_GeminiStopMode);
+                return m_GeminiStopMode;
+            }
+            set
+            {
+
+                Trace.Enter("GeminiStopMode.Set", value);
+
+                if (value >= 0 && value <= 2)
+                {
+                    m_GeminiStopMode = value;
+                    Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GeminiStopMode", m_GeminiStopMode.ToString());
+
+                    if (GeminiHardware.Instance.Connected && GeminiHardware.Instance.dVersion >= 5.1)
+                        GeminiHardware.Instance.DoCommandResult(">92:" + value.ToString(), MAX_TIMEOUT, false);
+
+                }
+
+            }
+        }
+       
+
+            
 
         /// <summary>
         /// Execute a single serial command, block and wait for the response from the mount, return it 

@@ -2498,7 +2498,8 @@ namespace ASCOM.GeminiTelescope
                     for (int idx = 0; idx < result.Length; ++idx)
                     {
                         double rate = 0;
-                        if (!double.TryParse(result[idx], out rate)) throw new TimeoutException("AxisRates");
+                        if (!GeminiHardware.Instance.m_Util.StringToDouble(result[idx], out rate))
+                            throw new TimeoutException("AxisRates");
                         rate = rate * SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0;  // convert to rate in deg/sec
                         m_Rates[idx] = new Rate(rate, rate);
                     }

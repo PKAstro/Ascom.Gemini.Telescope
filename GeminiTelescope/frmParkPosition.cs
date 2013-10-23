@@ -29,6 +29,7 @@ namespace ASCOM.GeminiTelescope
                 case GeminiHardwareBase.GeminiParkMode.SlewHome: this.rbHome.Checked = true; break;
                 default: rbNoSlew.Checked = true; break;
             }
+            chkUnparkMode.Checked = (GeminiHardware.Instance.GeminiStopMode == 2);
         }
 
         private void pbGetPos_Click(object sender, EventArgs e)
@@ -74,6 +75,11 @@ namespace ASCOM.GeminiTelescope
             if (rbAltAz.Checked) GeminiHardware.Instance.ParkPosition = GeminiHardwareBase.GeminiParkMode.SlewAltAz;
             if (rbCWD.Checked) GeminiHardware.Instance.ParkPosition = GeminiHardwareBase.GeminiParkMode.SlewCWD;
             if (rbHome.Checked) GeminiHardware.Instance.ParkPosition = GeminiHardwareBase.GeminiParkMode.SlewHome;
+            if (chkUnparkMode.Checked)
+                GeminiHardware.Instance.GeminiStopMode = 2;
+            else
+                GeminiHardware.Instance.GeminiStopMode = 0;
+
             DialogResult = DialogResult.OK;
         }
 

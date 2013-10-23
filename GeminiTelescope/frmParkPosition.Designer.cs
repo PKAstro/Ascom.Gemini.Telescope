@@ -41,6 +41,7 @@
             this.txtAz = new System.Windows.Forms.TextBox();
             this.pbOK = new System.Windows.Forms.Button();
             this.pbCancel = new System.Windows.Forms.Button();
+            this.chkUnparkMode = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -181,12 +182,24 @@
             this.pbCancel.Text = "Cancel";
             this.pbCancel.UseVisualStyleBackColor = true;
             // 
+            // chkUnparkMode
+            // 
+            this.chkUnparkMode.ForeColor = System.Drawing.Color.White;
+            this.chkUnparkMode.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.chkUnparkMode.Location = new System.Drawing.Point(13, 214);
+            this.chkUnparkMode.Name = "chkUnparkMode";
+            this.chkUnparkMode.Size = new System.Drawing.Size(332, 24);
+            this.chkUnparkMode.TabIndex = 2;
+            this.chkUnparkMode.Text = "Unpark only through ASCOM  (HC will not unpark the mount)";
+            this.chkUnparkMode.UseVisualStyleBackColor = true;
+            // 
             // frmParkPosition
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(413, 221);
+            this.ClientSize = new System.Drawing.Size(413, 248);
+            this.Controls.Add(this.chkUnparkMode);
             this.Controls.Add(this.pbCancel);
             this.Controls.Add(this.pbOK);
             this.Controls.Add(this.groupBox1);
@@ -197,8 +210,8 @@
             this.Name = "frmParkPosition";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Driver Park Behavior Settings";
-            this.Load += new System.EventHandler(this.frmParkPosition_Load);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmParkPosition_FormClosed);
+            this.Load += new System.EventHandler(this.frmParkPosition_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -219,5 +232,6 @@
         private System.Windows.Forms.RadioButton rbHome;
         private System.Windows.Forms.RadioButton rbNoSlew;
         private System.Windows.Forms.RadioButton rbCWD;
+        private System.Windows.Forms.CheckBox chkUnparkMode;
     }
 }

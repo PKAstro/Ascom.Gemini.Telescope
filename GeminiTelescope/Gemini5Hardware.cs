@@ -93,6 +93,12 @@ namespace ASCOM.GeminiTelescope
                 string res = DoCommandResult("<91:", MAX_TIMEOUT, false);
                 if (res == "1")
                     m_ChecksumMask = 0xff;
+
+
+                if (GeminiHardware.Instance.dVersion >= 5.1) //set preferred stop mode for level 5.1 and greater
+                {
+                    GeminiHardware.Instance.GeminiStopMode = GeminiHardware.Instance.m_GeminiStopMode;
+                }           
             } 
 
             base.SendStartUpCommands();
