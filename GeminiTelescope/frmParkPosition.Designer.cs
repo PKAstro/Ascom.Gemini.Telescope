@@ -190,7 +190,7 @@
             this.chkUnparkMode.Name = "chkUnparkMode";
             this.chkUnparkMode.Size = new System.Drawing.Size(332, 24);
             this.chkUnparkMode.TabIndex = 2;
-            this.chkUnparkMode.Text = "Unpark only through ASCOM  (HC will not unpark the mount)";
+            this.chkUnparkMode.Text = "Prevent accidental unparking by software";
             this.chkUnparkMode.UseVisualStyleBackColor = true;
             // 
             // frmParkPosition

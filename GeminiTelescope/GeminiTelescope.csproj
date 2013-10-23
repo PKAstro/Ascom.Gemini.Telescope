@@ -335,6 +335,9 @@
     <EmbeddedResource Include="AboutBox\AboutBox1.resx">
       <DependentUpon>AboutBox1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmNetworkSettings.fr.resx">
+      <DependentUpon>frmNetworkSettings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmPEC.resx">
       <DependentUpon>frmPEC.cs</DependentUpon>
     </EmbeddedResource>
