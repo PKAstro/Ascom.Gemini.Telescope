@@ -57,8 +57,8 @@
             this.GeminiPictureBox.Size = new System.Drawing.Size(120, 73);
             this.GeminiPictureBox.TabIndex = 0;
             this.GeminiPictureBox.TabStop = false;
-            this.GeminiPictureBox.DoubleClick += new System.EventHandler(this.GeminiPictureBox_Click);
             this.GeminiPictureBox.Click += new System.EventHandler(this.GeminiPictureBox_Click);
+            this.GeminiPictureBox.DoubleClick += new System.EventHandler(this.GeminiPictureBox_Click);
             // 
             // ASCOMpictureBox
             // 
@@ -71,8 +71,8 @@
             this.ASCOMpictureBox.Size = new System.Drawing.Size(61, 77);
             this.ASCOMpictureBox.TabIndex = 1;
             this.ASCOMpictureBox.TabStop = false;
-            this.ASCOMpictureBox.DoubleClick += new System.EventHandler(this.ASCOMpictureBox_Click);
             this.ASCOMpictureBox.Click += new System.EventHandler(this.ASCOMpictureBox_Click);
+            this.ASCOMpictureBox.DoubleClick += new System.EventHandler(this.ASCOMpictureBox_Click);
             // 
             // labelProductName
             // 
@@ -182,9 +182,9 @@
             this.labelCopyright.ForeColor = System.Drawing.Color.White;
             this.labelCopyright.Location = new System.Drawing.Point(155, 403);
             this.labelCopyright.Name = "labelCopyright";
-            this.labelCopyright.Size = new System.Drawing.Size(344, 18);
+            this.labelCopyright.Size = new System.Drawing.Size(244, 18);
             this.labelCopyright.TabIndex = 11;
-            this.labelCopyright.Text = "Copyright © 2009-12 Paul Kanevsky, Robert Turner";
+            this.labelCopyright.Text = "Copyright © 2009-13 Paul Kanevsky";
             // 
             // linkLabel5
             // 
