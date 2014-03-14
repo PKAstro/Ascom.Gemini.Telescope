@@ -2113,7 +2113,7 @@ namespace ASCOM.GeminiTelescope
                 AssertConnect();
                 System.Threading.Thread.Sleep(10); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
 
-                if (GeminiHardware.Instance.Velocity == "S" || GeminiHardware.Instance.Velocity == "C" || GeminiHardware.Instance.Velocity == "G")
+                if (GeminiHardware.Instance.Velocity == "S" || GeminiHardware.Instance.Velocity == "C" )
                 {
                     GeminiHardware.Instance.Trace.Enter("IT:Slewing.Get", true);
                     return true;
