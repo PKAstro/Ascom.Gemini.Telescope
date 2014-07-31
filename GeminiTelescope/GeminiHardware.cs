@@ -4712,8 +4712,22 @@ namespace ASCOM.GeminiTelescope
                 if (!int.TryParse(sp[0], out ra_size_clusters)) throw new InvalidDataException("Mechanical Declination:size='" + size + "'"); //???
                 if (!int.TryParse(sp[1], out dec_size_clusters)) throw new InvalidDataException("Mechanical Declination:size='" + size + "'"); //???
 
-                double distance_deg = (dec_clusters - dec_size_clusters / 2) * 180.0 / dec_size_clusters; //mechanical declination in degrees from 0 to 359 degrees
+                double distance_deg = 0;
+
+                if (dVersion < 5.0) //Gemini-I
+                {
+                    //PK2014-07 (fix Gemini-I reversal)
+                    //PK2014-07: CWD position is at dec_clusters, west side mechanical DEC zero position is at (dec_clusters+dec_clusters/2)
+                    distance_deg = (dec_clusters - (dec_size_clusters + dec_size_clusters / 2)) * 180.0 / dec_size_clusters; //mechanical declination in degrees from 0 to 359 degrees
+                }
+                else
+                {
+                    
+                    distance_deg = (dec_clusters - dec_size_clusters / 2) * 180.0 / dec_size_clusters; //mechanical declination in degrees from 0 to 359 degrees
+                }
+
                 if (distance_deg > 180.0) distance_deg = distance_deg - 360.0;//mechanical declination in degrees from -180 to +180 degrees
+                if (distance_deg < -180.0) distance_deg += 360.0; //PK2014-07: adjust both ways into -180..180 range
 
                 return distance_deg;
 
