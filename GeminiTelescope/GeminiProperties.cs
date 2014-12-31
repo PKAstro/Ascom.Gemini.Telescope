@@ -423,7 +423,7 @@ namespace ASCOM.GeminiTelescope
 
 #region Advanced Properties
 
-        [Sequence(0)]
+        [Sequence(1)]
         public string MountTypeSetting
         {
             get { return (string)get_Profile("MountTypeSetting", Mount_names[2]); }
@@ -441,7 +441,7 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        [Sequence(1)]
+        [Sequence(2)]
         public string MountGeometrySetting
         {
             get { return (string)get_Profile("MountGeometrySetting", Geometry_names[0]); }
@@ -573,7 +573,7 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        [Sequence(9)]
+        [Sequence(20)]
         public string WestSafetyLimit
         {
             get {
@@ -603,7 +603,7 @@ namespace ASCOM.GeminiTelescope
         }
 */
 
-        [Sequence(9)]
+        [Sequence(20)]
         public string EastSafetyLimit
         {
             get {
@@ -632,7 +632,7 @@ namespace ASCOM.GeminiTelescope
         }
  */
 
-        [Sequence(9)]
+        [Sequence(20)]
         public double WestSafetyLimitDegrees
         {
             get { return (double)get_Profile("WestSafetyLimitDegrees", 0); }
@@ -666,7 +666,7 @@ namespace ASCOM.GeminiTelescope
         }
 
 
-        [Sequence(9)]
+        [Sequence(20)]
         public double EastSafetyLimitDegrees
         {
             get { return (double)get_Profile("EastSafetyLimitDegrees", 0); }
@@ -698,7 +698,7 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        [Sequence(1)]
+        [Sequence(2)]
         public double Latitude
         {
             get { return (double)get_Profile("Latitude", 0.0); }
@@ -717,7 +717,7 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        [Sequence(2)]
+        [Sequence(3)]
         public double Longitude
         {
             get { return (double)get_Profile("Longitude", 0.0); }
@@ -736,7 +736,7 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        [Sequence(3)]
+        [Sequence(4)]
         public int UTC_Offset
         {
             get { return (int)get_Profile("UTC_Offset", 0); }
@@ -755,7 +755,7 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        [Sequence(9)]
+        [Sequence(20)]
         public double GotoLimitDegrees
         {
             get { return (double)get_Profile("GotoLimitDegrees", 0.0); }
@@ -786,7 +786,7 @@ namespace ASCOM.GeminiTelescope
 
         }
 
-        [Sequence(9)]
+        [Sequence(20)]
         public bool PEC_Is_On
         {
             get { return (bool)get_Profile("PEC_Is_On", false);}
@@ -817,7 +817,7 @@ namespace ASCOM.GeminiTelescope
 
 
 
-        [Sequence(9)]
+        [Sequence(20)]
         public string HandController
         {
             get {return (string)get_Profile("HandController", HandController_names[0]);}
@@ -834,7 +834,7 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        [Sequence(4)]
+        [Sequence(7)]
         public string TrackingRateMode
         {
             get { return (string)get_Profile("TrackingRateMode", TrackingRate_names[0]); }
@@ -851,7 +851,7 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        [Sequence(5)]
+        [Sequence(10)]
         public int TrackingDivisorRA
         {
             get { return (int)get_Profile("TrackingDivisorRA", 56096); }
@@ -867,13 +867,14 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        [Sequence(5)]
+        [Sequence(10)]
         public int TrackingDivisorDEC
         {
             get { return (int)get_Profile("TrackingDivisorDEC", 0); }
             set { mProfile["TrackingDivisorDEC"] = value; IsDirty = true; }
         }
 
+       
         private int TrackingDivisorDEC_Gemini
         {
             get { return get_int_Prop("<412:"); }
@@ -883,6 +884,7 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        [Sequence(9)]
         public int ManualSlewSpeed
         {
             get { return (int)get_Profile("ManualSlewSpeed", 800); }
@@ -895,6 +897,8 @@ namespace ASCOM.GeminiTelescope
             set { GeminiHardware.Instance.DoCommandResult(">120:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
+
+        [Sequence(9)]
         public int GotoSlewSpeed
         {
             get { return (int)get_Profile("GotoSlewSpeed", 800); }
@@ -907,6 +911,7 @@ namespace ASCOM.GeminiTelescope
             set { GeminiHardware.Instance.DoCommandResult(">140:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
+        [Sequence(9)]
         public int CenteringSpeed
         {
             get { return (int)get_Profile("CenteringSpeed", 20); }
@@ -919,6 +924,7 @@ namespace ASCOM.GeminiTelescope
             set { GeminiHardware.Instance.DoCommandResult(">170:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
+        [Sequence(9)]
         public double GuideSpeed
         {
             get { return (double)get_Profile("GuideSpeed", 0.5); }
@@ -944,7 +950,7 @@ namespace ASCOM.GeminiTelescope
         }
 
 
-        [Sequence(4)]
+        [Sequence(7)]
         public int WormGearRatioRA
         {
             get { return (int)get_Profile("WormGearRatioRA", 0); }
@@ -959,7 +965,7 @@ namespace ASCOM.GeminiTelescope
                     GeminiHardware.Instance.DoCommandResult(">21:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
-        [Sequence(4)]
+        [Sequence(7)]
         public int WormGearRatioDEC
         {
             get { return (int)get_Profile("WormGearRatioDEC", 0); }
@@ -975,7 +981,7 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        [Sequence(4)]
+        [Sequence(7)]
         public int SpurGearRatioRA
         {
             get { return (int)get_Profile("SpurGearRatioRA", 0); }
@@ -991,7 +997,7 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        [Sequence(4)]
+        [Sequence(7)]
         public int SpurGearRatioDEC
         {
             get { return (int)get_Profile("SpurGearRatioDEC", 0); }
@@ -1007,7 +1013,7 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        [Sequence(4)]
+        [Sequence(7)]
         public int ServoEncoderResolutionRA
         {
             get { return (int)get_Profile("ServoEncoderResolutionRA", 0); }
@@ -1023,7 +1029,7 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        [Sequence(4)]
+        [Sequence(7)]
         public int ServoEncoderResolutionDEC
         {
             get { return (int)get_Profile("ServoEncoderResolutionDEC", 0); }
@@ -1039,7 +1045,7 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        [Sequence(4)]
+        [Sequence(7)]
         public int StepsPerWormRevolutionRA
         {
             get { return (int)get_Profile("StepsPerWormRevolutionRA", 0); }
@@ -1056,7 +1062,7 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        [Sequence(4)]
+        [Sequence(7)]
         public int StepsPerWormRevolutionDEC
         {
             get { return (int)get_Profile("StepsPerWormRevolutionDEC", 0); }
@@ -1073,7 +1079,7 @@ namespace ASCOM.GeminiTelescope
         }
 
 
-        [Sequence(4)]
+        [Sequence(7)]
         public bool UseEncoders
         {
             get { return (bool)get_Profile("UseEncoders", false); }
@@ -1094,7 +1100,7 @@ namespace ASCOM.GeminiTelescope
 
 
 
-        [Sequence(4)]
+        [Sequence(7)]
         public bool UseLimitSwitches
         {
             get { return (bool)get_Profile("UseLimitSwitches", false); }
@@ -1114,7 +1120,7 @@ namespace ASCOM.GeminiTelescope
         }
 
 
-        [Sequence(4)]
+        [Sequence(7)]
         public int EncoderResolutionRA
         {
             get { return (int)get_Profile("EncoderResolutionRA", 0); }
@@ -1127,7 +1133,7 @@ namespace ASCOM.GeminiTelescope
             set { GeminiHardware.Instance.DoCommandResult(">100:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
-        [Sequence(4)]
+        [Sequence(7)]
         public int EncoderResolutionDEC
         {
             get { return (int)get_Profile("EncoderResolutionDEC", 0); }
@@ -1141,7 +1147,7 @@ namespace ASCOM.GeminiTelescope
         }
 
 
-        [Sequence(5)]
+        [Sequence(10)]
         public int TVC
         {
             get { return (int)get_Profile("TVC", 0); }
@@ -1154,7 +1160,7 @@ namespace ASCOM.GeminiTelescope
             set { GeminiHardware.Instance.DoCommandResult(">200:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
-        [Sequence(6)]
+        [Sequence(13)]
         public int ModelA
         {
             get { return (int)get_Profile("ModelA", 0); }
@@ -1167,7 +1173,7 @@ namespace ASCOM.GeminiTelescope
             set { GeminiHardware.Instance.DoCommandResult(">201:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); } 
         }
 
-        [Sequence(6)]
+        [Sequence(13)]
         public int ModelE
         {
             get { return (int)get_Profile("ModelE", 0); }
@@ -1180,7 +1186,7 @@ namespace ASCOM.GeminiTelescope
             set { GeminiHardware.Instance.DoCommandResult(">202:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
-        [Sequence(6)]
+        [Sequence(13)]
         public int ModelNP
         {
             get { return (int)get_Profile("ModelNP", 0); }
@@ -1193,7 +1199,7 @@ namespace ASCOM.GeminiTelescope
             set { GeminiHardware.Instance.DoCommandResult(">203:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
-        [Sequence(6)]
+        [Sequence(13)]
         public int ModelNE
         {
             get { return (int)get_Profile("ModelNE", 0); }
@@ -1206,7 +1212,7 @@ namespace ASCOM.GeminiTelescope
             set { GeminiHardware.Instance.DoCommandResult(">204:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
-        [Sequence(6)]
+        [Sequence(13)]
         public int ModelIH
         {
             get { return (int)get_Profile("ModelIH", 0); }
@@ -1219,7 +1225,7 @@ namespace ASCOM.GeminiTelescope
             set { GeminiHardware.Instance.DoCommandResult(">205:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
-        [Sequence(6)]
+        [Sequence(13)]
         public int ModelID
         {
             get { return (int)get_Profile("ModelID", 0); }
@@ -1232,7 +1238,7 @@ namespace ASCOM.GeminiTelescope
             set { GeminiHardware.Instance.DoCommandResult(">206:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
-        [Sequence(6)]
+        [Sequence(13)]
         public int ModelFR
         {
             get { return (int)get_Profile("ModelFR", 0); }
@@ -1245,7 +1251,7 @@ namespace ASCOM.GeminiTelescope
             set { GeminiHardware.Instance.DoCommandResult(">207:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
-        [Sequence(6)]
+        [Sequence(13)]
         public int ModelFD
         {
             get { return (int)get_Profile("ModelFD", 0); }
@@ -1258,7 +1264,7 @@ namespace ASCOM.GeminiTelescope
             set { GeminiHardware.Instance.DoCommandResult(">208:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
-        [Sequence(6)]
+        [Sequence(13)]
         public int ModelCF
         {
             get { return (int)get_Profile("ModelCF", 0); }
@@ -1271,7 +1277,7 @@ namespace ASCOM.GeminiTelescope
             set { GeminiHardware.Instance.DoCommandResult(">209:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
-        [Sequence(6)]
+        [Sequence(13)]
         public int ModelTF
         {
             get { return (int)get_Profile("ModelTF", 0); }
@@ -1285,7 +1291,7 @@ namespace ASCOM.GeminiTelescope
         }
 
 
-        [Sequence(7)]
+        [Sequence(16)]
         public bool SavePEC
         {
             get { return (bool)get_Profile("SavePEC", false); }

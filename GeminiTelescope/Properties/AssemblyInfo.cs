@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ASCOM Initiative")]
 [assembly: AssemblyProduct("ASCOM Gemini Telescope Driver")]
-[assembly: AssemblyCopyright("Copyright © 2009-14 Paul Kanevsky")]
+[assembly: AssemblyCopyright("Copyright © 2009-13 Paul Kanevsky")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
