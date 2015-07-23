@@ -63,7 +63,7 @@ namespace ASCOM.GeminiTelescope
         public frmGps()
         {
             InitializeComponent();
-
+            GeminiHardware.Instance.Trace.Enter("frmGPS");
 
             comboBoxComPort.Items.Add("");
             foreach (string s in System.IO.Ports.SerialPort.GetPortNames())
@@ -81,22 +81,24 @@ namespace ASCOM.GeminiTelescope
             labelElevationData.Text = "";
             labelDateTime.Text = Resources.GPSDateTime + ":";
             labelDateTimeData.Text = "";
-
+            GeminiHardware.Instance.Trace.Exit("frmGPS");
         }
 
         private void frmGps_Load(object sender, EventArgs e)
         {
+            GeminiHardware.Instance.Trace.Enter("frmGPS_Load");
             interpreter.PositionReceived += new NmeaInterpreter.PositionReceivedEventHandler(interpreter_PositionReceived);
             interpreter.DateTimeChanged +=new NmeaInterpreter.DateTimeChangedEventHandler(interpreter_DateTimeChanged);
             interpreter.FixLost += new NmeaInterpreter.FixLostEventHandler(interpreter_FixLost);
             interpreter.FixObtained += new NmeaInterpreter.FixObtainedEventHandler(interpreter_FixObtained);
             interpreter.InvalidData += new NmeaInterpreter.InvalidDataEventHandler(interpreter_InvalidData);
             interpreter.DataTimeout += new NmeaInterpreter.DataTimeoutEventHandler(interpreter_DataTimeout);
+            GeminiHardware.Instance.Trace.Exit("frmGPS_Load");
 
         }
         private void ProcessForm(string latitude, string longitude, string elevation)
         {
-            
+            GeminiHardware.Instance.Trace.Enter("ProcessForm", latitude, longitude, elevation);
 
             m_Latitude = latitude.Substring(1);
             m_Longitude = longitude.Substring(1);
@@ -104,6 +106,8 @@ namespace ASCOM.GeminiTelescope
             // GPS data contains '.' as the decimal separator. To make ASCOM conversion functions work for the current locale,
             // need to replace '.' with the correct local decimal separator [pk: 2010-03-29]
             string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            GeminiHardware.Instance.Trace.Info(4, "NumberDecimalSeparator = ", sep );
+
             if (sep != ".")
             {
                 m_Latitude = m_Latitude.Replace(".", sep);
@@ -116,24 +120,35 @@ namespace ASCOM.GeminiTelescope
 
             try
             {
-                labelLatitudeData.Text = GeminiHardware.Instance.m_Util.DegreesToDMS(GeminiHardware.Instance.m_Util.DMSToDegrees(m_Latitude));
-                labelLongitudeData.Text = GeminiHardware.Instance.m_Util.DegreesToDMS(GeminiHardware.Instance.m_Util.DMSToDegrees(m_Longitude));
+                labelLatitudeData.Text =
+                    GeminiHardware.Instance.m_Util.DegreesToDMS(GeminiHardware.Instance.m_Util.DMSToDegrees(m_Latitude));
+                labelLongitudeData.Text =
+                    GeminiHardware.Instance.m_Util.DegreesToDMS(GeminiHardware.Instance.m_Util.DMSToDegrees(m_Longitude));
             }
-            catch { }
+            catch (Exception ex)
+            {
+                GeminiHardware.Instance.Trace.Except(ex);
+            }
             
             if (elevation != SharedResources.INVALID_DOUBLE.ToString()) labelElevationData.Text = elevation;
 
             m_Elevation = elevation;
-            
+
+            GeminiHardware.Instance.Trace.Exit("ProcessForm", latitude, longitude, elevation);
         }
         private void interpreter_PositionReceived(string latitude, string longitude, string elevation)
         {
+            GeminiHardware.Instance.Trace.Enter("frmGPS PositionReceived", latitude, longitude, elevation);
+
             FormDelegate message = new FormDelegate(ProcessForm);
-            this.BeginInvoke(message, new Object[] { latitude, longitude, elevation });          
+            this.BeginInvoke(message, new Object[] { latitude, longitude, elevation });
+            GeminiHardware.Instance.Trace.Exit("frmGPS PositionReceived");
         }
 
         private void ProcessStatus(string status, Boolean blankFields, int icon)
         {
+            GeminiHardware.Instance.Trace.Enter("ProcessStatus", status, blankFields, icon);
+
             labelStatusData.Text = status;
             if (blankFields)
             {
@@ -154,12 +169,14 @@ namespace ASCOM.GeminiTelescope
             {
                 pictureBox1.Image = Resources.satellite;
             }
-
+            GeminiHardware.Instance.Trace.Exit("ProcessStatus");
         }
 
 
         private void setTime(System.DateTime dateTime)
         {
+            GeminiHardware.Instance.Trace.Enter("setTime", dateTime.ToString());
+
             labelDateTimeData.Text = dateTime.ToString();
             if (checkBoxUpdateClock.Checked)
             {
@@ -172,10 +189,13 @@ namespace ASCOM.GeminiTelescope
                 updatedTime.Second = (ushort)dateTime.ToUniversalTime().Second;
                 Win32SetSystemTime(ref updatedTime);
             }
+
+            GeminiHardware.Instance.Trace.Exit("setTime" );
         }
 
         private void interpreter_DateTimeChanged(System.DateTime dateTime)
         {
+            GeminiHardware.Instance.Trace.Enter("DateTimeChanged", dateTime);
             this.BeginInvoke(new TimeUpdateDelegate(setTime), dateTime);
         }
 
@@ -188,7 +208,11 @@ namespace ASCOM.GeminiTelescope
                 {
                     lat = GeminiHardware.Instance.m_Util.DMSToDegrees(m_Latitude);
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    GeminiHardware.Instance.Trace.Except(ex);
+                }
+                GeminiHardware.Instance.Trace.Enter("get_Latitude", lat);
                 return lat;
             }
         }
@@ -201,7 +225,13 @@ namespace ASCOM.GeminiTelescope
                 {
                     log = GeminiHardware.Instance.m_Util.DMSToDegrees(m_Longitude);
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    GeminiHardware.Instance.Trace.Except(ex);
+                }
+
+                GeminiHardware.Instance.Trace.Enter("get_Longitude", log);
+
                 return log;
             }
         }
@@ -209,14 +239,32 @@ namespace ASCOM.GeminiTelescope
 
         public string ComPort
         {
-            get { return comboBoxComPort.SelectedItem.ToString(); }
-            set { comboBoxComPort.SelectedItem = value; }
+            get
+            {
+                GeminiHardware.Instance.Trace.Enter("get_ComPort", comboBoxComPort.SelectedItem.ToString());
+                return comboBoxComPort.SelectedItem.ToString();
+            }
+            set
+            {
+                GeminiHardware.Instance.Trace.Enter("set_ComPort", value);
+                comboBoxComPort.SelectedItem = value;
+                GeminiHardware.Instance.Trace.Exit("set_ComPort", comboBoxComPort.SelectedItem.ToString());
+            }
         }
 
         public string BaudRate
         {
-            get { return comboBoxBaudRate.SelectedItem.ToString(); }
-            set { comboBoxBaudRate.SelectedItem = value; }
+            get
+            {
+                GeminiHardware.Instance.Trace.Enter("get_BaudRate", comboBoxBaudRate.SelectedItem.ToString());
+                return comboBoxBaudRate.SelectedItem.ToString();
+            }
+            set
+            {
+                GeminiHardware.Instance.Trace.Enter("set_BaudRate",value);
+                comboBoxBaudRate.SelectedItem = value;
+                GeminiHardware.Instance.Trace.Exit("set_BaudRate", comboBoxBaudRate.SelectedItem.ToString());
+            }
         }
         public bool UpdateClock
         {
@@ -226,20 +274,26 @@ namespace ASCOM.GeminiTelescope
         
         private void buttonQuery_Click(object sender, EventArgs e)
         {
+            GeminiHardware.Instance.Trace.Enter("buttonQuery");
+
+
             if (buttonQuery.Text == Resources.Query)
             {
                 if (comboBoxComPort.SelectedItem == null) { MessageBox.Show(Resources.SelectCOMPort); return; }
                 try
                 {
-                   
-                        interpreter.ComPort = comboBoxComPort.SelectedItem.ToString();
-                        interpreter.BaudRate = int.Parse(comboBoxBaudRate.SelectedItem.ToString());
-                        interpreter.Connected = true;
-                        buttonQuery.Text = Resources.Stop;
-                        labelStatusData.Text = Resources.WaitingForData;                  
+
+                    interpreter.ComPort = comboBoxComPort.SelectedItem.ToString();
+                    interpreter.BaudRate = int.Parse(comboBoxBaudRate.SelectedItem.ToString());
+                    interpreter.Connected = true;
+                    buttonQuery.Text = Resources.Stop;
+                    labelStatusData.Text = Resources.WaitingForData;
                 }
                 catch (Exception ex)
-                { MessageBox.Show(ex.Message); }
+                {
+                    GeminiHardware.Instance.Trace.Except(ex);
+                    MessageBox.Show(ex.Message);
+                }
                 
             }
             else
@@ -251,19 +305,30 @@ namespace ASCOM.GeminiTelescope
                     pictureBox1.Image = Resources.no_satellite;
                     labelStatusData.Text = "";
                 }
-                catch { }
+                catch (Exception ex1)
+                {
+                    GeminiHardware.Instance.Trace.Except(ex1);
+                }
             }
+            GeminiHardware.Instance.Trace.Exit("buttonQuery");
         }
 
         private void cmdOK_Click(object sender, EventArgs e)
         {
+            GeminiHardware.Instance.Trace.Enter("cmdOK_Click");
+
             try
             {
 
                 interpreter.Connected = false;
 
             }
-            catch { }
+            catch (Exception ex)
+            {
+                GeminiHardware.Instance.Trace.Except(ex);
+
+            }
+            GeminiHardware.Instance.Trace.Exit("cmdOK_Click");
         }
 
         private void cmdCancel_Click(object sender, EventArgs e)
@@ -279,31 +344,47 @@ namespace ASCOM.GeminiTelescope
 
         private void interpreter_FixLost()
         {
+            GeminiHardware.Instance.Trace.Enter("FixLost");
+
             StatusDelegate message = new StatusDelegate(ProcessStatus);
             this.BeginInvoke(message, new Object[] { global::ASCOM.GeminiTelescope.Properties.Resources.GPSNoFix, true, 2 });
+            GeminiHardware.Instance.Trace.Exit("FixLost");
+
         }
         private void interpreter_FixObtained()
         {
+            GeminiHardware.Instance.Trace.Enter("FixObtained");
+
             StatusDelegate message = new StatusDelegate(ProcessStatus);
             this.BeginInvoke(message, new Object[] { global::ASCOM.GeminiTelescope.Properties.Resources.DataOK, false, 3 });
+            GeminiHardware.Instance.Trace.Exit("FixObtained");
         }
 
         private void interpreter_InvalidData()
         {
+            GeminiHardware.Instance.Trace.Enter("InvalidData");
+
             StatusDelegate message = new StatusDelegate(ProcessStatus);
             this.BeginInvoke(message, new Object[] { global::ASCOM.GeminiTelescope.Properties.Resources.InvalidDataReceived, true, 2 });
+            GeminiHardware.Instance.Trace.Exit("InvalidData");
         }
 
         private void interpreter_DataTimeout()
         {
+            GeminiHardware.Instance.Trace.Enter("DataTimeout");
+
             StatusDelegate message = new StatusDelegate(ProcessStatus);
             this.BeginInvoke(message, new Object[] { global::ASCOM.GeminiTelescope.Properties.Resources.WaitingForData, true, 1 });
+            GeminiHardware.Instance.Trace.Exit("DataTimeout");
         }
 
         private void frmGps_FormClosing(object sender, FormClosingEventArgs e)
         {
+            GeminiHardware.Instance.Trace.Enter("frmGps_Closing");
+
             interpreter.Connected = false;
             interpreter = null;
+            GeminiHardware.Instance.Trace.Exit("frmGps_Closing");
 
         }
 

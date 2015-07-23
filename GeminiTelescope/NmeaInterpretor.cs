@@ -76,8 +76,11 @@ namespace ASCOM.GeminiTelescope
 
         public NmeaInterpreter()
         {
+            GeminiHardware.Instance.Trace.Enter("NmeaInterpreter");
+
             comPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(comPort_DataReceived);
             timeOut = new Timer(new TimerCallback(timeOut_Elapsed),null,  Timeout.Infinite, Timeout.Infinite);
+            GeminiHardware.Instance.Trace.Exit("NmeaInterpreter");
         }
 
 
@@ -85,6 +88,8 @@ namespace ASCOM.GeminiTelescope
         //     
         public bool Parse(string sentence)
         {
+            GeminiHardware.Instance.Trace.Enter("Parse", sentence);
+
             // Discard the sentence if its checksum 
             //     does not match our 
             // calculated checksum
@@ -93,6 +98,8 @@ namespace ASCOM.GeminiTelescope
             // Look at the first character, if it is $ then we are receiving data
             if (sentence.Substring(0,1) != "$")
             {
+                GeminiHardware.Instance.Trace.Info(2, "Parse: Invalid Data", sentence);
+
                 // Flag invalid data from port
                 if (InvalidData != null)
                     InvalidData();
@@ -129,6 +136,8 @@ namespace ASCOM.GeminiTelescope
         //Interprets a $GPGGA message
         public bool ParseGPGGA(string sentence)
         {
+            GeminiHardware.Instance.Trace.Enter("ParseGPGAA", sentence);
+
             // Divide the sentence into words
             string[] Words = GetWords(sentence);
 
@@ -136,6 +145,8 @@ namespace ASCOM.GeminiTelescope
             Words[4] != "" & Words[5] != "" &
              Words[9] != "" & Words[10] != "" & Words[6] != "0")
             {
+                GeminiHardware.Instance.Trace.Info(4, "Extracting");
+
                 // Yes. Extract latitude and longitude
                 // Append hours
                 string Latitude = Words[2].Substring(0, 2) + ":";
@@ -151,30 +162,42 @@ namespace ASCOM.GeminiTelescope
 
                 string Elevation = Words[9];
 
+                GeminiHardware.Instance.Trace.Info(4, "Extracted", Latitude, Longitude, Elevation);
+
                 // Notify the calling application of the change
                 if (PositionReceived != null)
                     PositionReceived(Latitude, Longitude, Elevation);
             }
+
+            GeminiHardware.Instance.Trace.Info(4, "Word[6]", Words[6]);
+
 
             if (Words[6] != "")
             {
                 switch (Words[6])
                 {
                     case "0":
+                        GeminiHardware.Instance.Trace.Info(2, "Fix Lost");
                         if (FixLost != null)
                             FixLost();
                         break;
                     default:
+                        GeminiHardware.Instance.Trace.Info(2, "Fix Obtained");
                         if (FixObtained != null)
                             FixObtained();
                         break;
                 }
             }
+
+            GeminiHardware.Instance.Trace.Exit("ParseGPGAA", true);
+
             return true;
         }
         // Interprets a $GPRMC message
         public bool ParseGPRMC(string sentence)
         {
+            GeminiHardware.Instance.Trace.Enter("ParseGPRMC", sentence);
+
             // Divide the sentence into words
             string[] Words = GetWords(sentence);
             // Do we have enough values to describe 
@@ -182,6 +205,8 @@ namespace ASCOM.GeminiTelescope
             if (Words[3] != "" & Words[4] != "" &
                 Words[5] != "" & Words[6] != "" & Words[2] == "A")
             {
+                GeminiHardware.Instance.Trace.Info(4, "ExtractWords");
+
                 // Yes. Extract latitude and longitude
                 // Append hours
                 string Latitude = Words[3].Substring(0, 2) + ":";
@@ -196,13 +221,21 @@ namespace ASCOM.GeminiTelescope
                 Longitude = Words[6] + Longitude;
                 // Notify the calling application of the
                 //     change
+
+                GeminiHardware.Instance.Trace.Info(4, "ParseGPRMC:PositionReceived", Latitude, Longitude);
+
                 if (PositionReceived != null)
                     PositionReceived(Latitude, Longitude, SharedResources.INVALID_DOUBLE.ToString());
             }
+
+            GeminiHardware.Instance.Trace.Info(4, "ParseGPRMC:Parsed");
+
             // Do we have enough values to parse satellite-derived time?
             //     
             if (Words[1] != "" & Words[2] == "A")
             {
+                GeminiHardware.Instance.Trace.Info(4, "ParseGPRMC:ParseTime");
+
                 // Yes. Extract hours, minutes, seconds 
                 //     and milliseconds
                 int UtcHours = Convert.ToInt32(Words[1].Substring(0, 2));
@@ -219,6 +252,9 @@ namespace ASCOM.GeminiTelescope
                 System.DateTime SatelliteTime = new System.DateTime(Today.Year,
                 Today.Month, Today.Day, UtcHours, UtcMinutes, UtcSeconds,
                 UtcMilliseconds);
+
+                GeminiHardware.Instance.Trace.Info(4, "ParseGPRMC:ParseTime", SatelliteTime.ToString());
+
                 // Notify of the new time, adjusted to the
                 // local time zone
                 if (DateTimeChanged != null)
@@ -228,6 +264,8 @@ namespace ASCOM.GeminiTelescope
             // the current speed?
             if (Words[7] != "")
             {
+                GeminiHardware.Instance.Trace.Info(4, "ParseGPRMC:ParseSpeed");
+
                 // Yes. Parse the speed and convert it to MPH
                 double Speed = double.Parse(Words[7], NmeaCultureInfo) *
                 MPHPerKnot;
@@ -242,6 +280,7 @@ namespace ASCOM.GeminiTelescope
             // Do we have enough information to extract bearing?
             if (Words[8] != "")
             {
+                GeminiHardware.Instance.Trace.Info(4, "ParseGPRMC:ParseBearing");
                 // Indicate that the sentence was recognized
                 double Bearing = double.Parse(Words[8], NmeaCultureInfo);
                 if (BearingReceived != null)
@@ -253,15 +292,22 @@ namespace ASCOM.GeminiTelescope
                 switch (Words[2])
                 {
                     case "A":
+                        GeminiHardware.Instance.Trace.Info(4, "ParseGPRMC:FixObtained");
+
                         if (FixObtained != null)
                             FixObtained();
                         break;
                     case "V":
+                        GeminiHardware.Instance.Trace.Info(4, "ParseGPRMC:FixLost");
+
                         if (FixLost != null)
                             FixLost();
                         break;
                 }
             }
+
+            GeminiHardware.Instance.Trace.Exit("ParseGPRMC", true);
+
             // Indicate that the sentence was recognized
             return true;
         }
@@ -273,6 +319,9 @@ namespace ASCOM.GeminiTelescope
             int Azimuth = 0;
             int Elevation = 0;
             int SignalToNoiseRatio = 0;
+
+            GeminiHardware.Instance.Trace.Enter("ParseGPGSV", sentence);
+
             // Divide the sentence into words
             string[] Words = GetWords(sentence);
             // Each sentence contains four blocks of
@@ -290,52 +339,73 @@ namespace ASCOM.GeminiTelescope
                     if (Words[Count * 4] != "" & Words[Count * 4 + 1] != ""
                     & Words[Count * 4 + 2] != "" & Words[Count * 4 + 3] != "")
                     {
+                        GeminiHardware.Instance.Trace.Info(4, "ParseGPGSV:Parse", sentence);
+
                         // Yes. Extract satellite information and report it
                         PseudoRandomCode = System.Convert.ToInt32(Words[Count * 4]);
                         Elevation = Convert.ToInt32(Words[Count * 4 + 1]);
                         Azimuth = Convert.ToInt32(Words[Count * 4 + 2]);
                         SignalToNoiseRatio = Convert.ToInt32(Words[Count * 4 + 2]);
                         // Notify of this satellite's information
+                        GeminiHardware.Instance.Trace.Info(4, "ParseGPGSV", Elevation, Azimuth, SignalToNoiseRatio);
+
                         if (SatelliteReceived != null)
                             SatelliteReceived(PseudoRandomCode, Azimuth,
                             Elevation, SignalToNoiseRatio);
                     }
                 }
             }
+            GeminiHardware.Instance.Trace.Exit("ParseGPGSV", true);
+
             // Indicate that the sentence was recognized   
             return true;
         }
         // Interprets a "Fixed Satellites and DOP" NMEA sentence
         public bool ParseGPGSA(string sentence)
         {
+            GeminiHardware.Instance.Trace.Enter("ParseGPGSA", sentence);
+
             // Divide the sentence into words
             string[] Words = GetWords(sentence);
             // Update the DOP values
             if (Words[15] != "")
             {
+                GeminiHardware.Instance.Trace.Info(4, "ParseGPGSA:15", Words[15]);
                 if (PDOPReceived != null)
                     PDOPReceived(double.Parse(Words[15], NmeaCultureInfo));
             }
             if (Words[16] != "")
             {
+                GeminiHardware.Instance.Trace.Info(4, "ParseGPGSA:16", Words[16]);
+
                 if (HDOPReceived != null)
                     HDOPReceived(double.Parse(Words[16], NmeaCultureInfo));
             }
             if (Words[17] != "")
             {
+                GeminiHardware.Instance.Trace.Info(4, "ParseGPGSA:17", Words[17]);
+
                 if (VDOPReceived != null)
                     VDOPReceived(double.Parse(Words[17], NmeaCultureInfo));
             }
+            GeminiHardware.Instance.Trace.Exit("ParseGPGSA", true);
+
             return true;
         }
         // Returns True if a sentence's checksum matches the 
         // calculated checksum
         public bool IsValid(string sentence)
         {
+            GeminiHardware.Instance.Trace.Enter("IsValid", sentence);
+
             // Compare the characters after the asterisk
             // to the calculation
-            return sentence.Substring(sentence.IndexOf("*") + 1) ==
+            bool res= sentence.Substring(sentence.IndexOf("*") + 1) ==
             GetChecksum(sentence);
+
+            GeminiHardware.Instance.Trace.Exit("IsValid", res);
+
+            return res;
         }
         // Calculates the checksum for a sentence
         public string GetChecksum(string sentence)
@@ -395,6 +465,8 @@ namespace ASCOM.GeminiTelescope
         /// </summary>        
         void ProcessDataThread()
         {
+            GeminiHardware.Instance.Trace.Enter("ProcessDataThread");
+
             while (!m_QuitThread && m_DataReceivedEvent.WaitOne())
             {
                 if (m_QuitThread) break;
@@ -405,11 +477,16 @@ namespace ASCOM.GeminiTelescope
                     {
                         MessageDelegate message = new MessageDelegate(ProcessMessage);
                         string str = comPort.ReadLine();
+
+                        GeminiHardware.Instance.Trace.Info(4, "ProcessDataThread:readLine", str);
+
                         message.Invoke(str);
                     }
                 }
-                catch (TimeoutException)
+                catch (TimeoutException ex)
                 {
+                    GeminiHardware.Instance.Trace.Except(ex);
+
                     //flush the buffer, its probably full of rubbish
                     if (comPort!=null) comPort.DiscardInBuffer();
                     timeOut.Change(3000, 0);
@@ -417,6 +494,8 @@ namespace ASCOM.GeminiTelescope
                         InvalidData();
                 }
             }
+            GeminiHardware.Instance.Trace.Exit("ProcessDataThread");
+
         }
 
 
@@ -445,15 +524,21 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
+                GeminiHardware.Instance.Trace.Enter("get_Connected", comPort.IsOpen);
                 return comPort.IsOpen;
             }
             set
             {
+                GeminiHardware.Instance.Trace.Enter("set_Connected", value);
+
                 if (value)
                 {
+
                     if (comPort.IsOpen == false)
                     {
-                       
+                        GeminiHardware.Instance.Trace.Info(4, "set_Connected", m_ComPort, m_BaudRate);
+                        try
+                        {
                             comPort.PortName = m_ComPort;
                             comPort.BaudRate = m_BaudRate;
                             comPort.DataBits = 8;
@@ -475,11 +560,17 @@ namespace ASCOM.GeminiTelescope
                             m_QuitThread = false;
                             m_DataThread = new Thread(new ThreadStart(ProcessDataThread));
                             m_DataThread.Start();
+                        }
+                        catch (Exception ex)
+                        {
+                            GeminiHardware.Instance.Trace.Except(ex);
+                        }
 
                     }
                 }
                 else
                 {
+                    GeminiHardware.Instance.Trace.Info(4, "set_Connected port open", comPort.IsOpen);
                     //Must stop the read thread before closing the port
                     if (m_DataThread != null)
                     {
@@ -493,11 +584,17 @@ namespace ASCOM.GeminiTelescope
                     {
                         if (comPort.IsOpen == true) comPort.Close();
                     }
-                    catch { }
+                    catch (Exception ex)
+                    {
+                        GeminiHardware.Instance.Trace.Except(ex);   
+                    }
                     timeOut.Change(Timeout.Infinite, Timeout.Infinite);
 
                 }
+
+                GeminiHardware.Instance.Trace.Exit("set_Connected", comPort.IsOpen);
             }
+
         }
     }
 }

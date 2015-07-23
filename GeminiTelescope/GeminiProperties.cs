@@ -1160,6 +1160,29 @@ namespace ASCOM.GeminiTelescope
             set { GeminiHardware.Instance.DoCommandResult(">200:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
+        [Sequence(10)]
+        public int PECOnAuto
+        {
+            get { return (int)get_Profile("PECOnAuto", 0); }
+            set { mProfile["PECOnAuto"] = value; IsDirty = true; }
+        }
+
+        private int PECOnAuto_Gemini
+        {
+            get
+            {
+                if (GeminiHardware.Instance.dVersion >= 5.2)
+                    return get_int_Prop("<508:");
+                else
+                    return 0;
+            }
+            set
+            {
+                if (GeminiHardware.Instance.dVersion >= 5.2)
+                    GeminiHardware.Instance.DoCommandResult(">508:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
+            }
+        }
+
         [Sequence(13)]
         public int ModelA
         {

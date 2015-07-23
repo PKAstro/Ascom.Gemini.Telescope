@@ -611,8 +611,8 @@ namespace ASCOM.GeminiTelescope
             this.picASCOM.Image = global::ASCOM.GeminiTelescope.Properties.Resources.ASCOM;
             this.picASCOM.Name = "picASCOM";
             this.picASCOM.TabStop = false;
-            this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
             this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
+            this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
             // 
             // label11
             // 

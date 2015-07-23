@@ -562,6 +562,7 @@ namespace ASCOM.GeminiTelescope
 
         private void buttonGps_Click(object sender, EventArgs e)
         {
+            GeminiHardware.Instance.Trace.Enter("buttonGps_Click");
             frmGps gpsForm = new frmGps();
 
             gpsForm.ComPort = GeminiHardware.Instance.GpsComPort;
@@ -573,6 +574,8 @@ namespace ASCOM.GeminiTelescope
             {
                 try
                 {
+                    GeminiHardware.Instance.Trace.Info(4, "buttonGps_Click", gpsForm.BaudRate, gpsForm.UpdateClock, gpsForm.Latitude, gpsForm.Longitude, gpsForm.Elevation);
+
                     string error = "";
                     int gpsBaudRate;
                     if (!int.TryParse(gpsForm.BaudRate, out gpsBaudRate))
@@ -592,10 +595,14 @@ namespace ASCOM.GeminiTelescope
                     }
                     if (gpsForm.Elevation != SharedResources.INVALID_DOUBLE.ToString()) Elevation = double.Parse(gpsForm.Elevation);
                 }
-                catch
+                catch (Exception ex)
                 {
+                    GeminiHardware.Instance.Trace.Except(ex);
+
                 }
             }
+            GeminiHardware.Instance.Trace.Exit("buttonGps_Click");
+
         }
 
         private void pbGeminiSettings_Click(object sender, EventArgs e)

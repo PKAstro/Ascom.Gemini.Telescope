@@ -45,6 +45,13 @@ namespace ASCOM.GeminiTelescope
                 numericUpDown1.Minimum = new decimal(new int[] { 256, 0, 0, 0 });
                 numericUpDown2.Minimum = numericUpDown2.Minimum = new decimal(new int[] { 0, 0, 0, 0 });
             }
+            
+            if (GeminiHardware.Instance.dVersion < 5.2)
+            {
+                // PEC enabled at start-up in L5.2
+                checkBox8.Enabled = false;
+                checkBox8.Checked = false;
+            }
 
             if (GeminiHardware.Instance.dVersion < 5.1)
                 cbGeometry.Enabled = false;
