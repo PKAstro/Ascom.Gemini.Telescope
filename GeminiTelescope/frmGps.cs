@@ -247,8 +247,15 @@ namespace ASCOM.GeminiTelescope
             set
             {
                 GeminiHardware.Instance.Trace.Enter("set_ComPort", value);
-                comboBoxComPort.SelectedItem = value;
-                GeminiHardware.Instance.Trace.Exit("set_ComPort", comboBoxComPort.SelectedItem.ToString());
+                try
+                {
+                    comboBoxComPort.SelectedItem = value;
+                }
+                catch (Exception ex)
+                {
+                    GeminiHardware.Instance.Trace.Except(ex);
+                }
+//                GeminiHardware.Instance.Trace.Exit("set_ComPort", comboBoxComPort.SelectedItem.ToString());
             }
         }
 

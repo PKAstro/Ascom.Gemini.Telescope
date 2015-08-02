@@ -627,7 +627,7 @@ namespace ASCOM.GeminiTelescope
             try
             {
                 mut = new Mutex(false, SharedResources.TELESCOPE_PROGRAM_ID + "_Mutex");
-                if (!mut.WaitOne(0))
+                if (!mut.WaitOne(500))
                 {
                     MessageBox.Show("Another instance of " + SharedResources.TELESCOPE_DRIVER_NAME + " is already running.\r\nPlease close it first.", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
