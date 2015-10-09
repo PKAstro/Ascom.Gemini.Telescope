@@ -507,8 +507,8 @@ namespace ASCOM.GeminiTelescope
             set { GeminiHardware.Instance.SwapSyncAdditionalAlign = value; }
         }
 
-
-        [Sequence(99)]
+        // must be set before DoesRefraction!
+        [Sequence(98)]
         public bool DoesPrecession
         {
             get { return (bool) get_Profile("DoesPrecession", false); }
