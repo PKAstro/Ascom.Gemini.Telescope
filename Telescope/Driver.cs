@@ -2072,6 +2072,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Instance.Velocity = "S";
             GeminiHardware.Instance.SlewEquatorialAsync();
             //            GeminiHardware.Instance.WaitForVelocity("SC", GeminiHardware.Instance.MAX_TIMEOUT);
+            GeminiHardware.Instance.WaitForVelocity("SC", GeminiHardware.Instance.MAX_TIMEOUT);
             m_AsyncSlewStarted = true;
             GeminiHardware.Instance.Trace.Exit("IT:SlewToCoordinatesAsync", RightAscension, Declination);
         }
