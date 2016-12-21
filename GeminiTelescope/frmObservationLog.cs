@@ -20,6 +20,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Windows.Forms;
 using ASCOM.GeminiTelescope.Properties;
@@ -130,7 +131,12 @@ namespace ASCOM.GeminiTelescope
         {
             pbToGemini.Enabled = GeminiHardware.Instance.Connected;
             pbFromGemini.Enabled = GeminiHardware.Instance.Connected;
-            btnGoto.Enabled = (GeminiHardware.Instance.Connected && gvLog.SelectedRows.Count == 1);
+
+
+            Observation obs = null;
+            if (gvLog.SelectedRows.Count == 1) obs = gvLog.SelectedRows[0].DataBoundItem as Observation;
+
+            btnGoto.Enabled = (GeminiHardware.Instance.Connected && obs!=null && (obs.RA.RA!=0 || obs.DEC.DEC!=0));
 
             pbToGemini.BackColor = pbToGemini.Enabled? Color.FromArgb(16,16,16): Color.FromArgb(64,64,64);
             pbFromGemini.BackColor = pbFromGemini.Enabled? Color.FromArgb(16,16,16): Color.FromArgb(64, 64, 64);
@@ -462,6 +468,7 @@ namespace ASCOM.GeminiTelescope
         {
            try
            {
+               //161106140324SKochab [CE][B2] UMi
                obs = new Observation();
                int y, mo, d, h, m, s;
                y = int.Parse(line.Substring(0,2))+2000;
@@ -471,14 +478,26 @@ namespace ASCOM.GeminiTelescope
                m = int.Parse(line.Substring(8, 2));
                s = int.Parse(line.Substring(10, 2));
 
-               obs.Time = new ObsTime( new DateTime(y, mo, d, h, m, s, 0, DateTimeKind.Utc));
+               int objOffset = 30;
 
-               obs.Operation = m_Ops[line.Substring(12, 1)];
-               obs.RA = new RACoord(GeminiHardware.Instance.m_Util.HMSToHours(line.Substring(13, 8)));
-               obs.DEC = new DECCoord(GeminiHardware.Instance.m_Util.DMSToDegrees(line.Substring(21, 9)));
-               if (line.Length > 30)
+               obs.Time = new ObsTime( new DateTime(y, mo, d, h, m, s, 0, DateTimeKind.Utc));
+               try
                {
-                   obs.Object = line.Substring(30);
+                   obs.Operation = m_Ops[line.Substring(12, 1)];
+                   obs.RA = new RACoord(GeminiHardware.Instance.m_Util.HMSToHours(line.Substring(13, 8)));
+                   obs.DEC = new DECCoord(GeminiHardware.Instance.m_Util.DMSToDegrees(line.Substring(21, 9)));
+               }
+               catch 
+               {
+                   //L5 does not record RA and DEC coordinates in the log, so ignore them
+                   obs.RA = new RACoord(0);
+                   obs.DEC = new DECCoord(0);
+                   objOffset = 13;
+               }
+
+               if (line.Length > objOffset)
+               {
+                   obs.Object = line.Substring(objOffset);
                    if (obs.Object.EndsWith("#")) obs.Object = obs.Object.Remove(obs.Object.Length - 1);
                }
                else

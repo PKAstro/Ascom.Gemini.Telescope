@@ -2452,6 +2452,24 @@ namespace ASCOM.GeminiTelescope
 
 
         /// <summary>
+        /// return actual velocity (not polled) from Gemini
+        /// </summary>
+        /// <returns>N, T, G, C, S</returns>
+        public string GetVelocitySync(int tmout)
+        {
+            Trace.Enter(4, "GetVelocitySync");
+            string res = DoCommandResult(":Gv", tmout, false);
+            if (res == null)
+            {
+                Trace.Exit(2, "GetVelocitySync", "timeout! returns " + Velocity);
+                return Velocity; //last known (polled) value if timeout
+            }
+
+            Trace.Exit(4, "GetVelocitySync", res);
+            return res;
+        }
+
+        /// <summary>
         /// wait for one or more possible velocity states of the mount
         /// </summary>
         /// <param name="p">contains one or more letters representing velocities we are waiting for: N, T, G, C, S</param>
@@ -2462,7 +2480,7 @@ namespace ASCOM.GeminiTelescope
             Trace.Enter(4, "WaitForVelocity", p, tmout);
 
             int timeout = System.Environment.TickCount + tmout;
-            while ((tmout <= 0 || System.Environment.TickCount < timeout) && !p.Contains(Velocity)) System.Threading.Thread.Sleep(500);
+            while ((tmout <= 0 || System.Environment.TickCount < timeout) && !p.Contains(GetVelocitySync(Math.Max(tmout,500)))) System.Threading.Thread.Sleep(500);
 
             Trace.Exit(4, "WaitForVelocity", p, tmout, Velocity);
             if (p.Contains(Velocity)) return true;

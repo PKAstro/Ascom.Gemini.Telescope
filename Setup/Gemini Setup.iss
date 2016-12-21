@@ -174,10 +174,10 @@ begin
 
   if Result then // check for .NET 3.5 SP1
   begin
-		RegQueryDWordValue(HKLM, 'Software\Microsoft\NET Framework Setup\NDP\v3.5', 'SP', version);
+		RegQueryDWordValue(HKLM, 'Software\Microsoft\NET Framework Setup\NDP\v4\Client', 'Install', version);
 		if version < 1 then
 		begin
-     MsgBox('Microsoft .NET version 3.5 SP1 is not installed. You must install .NET 3.5 SP1 run-time before installing this driver.', mbCriticalError, MB_OK);
+     MsgBox('Microsoft .NET version 4.0 is not installed. You must install .NET 4.0 run-time before installing this driver.', mbCriticalError, MB_OK);
        Result:= False;
     end;
   end;
