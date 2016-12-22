@@ -132,6 +132,7 @@ namespace ASCOM.GeminiTelescope
 
         private void UpdateStatus()
         {
+            chkAutoTurnOnPEC.Checked = GeminiHardware.Instance.AutoStartPEC;
             if (!GeminiHardware.Instance.Connected)
             {
                 pbLoad.Enabled = false;
@@ -405,6 +406,17 @@ namespace ASCOM.GeminiTelescope
                 UpdateStatus();
             }
 
+        }
+
+        private void chkEnablePEC_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chkAutoTurnOnPEC_Click(object sender, EventArgs e)
+        {
+            chkAutoTurnOnPEC.Checked = !chkAutoTurnOnPEC.Checked;
+            GeminiHardware.Instance.AutoStartPEC = chkAutoTurnOnPEC.Checked;
         }
 
     }

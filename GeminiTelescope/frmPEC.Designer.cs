@@ -44,6 +44,7 @@
             this.SetPECMax = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.pbClear = new System.Windows.Forms.Button();
+            this.chkAutoTurnOnPEC = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // chkEnablePEC
@@ -57,6 +58,7 @@
             this.chkEnablePEC.TabIndex = 30;
             this.chkEnablePEC.Text = "PEC Playback";
             this.chkEnablePEC.UseVisualStyleBackColor = false;
+            this.chkEnablePEC.CheckedChanged += new System.EventHandler(this.chkEnablePEC_CheckedChanged);
             this.chkEnablePEC.Click += new System.EventHandler(this.chkEnablePEC_Click);
             // 
             // cmdOK
@@ -218,6 +220,19 @@
             this.pbClear.UseVisualStyleBackColor = true;
             this.pbClear.Click += new System.EventHandler(this.pbClear_Click);
             // 
+            // chkAutoTurnOnPEC
+            // 
+            this.chkAutoTurnOnPEC.AutoCheck = false;
+            this.chkAutoTurnOnPEC.AutoSize = true;
+            this.chkAutoTurnOnPEC.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkAutoTurnOnPEC.Location = new System.Drawing.Point(229, 22);
+            this.chkAutoTurnOnPEC.Name = "chkAutoTurnOnPEC";
+            this.chkAutoTurnOnPEC.Size = new System.Drawing.Size(144, 17);
+            this.chkAutoTurnOnPEC.TabIndex = 45;
+            this.chkAutoTurnOnPEC.Text = "Turn on PEC on connect";
+            this.chkAutoTurnOnPEC.UseVisualStyleBackColor = false;
+            this.chkAutoTurnOnPEC.Click += new System.EventHandler(this.chkAutoTurnOnPEC_Click);
+            // 
             // frmPEC
             // 
             this.AcceptButton = this.cmdOK;
@@ -225,6 +240,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(397, 245);
+            this.Controls.Add(this.chkAutoTurnOnPEC);
             this.Controls.Add(this.pbClear);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.cbPECMax);
@@ -270,5 +286,6 @@
         private System.Windows.Forms.Button SetPECMax;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button pbClear;
+        public System.Windows.Forms.CheckBox chkAutoTurnOnPEC;
     }
 }

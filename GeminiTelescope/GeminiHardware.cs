@@ -191,6 +191,25 @@ namespace ASCOM.GeminiTelescope
         }
 
 
+        internal bool m_AutoStartPEC = true;
+
+        public bool AutoStartPEC
+        {
+            get
+            {
+                return m_AutoStartPEC;
+            }
+            set
+            {
+                
+                m_AutoStartPEC = value;
+                Profile.DeviceType = "Telescope";
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AutoTurnOnPEC", value.ToString()); 
+            }
+        }
+
+
+
         internal bool m_Tracking;
 
         internal bool m_AtPark;
@@ -1304,6 +1323,9 @@ namespace ASCOM.GeminiTelescope
             {
                 m_SerialPort.PortName = m_ComPort;
             }
+
+            if (!bool.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "AutoTurnOnPEC", ""), out m_AutoStartPEC))
+                m_AutoStartPEC = false;
 
             if (!bool.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "SendAdvancedSettings", ""), out m_SendAdvancedSettings))
                 m_SendAdvancedSettings = false;
@@ -2802,6 +2824,17 @@ namespace ASCOM.GeminiTelescope
                         if (SendAdvancedSettings)
                         {
                             SetGeminiAdvancedSettings();
+                        }
+
+                        if (m_AutoStartPEC)
+                        {
+                            Trace.Info(2, "Turn on PEC on connect");
+                            byte pec = GeminiHardware.Instance.PECStatus;
+                            if (pec != 0xff)
+                            {
+                                pec = (byte) (pec | 1);
+                                GeminiHardware.Instance.PECStatus = pec;
+                            }
                         }
 
                     }
