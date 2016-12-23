@@ -4003,6 +4003,19 @@ namespace ASCOM.GeminiTelescope
         }
 
         /// <summary>
+        /// called when a stop is signaled by the caller, issued just like any other
+        /// serial command and will be executed in the correct sequence with anything
+        /// already in the queue
+        /// </summary>        
+        public void AbortSlewSync()
+        {
+            Trace.Enter(4, "GeminiHardware:AbortSlewSync");
+            DoCommandResult(":Q#", MAX_TIMEOUT, false);
+            Trace.Exit(4, "GeminiHardware:AbortSlewSync");
+        }
+
+
+        /// <summary>
         /// Park using specified park position mode
         /// </summary>
         /// <param name="mode"></param>

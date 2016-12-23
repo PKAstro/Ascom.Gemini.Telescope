@@ -342,7 +342,7 @@ namespace ASCOM.GeminiTelescope
             AssertConnect();
             if (GeminiHardware.Instance.AtHome || GeminiHardware.Instance.AtPark)
                 throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
-            GeminiHardware.Instance.AbortSlew();
+            GeminiHardware.Instance.AbortSlewSync();
             GeminiHardware.Instance.Trace.Exit("IT:AbortSlew");
         }
 
@@ -2034,7 +2034,7 @@ namespace ASCOM.GeminiTelescope
 
             GeminiHardware.Instance.TargetAzimuth = Azimuth;
             GeminiHardware.Instance.TargetAltitude = Altitude;
-            if (Slewing) AbortSlew();
+            if (internalSlewing) GeminiHardware.Instance.AbortSlewSync();
             GeminiHardware.Instance.Velocity = "S";
             GeminiHardware.Instance.SlewHorizonAsync();
             GeminiHardware.Instance.WaitForVelocity("SC", GeminiHardware.Instance.MAX_TIMEOUT);
@@ -2051,7 +2051,8 @@ namespace ASCOM.GeminiTelescope
 
             GeminiHardware.Instance.TargetRightAscension = RightAscension;
             GeminiHardware.Instance.TargetDeclination = Declination;
-            if (Slewing) AbortSlew();
+            if (internalSlewing) GeminiHardware.Instance.AbortSlewSync();
+
             GeminiHardware.Instance.Velocity = "S";
             GeminiHardware.Instance.SlewEquatorial();
 
@@ -2068,7 +2069,8 @@ namespace ASCOM.GeminiTelescope
 
             GeminiHardware.Instance.TargetRightAscension = RightAscension;
             GeminiHardware.Instance.TargetDeclination = Declination;
-            if (Slewing) AbortSlew();
+            if (internalSlewing) GeminiHardware.Instance.AbortSlewSync();
+
             GeminiHardware.Instance.Velocity = "S";
             GeminiHardware.Instance.SlewEquatorialAsync();
             //            GeminiHardware.Instance.WaitForVelocity("SC", GeminiHardware.Instance.MAX_TIMEOUT);
@@ -2084,7 +2086,7 @@ namespace ASCOM.GeminiTelescope
 
             if (GeminiHardware.Instance.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
-            if (Slewing) AbortSlew();
+            if (internalSlewing) GeminiHardware.Instance.AbortSlewSync();
             GeminiHardware.Instance.Velocity = "S";
             GeminiHardware.Instance.SlewEquatorial();
             GeminiHardware.Instance.WaitForSlewToEnd();
@@ -2099,7 +2101,7 @@ namespace ASCOM.GeminiTelescope
 
             if (GeminiHardware.Instance.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
-            if (Slewing) AbortSlew();
+            if (internalSlewing)  GeminiHardware.Instance.AbortSlewSync();
             GeminiHardware.Instance.Velocity = "S";
             GeminiHardware.Instance.SlewEquatorialAsync();
             GeminiHardware.Instance.WaitForVelocity("SC", GeminiHardware.Instance.MAX_TIMEOUT);
@@ -2111,12 +2113,21 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
+                bool res = internalSlewing;
+                GeminiHardware.Instance.Trace.Enter("IT:Slewing.Get", res);
+                return res;
+            }
+        }
+
+        public bool internalSlewing
+        {
+            get
+            {
                 AssertConnect();
                 System.Threading.Thread.Sleep(10); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
 
-                if (GeminiHardware.Instance.Velocity == "S" || GeminiHardware.Instance.Velocity == "C" )
+                if (GeminiHardware.Instance.Velocity == "S" || GeminiHardware.Instance.Velocity == "C")
                 {
-                    GeminiHardware.Instance.Trace.Enter("IT:Slewing.Get", true);
                     return true;
                 }
                 else
@@ -2126,11 +2137,11 @@ namespace ASCOM.GeminiTelescope
                         System.Threading.Thread.Sleep((GeminiHardware.Instance.SlewSettleTime + 2) * 1000);
                         m_AsyncSlewStarted = false;
                     }
-                    GeminiHardware.Instance.Trace.Enter("IT:Slewing.Get", false);
                     return false;
                 }
             }
         }
+
 
         public void SyncToAltAz(double Azimuth, double Altitude)
         {
