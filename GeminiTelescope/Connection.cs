@@ -30,6 +30,7 @@ using ASCOM.GeminiTelescope.Properties;
 using System.Net;
 using System.IO;
 using System.Web;
+using System.Threading;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -826,7 +827,10 @@ wait_again:
                 Trace.Error(msg, "Teminating connection!");
                 GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, msg + " Terminating connection!");
                 if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, Resources.TerminatingConnection);
-                while (m_Connected) Disconnect();
+
+                ThreadPool.QueueUserWorkItem(new WaitCallback(a => Disconnect()));
+
+                while (m_Connected) System.Threading.Thread.Sleep(500);
                 return;
             }
 

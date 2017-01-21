@@ -3203,8 +3203,11 @@ namespace ASCOM.GeminiTelescope
                             m_WaitForCommand.Set(); // wake up the background thread
                             try
                             {
-                                if (!m_BackgroundWorker.Join(2000))
-                                    m_BackgroundWorker.Abort();
+                                try
+                                {
+                                    if (!m_BackgroundWorker.Join(2000))
+                                        m_BackgroundWorker.Abort();
+                                } catch { }
                             }
                             catch { }
                             Trace.Info(2, "Bkgd thread stopped");
