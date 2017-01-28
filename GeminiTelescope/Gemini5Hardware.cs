@@ -168,7 +168,7 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                return EthernetPort && (!UDP || (UDP_client != null && UDP_client.Client.Connected));
+                return EthernetPort && (!UDP || (UDP_client != null));
             }
         }
 
