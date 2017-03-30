@@ -60,7 +60,7 @@ namespace ASCOM.GeminiTelescope
             public string name;
         }
 
-        static public string[] Mount_names = {"Custom", "GM-8", "G-11", "HGM-200", "MI-250", "Titan", "Titan50"};
+        static public string[] Mount_names = {"Custom", "GM-8", "G-11", "HGM-200", "MI-250", "Titan", "Titan50", "G11T", "GM811"};
         static public string[] Geometry_names = { "GEM", "Alt/Az" };
         static public string[] TrackingRate_names = { "Sidereal", "King Rate", "Lunar", "Solar", "Terrestrial", "Closed Loop", "Comet Rate" };
         static public string[] HandController_names = { "Visual", "Photo", "All Speeds" };

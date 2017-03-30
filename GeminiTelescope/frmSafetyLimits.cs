@@ -73,7 +73,7 @@ namespace ASCOM.GeminiTelescope
 
         private void pbOK_Click(object sender, EventArgs e)
         {
-            string losmandy_mounts = "GM-8,G-11,HGM-200,Titan,Titan50";
+            string losmandy_mounts = "GM-8,G-11,HGM-200,Titan,Titan50,G11T,GM811";
             if (ValidateChildren())
             {
                 GeminiProperties props = (GeminiProperties)geminiPropertiesBindingSource[0];
