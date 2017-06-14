@@ -103,23 +103,28 @@ namespace ASCOM.GeminiTelescope
             m_Latitude = latitude.Substring(1);
             m_Longitude = longitude.Substring(1);
 
-            // GPS data contains '.' as the decimal separator. To make ASCOM conversion functions work for the current locale,
-            // need to replace '.' with the correct local decimal separator [pk: 2010-03-29]
+            System.Globalization.CultureInfo oldCulture = GeminiHardware.Instance.m_Util.CurrentCulture;
+
+            GeminiHardware.Instance.m_Util.CurrentCulture = GeminiHardware.Instance.m_GeminiCulture;    //"en-US" culture
+
+            //// GPS data contains '.' as the decimal separator. To make ASCOM conversion functions work for the current locale,
+            //// need to replace '.' with the correct local decimal separator [pk: 2010-03-29]
             string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
             GeminiHardware.Instance.Trace.Info(4, "NumberDecimalSeparator = ", sep );
 
-            if (sep != ".")
-            {
-                m_Latitude = m_Latitude.Replace(".", sep);
-                m_Longitude = m_Longitude.Replace(".", sep);                
-                elevation = elevation.Replace(".", sep);
-            }
+            //if (sep != ".")
+            //{
+            //    m_Latitude = m_Latitude.Replace(".", sep);
+            //    m_Longitude = m_Longitude.Replace(".", sep);                
+            //    elevation = elevation.Replace(".", sep);
+            //}
 
             if (latitude.Substring(0, 1) == "S") m_Latitude = "-" + m_Latitude;
             if (longitude.Substring(0, 1) == "W") m_Longitude = "-" + m_Longitude;
 
             try
             {
+ 
                 labelLatitudeData.Text =
                     GeminiHardware.Instance.m_Util.DegreesToDMS(GeminiHardware.Instance.m_Util.DMSToDegrees(m_Latitude));
                 labelLongitudeData.Text =
@@ -129,7 +134,9 @@ namespace ASCOM.GeminiTelescope
             {
                 GeminiHardware.Instance.Trace.Except(ex);
             }
-            
+
+            GeminiHardware.Instance.m_Util.CurrentCulture = oldCulture; //restore original 
+
             if (elevation != SharedResources.INVALID_DOUBLE.ToString()) labelElevationData.Text = elevation;
 
             m_Elevation = elevation;
