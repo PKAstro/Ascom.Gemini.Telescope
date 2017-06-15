@@ -112,12 +112,12 @@ namespace ASCOM.GeminiTelescope
             string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
             GeminiHardware.Instance.Trace.Info(4, "NumberDecimalSeparator = ", sep );
 
-            //if (sep != ".")
-            //{
-            //    m_Latitude = m_Latitude.Replace(".", sep);
-            //    m_Longitude = m_Longitude.Replace(".", sep);                
-            //    elevation = elevation.Replace(".", sep);
-            //}
+            if (sep != ".")
+            {
+                //m_Latitude = m_Latitude.Replace(".", sep);
+                //m_Longitude = m_Longitude.Replace(".", sep);
+                elevation = elevation.Replace(".", sep);
+            }
 
             if (latitude.Substring(0, 1) == "S") m_Latitude = "-" + m_Latitude;
             if (longitude.Substring(0, 1) == "W") m_Longitude = "-" + m_Longitude;
