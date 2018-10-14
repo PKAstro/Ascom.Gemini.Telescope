@@ -1057,8 +1057,8 @@ namespace ASCOM.GeminiTelescope
             get { return get_int_Prop("<27:"); }
             set
             {
-                if (MountTypeSetting == "Custom")
-                    GeminiHardware.Instance.DoCommandResult(">27:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
+                //if (MountTypeSetting == "Custom")
+                //    GeminiHardware.Instance.DoCommandResult(">27:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
             }
         }
 
@@ -1073,8 +1073,8 @@ namespace ASCOM.GeminiTelescope
         {
             get { return get_int_Prop("<28:"); }
             set {
-                if (MountTypeSetting == "Custom")
-                    GeminiHardware.Instance.DoCommandResult(">28:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
+                //if (MountTypeSetting == "Custom")
+                //    GeminiHardware.Instance.DoCommandResult(">28:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
             }
         }
 

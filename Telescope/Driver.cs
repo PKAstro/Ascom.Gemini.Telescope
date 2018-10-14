@@ -30,7 +30,7 @@ using ASCOM;
 using ASCOM.Utilities;
 using ASCOM.Interface;
 using ASCOM.GeminiTelescope;
-using ASCOM.Conform;
+
 using System.IO;
 
 /// <summary>
@@ -195,12 +195,7 @@ public interface IGeminiTelescope
     string CommandString(string Command, [DefaultParameterValue(false)]bool Raw);
     [DispId(424)]
     string CommandNative(string Command);
-    [DispId(425)]
-    IConformCommandStrings ConformCommands { get; }
-    [DispId(426)]
-    IConformCommandStrings ConformCommandsRaw { get; }
-    [DispId(427)]
-    IConformErrorNumbers ConformErrors { get; }
+  
 
     //ITelescope v3 additions
     [DispId(429)]
@@ -2349,33 +2344,6 @@ namespace ASCOM.GeminiTelescope
 
         #endregion
 
-        #region IConform Members
-
-        public IConformCommandStrings ConformCommands
-        {
-            get
-            {
-                return new ConformCommandStrings("Gc", "(24)", "Q", "Sz045:00:00", true);
-            }
-        }
-
-        public IConformCommandStrings ConformCommandsRaw
-        {
-            get
-            {
-                return new ConformCommandStrings(":Gc#", "(24)#", ":Q#", ":Sz045:00:00#", true);
-            }
-        }
-
-        public IConformErrorNumbers ConformErrors
-        {
-            get
-            {
-                return new ConformErrorNumbers(new int[] { ErrorCodes.NotImplemented },
-                                               new int[] { ErrorCodes.InvalidValue },
-                                               new int[] { ErrorCodes.ValueNotSet });
-            }
-        }
 
         public string Action(string ActionName, string ActionParameters)
         {
@@ -2392,7 +2360,6 @@ namespace ASCOM.GeminiTelescope
         {
         }
 
-        #endregion
 
         /// <summary>
         /// Condition an hour angle value into the range -11.99999:0.0:+12.0 range

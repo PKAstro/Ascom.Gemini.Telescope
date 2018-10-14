@@ -1250,7 +1250,7 @@
             this.numericUpDown14.ForeColor = System.Drawing.Color.Lime;
             this.numericUpDown14.Location = new System.Drawing.Point(311, 107);
             this.numericUpDown14.Maximum = new decimal(new int[] {
-            25600,
+            2147483647,
             0,
             0,
             0});
@@ -1277,7 +1277,7 @@
             this.numericUpDown13.ForeColor = System.Drawing.Color.Lime;
             this.numericUpDown13.Location = new System.Drawing.Point(179, 107);
             this.numericUpDown13.Maximum = new decimal(new int[] {
-            25600,
+            2147483647,
             0,
             0,
             0});
