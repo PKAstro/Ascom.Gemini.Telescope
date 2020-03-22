@@ -58,24 +58,25 @@ namespace ASCOM.GeminiTelescope
                 tIP = tIP.Replace(" ", "");
                 tIP = tIP.Trim();
 
-                System.Net.IPAddress ip;
-                if (!System.Net.IPAddress.TryParse(tIP, out ip))
-                {
-                    MessageBox.Show("Invalid IP address: " + txtIP.Text);
-                    txtIP.Focus();
-                    return;
-                }
-
                 //reparse this to remove leading zeroes -- leading zeroes are 
                 // a signal that ip bytes are specified in octal, not decimal!
                 Regex R = new Regex(@"(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})");
                 Match m = R.Match(tIP);
 
-                GeminiHardware.Instance.EthernetIP = string.Format("{0}.{1}.{2}.{3}",
+                string sIP = string.Format("{0}.{1}.{2}.{3}",
                     int.Parse(m.Groups[1].Value),
                     int.Parse(m.Groups[2].Value),
                     int.Parse(m.Groups[3].Value),
                     int.Parse(m.Groups[4].Value));
+
+                System.Net.IPAddress ip;
+                if (!System.Net.IPAddress.TryParse(sIP, out ip))
+                {
+                    MessageBox.Show("Invalid IP address: " + sIP);
+                    txtIP.Focus();
+                    return;
+                }
+                GeminiHardware.Instance.EthernetIP = sIP;
 
                 GeminiHardware.Instance.UseDHCP = false;
             }
