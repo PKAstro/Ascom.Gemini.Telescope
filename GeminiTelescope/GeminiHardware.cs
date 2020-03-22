@@ -36,6 +36,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using System.Drawing;
 using ASCOM.GeminiTelescope.Properties;
+using System.Collections.Generic;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -1536,8 +1537,24 @@ namespace ASCOM.GeminiTelescope
                         bootMode = "3";
                         break;
                 }
+
+                
+
+
+
                 Profile.DeviceType = "Telescope";
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "BootMode", bootMode);
+
+                Dictionary<int, int> setCmd = new Dictionary<int, int>
+                {
+                    {0, 44 }, {1, 41 }, {2, 42 }, {3,43 }
+                };
+
+                int cmd = setCmd[(int)value];   // get the appropriate Gemini set command
+    
+                if (GeminiHardware.Instance.Connected && GeminiHardware.Instance.dVersion >= 5.1)
+                    GeminiHardware.Instance.DoCommandResult($">{cmd}:" , MAX_TIMEOUT, false);
+
             }
 
         }
