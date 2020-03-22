@@ -184,7 +184,7 @@
             this.labelCopyright.Name = "labelCopyright";
             this.labelCopyright.Size = new System.Drawing.Size(244, 18);
             this.labelCopyright.TabIndex = 11;
-            this.labelCopyright.Text = "Copyright © 2009-13 Paul Kanevsky";
+            this.labelCopyright.Text = "Copyright © 2009-20 Paul Kanevsky";
             // 
             // linkLabel5
             // 
