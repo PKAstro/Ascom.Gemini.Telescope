@@ -298,6 +298,8 @@ namespace ASCOM.GeminiTelescope
                     break;
                 case ":": //Do nothing
                     break;
+                case "\x6": //special case
+                    break;
                 default: //Prepend :
                     cmd = ":" + cmd;
                     break;
@@ -652,7 +654,7 @@ namespace ASCOM.GeminiTelescope
             AssertConnect();
 
             if (Command == String.Empty) throw new ASCOM.InvalidValueException("CommandBlind", Command, "valid Gemini command");
-            Command = PrepareCommand(Command); // Add leading colon if required
+            if (!Raw) Command = PrepareCommand(Command); // Add leading colon if required
             GeminiHardware.Instance.DoCommandResult(Command, GeminiHardware.Instance.MAX_TIMEOUT, Raw);
             GeminiHardware.Instance.Trace.Exit("IT:CommandBlind", Command);
         }
@@ -663,7 +665,7 @@ namespace ASCOM.GeminiTelescope
             AssertConnect();
 
             if (Command == "") throw new InvalidValueException("CommandBool", "", "valid Gemini command");
-            Command = PrepareCommand(Command); // Add leading colon if required
+            if (!Raw) Command = PrepareCommand(Command); // Add leading colon if required
             string result = GeminiHardware.Instance.DoCommandResult(Command, GeminiHardware.Instance.MAX_TIMEOUT, Raw);
             if (result == null) throw new TimeoutException("CommandString: " + Command);
 
@@ -678,10 +680,11 @@ namespace ASCOM.GeminiTelescope
             AssertConnect();
 
             if (Command == String.Empty) throw new ASCOM.InvalidValueException("CommandString", Command, "valid Gemini command");
-            Command = PrepareCommand(Command); // Add leading colon if required
+            if (!Raw) Command = PrepareCommand(Command); // Add leading colon if required
             string result = GeminiHardware.Instance.DoCommandResult(Command, GeminiHardware.Instance.MAX_TIMEOUT, Raw);
             if (result == null) throw new TimeoutException("CommandString: " + Command);
-            if (!Raw & result.EndsWith("#")) return result.Substring(1, result.Length - 1);//Added Start value substring parameter and handling of Raw values
+            
+            if (!Raw && result.EndsWith("#")) return result.Substring(1, result.Length - 1);//Added Start value substring parameter and handling of Raw values
             GeminiHardware.Instance.Trace.Exit("IT:CommandString", Command, result);
             return result;
         }
