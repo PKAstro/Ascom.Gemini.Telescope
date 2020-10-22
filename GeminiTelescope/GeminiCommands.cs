@@ -109,6 +109,7 @@ namespace ASCOM.GeminiTelescope
             Commands.Add(":GZ", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
             Commands.Add(":hP", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
             Commands.Add(":hC", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
+            Commands.Add(":hZ", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
             Commands.Add(":hN", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0, true));
             Commands.Add(":hW", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0, true));
             Commands.Add(":h?", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1)); //0/1/2
