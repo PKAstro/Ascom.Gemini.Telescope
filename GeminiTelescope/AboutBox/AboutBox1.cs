@@ -13,10 +13,7 @@ namespace ASCOM.GeminiTelescope
         public AboutBox1()
         {
             InitializeComponent();
-            this.Text = String.Format("About {0}", AssemblyTitle);
-            this.labelProductName.Text = AssemblyProduct;
-            this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
-            this.labelCopyright.Text = AssemblyCopyright;
+      
             //this.labelCompanyName.Text = AssemblyCompany;
             //this.textBoxDescription.Text = AssemblyDescription;
         }
@@ -27,16 +24,21 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
-                if (attributes.Length > 0)
+                try
                 {
-                    AssemblyTitleAttribute titleAttribute = (AssemblyTitleAttribute)attributes[0];
-                    if (titleAttribute.Title != "")
+                    object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
+                    if (attributes.Length > 0)
                     {
-                        return titleAttribute.Title;
+                        AssemblyTitleAttribute titleAttribute = (AssemblyTitleAttribute)attributes[0];
+                        if (titleAttribute.Title != "")
+                        {
+                            return titleAttribute.Title;
+                        }
                     }
+                    return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
                 }
-                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
+                catch { }
+                return "Gemini ASCOM Driver";
             }
         }
 
@@ -65,12 +67,17 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false);
-                if (attributes.Length == 0)
+                try
                 {
-                    return "";
+                    object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false);
+                    if (attributes.Length == 0)
+                    {
+                        return "";
+                    }
+                    return ((AssemblyProductAttribute)attributes[0]).Product;
                 }
-                return ((AssemblyProductAttribute)attributes[0]).Product;
+                catch { }
+                return "Gemini ASCOM Driver";
             }
         }
 
@@ -78,12 +85,17 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
-                if (attributes.Length == 0)
+                try
                 {
-                    return "";
+                    object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
+                    if (attributes.Length == 0)
+                    {
+                        return "";
+                    }
+                    return ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
                 }
-                return ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
+                catch { }
+                return "";
             }
         }
 
@@ -91,12 +103,17 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
-                if (attributes.Length == 0)
+                try
                 {
-                    return "";
+                    object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
+                    if (attributes.Length == 0)
+                    {
+                        return "";
+                    }
+                    return ((AssemblyCompanyAttribute)attributes[0]).Company;
                 }
-                return ((AssemblyCompanyAttribute)attributes[0]).Company;
+                catch { }
+                return "";
             }
         }
         #endregion
@@ -126,6 +143,14 @@ namespace ASCOM.GeminiTelescope
             {
                 MessageBox.Show(other.Message);
             }
+        }
+
+        private void AboutBox1_Load(object sender, EventArgs e)
+        {
+            this.Text = String.Format("About {0}", AssemblyTitle);
+            this.labelProductName.Text = AssemblyProduct;
+            this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
+            this.labelCopyright.Text = AssemblyCopyright;
         }
     }
 }

@@ -42,12 +42,12 @@
             this.pbOK = new System.Windows.Forms.Button();
             this.pbCancel = new System.Windows.Forms.Button();
             this.chkUnparkMode = new System.Windows.Forms.CheckBox();
+            this.pbSetHome = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
-            resources.ApplyResources(this.groupBox1, "groupBox1");
             this.groupBox1.Controls.Add(this.rbCWD);
             this.groupBox1.Controls.Add(this.rbAltAz);
             this.groupBox1.Controls.Add(this.rbHome);
@@ -58,6 +58,7 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.txtAz);
             this.groupBox1.ForeColor = System.Drawing.Color.White;
+            resources.ApplyResources(this.groupBox1, "groupBox1");
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.TabStop = false;
             // 
@@ -136,16 +137,25 @@
             // 
             // chkUnparkMode
             // 
-            resources.ApplyResources(this.chkUnparkMode, "chkUnparkMode");
             this.chkUnparkMode.ForeColor = System.Drawing.Color.White;
+            resources.ApplyResources(this.chkUnparkMode, "chkUnparkMode");
             this.chkUnparkMode.Name = "chkUnparkMode";
             this.chkUnparkMode.UseVisualStyleBackColor = true;
+            // 
+            // pbSetHome
+            // 
+            resources.ApplyResources(this.pbSetHome, "pbSetHome");
+            this.pbSetHome.ForeColor = System.Drawing.Color.White;
+            this.pbSetHome.Name = "pbSetHome";
+            this.pbSetHome.UseVisualStyleBackColor = true;
+            this.pbSetHome.Click += new System.EventHandler(this.pbSetHome_Click);
             // 
             // frmParkPosition
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
+            this.Controls.Add(this.pbSetHome);
             this.Controls.Add(this.chkUnparkMode);
             this.Controls.Add(this.pbCancel);
             this.Controls.Add(this.pbOK);
@@ -177,5 +187,6 @@
         private System.Windows.Forms.RadioButton rbNoSlew;
         private System.Windows.Forms.RadioButton rbCWD;
         private System.Windows.Forms.CheckBox chkUnparkMode;
+        private System.Windows.Forms.Button pbSetHome;
     }
 }

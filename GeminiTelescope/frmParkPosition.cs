@@ -30,6 +30,9 @@ namespace ASCOM.GeminiTelescope
                 default: rbNoSlew.Checked = true; break;
             }
             chkUnparkMode.Checked = (GeminiHardware.Instance.GeminiStopMode == 2);
+
+            pbSetHome.Visible = (GeminiHardware.Instance.dVersion > 5.1);   // can't set home if not >= L5.2
+
         }
 
         private void pbGetPos_Click(object sender, EventArgs e)
@@ -86,6 +89,11 @@ namespace ASCOM.GeminiTelescope
         private void frmParkPosition_FormClosed(object sender, FormClosedEventArgs e)
         {
             GeminiHardware.Instance.Profile = null;
+        }
+
+        private void pbSetHome_Click(object sender, EventArgs e)
+        {
+            GeminiHardware.Instance.SetHomePosition();
         }
     }
 }

@@ -573,7 +573,16 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        public void SetHomePosition()
+        {
+            Trace.Enter(2, "SetHomePosition");
 
+            if (Connected)
+               DoCommand(":hH#", false);
+
+            Trace.Exit(2, "SetHomePosition");
+
+        }
 
         private double m_HourAngle = 0;
 
