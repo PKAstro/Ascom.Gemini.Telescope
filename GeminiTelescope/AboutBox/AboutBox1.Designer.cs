@@ -270,7 +270,6 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "AboutBox1";
-            this.TransparencyKey = System.Drawing.Color.Black;
             this.Load += new System.EventHandler(this.AboutBox1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.GeminiPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ASCOMpictureBox)).EndInit();
