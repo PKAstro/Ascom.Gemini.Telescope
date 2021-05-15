@@ -48,6 +48,26 @@ namespace ASCOM.GeminiTelescope
             return dt;
         }
 
+        public static void ToJ2000(ref double ra, ref double dec)
+        {
+            //GeminiHardware.Instance.m_Transform.SiteElevation = GeminiHardware.Instance.Elevation;
+            //GeminiHardware.Instance.m_Transform.SiteLatitude = GeminiHardware.Instance.Latitude;
+            //GeminiHardware.Instance.m_Transform.SiteLongitude = GeminiHardware.Instance.Longitude;
+
+            //GeminiHardware.Instance.m_Transform.JulianDateUTC = DateUtcToJulian(DateTime.Now);
+            //GeminiHardware.Instance.m_Transform.SiteTemperature = 20;
+            //GeminiHardware.Instance.m_Transform.SetTopocentric(ra, dec);
+            //GeminiHardware.Instance.m_Transform.Refresh();
+            //ra = GeminiHardware.Instance.m_Transform.RAJ2000;
+            //dec = GeminiHardware.Instance.m_Transform.DecJ2000;
+
+
+            // Rigorous equatorial precession computation from JNow to J2000
+            // with much better precision around DEC=90 than ASCOM.Transform class
+            double tNow = (DateUtcToJulian(DateTime.Now) - 2451545.0) / 36525;
+            EqPrecession(tNow, 0, ref ra, ref dec); 
+        }
+
 
         //----------------------------------------------------------------------------------------
         // Calculate Precession
@@ -401,6 +421,167 @@ namespace ASCOM.GeminiTelescope
                 return Declination;
             }
         }
+
+
+
+
+        /////////////////////////////////////////
+        //
+        // Adapted from Astronomy on the Personal Computer by Oliver Montenbruck and Thomas Pfleger, 1994
+        //
+
+        const double degs = 57.2957795130823;
+        const double rads = 0.017453292519943295;
+
+        //   Conversion to and from rectangular and polar coordinates.
+        //   X,Y,Z form a left handed set of axes, and r is the radius vector
+        //   of the point from the origin. Theta is the elevation angle of
+        //   r with the XY plane, and phi is the angle anti-clockwise from the
+        //   X axis and the projection of r in the X,Y plane.
+        //
+        //   in astronomical coordinate systems,
+        //
+        //   item    equatorial          ecliptic (helio or geo centric)
+        //   z       celestial pole      ecliptic pole
+        //   x,y     equatorial plane    ecliptic
+        //   theta   declination         latitude
+        //   phi     right ascension     longitude
+        //
+
+        static double rectangular(double R, double THETA, double phi, int idx)
+        {
+            //  takes spherical coordinates in degrees and returns the rectangular
+            //  coordinate shown by index, 1 = x, 2 = y, 3 = z
+            //
+            //  x = r.cos(theta).cos(phi)
+            //  y = r.cos(theta).sin(phi)
+            //  z = r.sin(theta)
+            //
+            double r_cos_theta;
+            r_cos_theta = R * Math.Cos(THETA * rads);
+
+            if (idx == 1)
+                return r_cos_theta * Math.Cos(phi * rads); //returns x coord
+            if (idx == 2)
+                return r_cos_theta * Math.Sin(phi * rads); //returns y coord
+
+            return R * Math.Sin(THETA * rads);         //returns z coord 
+       }
+
+        static double rlength(double x, double y, double Z)
+        {
+            //   returns radius vector given the rectangular coords
+            return Math.Sqrt(x * x + y * y + Z * Z);
+        }
+
+
+        static double spherical(double x, double y, double Z, int idx)
+        {
+            //
+            //   Takes the rectangular coordinates and returns the shperical
+            //   coordinate selected by index - 1 = r, 2 = theta, 3 = phi
+            //
+            //   r = sqrt(x*x + y*y + z*z)
+            //   tan(phi) = y/x - use atan2 to get in correct quadrant
+            //   tan(theta) = z/sqrt(x*x + y*y) - likewise
+            //
+
+
+            double rho;
+            rho = x * x + y * y ;
+
+
+            if (idx == 1)
+                return Math.Sqrt(rho + Z * Z);    //returns r
+            if (idx == 2) {
+                rho = Math.Sqrt(rho);
+                return degs * Math.Atan(Z / rho);    //returns theta
+            }
+
+            rho = Math.Sqrt(rho);
+
+            var r = degs * Math.Atan2(y, x);      //returns phi
+            if (r < 0) r += 360;
+            return r;
+        }
+
+
+        //
+        //  EqPrecession
+        //  Equinox conversion for the precession (Rigorous method) as given in Astronomy on
+        //  the personal computer by Montenbruck, Pfleger.
+        //
+        //  yearold is the epoch to precess from, yearnew is the epoch to precess
+        //  to
+        //
+        //  ra and dec must BOTH be in decimal degrees.
+        //
+        //  entered by Han Kleijn, converted to C# by PK
+
+        static void EqPrecession(double yearold, double yearnew, ref double raold, ref double decold)
+        {
+            double x, y, Z;
+            double A11, A12, A13;
+            double A21, A22, A23;
+            double A31, A32, A33;
+            double U, V, W, Z2;
+
+            const double SEC = 3600;
+            double DT, t1, t2, ZETA, THETA;
+            double C1, S1, C2, S2, C3, S3;
+
+            raold = raold * 360.0 / 24.0;   //convert to degrees
+
+            x = rectangular(1, decold, raold, 1);
+            y = rectangular(1, decold, raold, 2);
+            Z = rectangular(1, decold, raold, 3);
+
+            t1 = yearold;
+            t2 = yearnew;
+            DT = t2 - t1;
+            ZETA = ((2306.2181 + (1.39656 - 0.000139 * t1) * t1) + ((0.30188 - 0.000345 * t1) + 0.017998 * DT) * DT) * DT / SEC;
+            Z2 = ZETA + ((0.7928 + 0.000411 * t1) + 0.000205 * DT) * DT * DT / SEC;
+
+            THETA = ((2004.3109 - (0.8533 + 0.000217 * t1) * t1) - ((0.42665 + 0.000217 * t1) + 0.041833 * DT) * DT) * DT / SEC;
+            C1 = Math.Cos(rads * Z2);
+            C2 = Math.Cos(rads * THETA);
+            C3 = Math.Cos(rads * ZETA);
+
+
+            S1 = Math.Sin(rads * Z2);
+            S2 = Math.Sin(rads * THETA);
+            S3 = Math.Sin(rads * ZETA);
+
+
+            A11 = -S1 * S3 + C1 * C2 * C3;
+            A12 = -S1 * C3 - C1 * C2 * S3;
+            A13 = -C1 * S2;
+            A21 = C1 * S3 + S1 * C2 * C3;
+            A22 = C1 * C3 - S1 * C2 * S3;
+            A23 = -S1 * S2;
+            A31 = S2 * C3;
+            A32 = -S2 * S3;
+            A33 = C2;
+
+
+            U = A11 * x + A12 * y + A13 * Z;
+            V = A21 * x + A22 * y + A23 * Z;
+            W = A31 * x + A32 * y + A33 * Z;
+
+
+            x = U;
+            y = V;
+            Z = W;
+
+            // Polar
+            raold = spherical(x, y, Z, 3) * 24 / 360.0;
+            decold = spherical(x, y, Z, 2);
+        }
+        //////////////////////////////////////////
+
+
+
+
     }
 }
 

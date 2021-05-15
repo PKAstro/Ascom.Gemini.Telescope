@@ -4416,6 +4416,8 @@ namespace ASCOM.GeminiTelescope
             m_RightAscension = ra;// Update state machine variables with new RA and DEC.
             m_Declination = dec;
 
+            UpdatePolledVariables(false);
+
         }
 
         /// <summary>
@@ -4456,6 +4458,7 @@ namespace ASCOM.GeminiTelescope
             m_RightAscension = ra;// Update state machine variables with new RA and DEC.
             m_Declination = dec;
 
+            UpdatePolledVariables(false);
         }
 
         /// <summary>

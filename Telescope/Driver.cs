@@ -715,10 +715,19 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                GeminiHardware.Instance.Trace.Enter("IT:Declination.Get", GeminiHardware.Instance.Declination);
                 AssertConnect();
                 System.Threading.Thread.Sleep(10); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
-                return GeminiHardware.Instance.Declination;
+                double res = GeminiHardware.Instance.Declination;  
+                
+                // adjust output to J2000 if that's the setting:
+                if (GeminiHardware.Instance.Precession)
+                {
+                    GeminiHardware.Instance.Trace.Info(2, "Converting DEC to J2000", res);
+                    double ra = GeminiHardware.Instance.RightAscension;
+                    AstronomyFunctions.ToJ2000(ref ra, ref res);
+                }
+                GeminiHardware.Instance.Trace.Enter("IT:Declination.Get", res);
+                return res;
             }
         }
 
@@ -1667,6 +1676,14 @@ namespace ASCOM.GeminiTelescope
 
                 System.Threading.Thread.Sleep(10); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
                 double res = GeminiHardware.Instance.RightAscension;
+
+                // adjust output to J2000 if that's the setting:
+                if (GeminiHardware.Instance.Precession)
+                {
+                    GeminiHardware.Instance.Trace.Info(2, "Converting RA to J2000", res);
+                    double dec = GeminiHardware.Instance.Declination;
+                    AstronomyFunctions.ToJ2000(ref res, ref dec);
+                }
                 GeminiHardware.Instance.Trace.Enter("IT:RightAscention.Get", res);
                 return res;
             }

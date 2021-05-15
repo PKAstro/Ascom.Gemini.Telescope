@@ -136,7 +136,7 @@ namespace ASCOM.GeminiTelescope
                 obj = frmUserCatalog.m_Objects[key];
             else
             {
-                if (!chkJ2000.Checked) ToJ2000(ref ra, ref dec);
+                if (!chkJ2000.Checked) AstronomyFunctions.ToJ2000(ref ra, ref dec);
 
                 key = frmUserCatalog.AddCustom(txtObject.Text, ra, dec);
 
@@ -174,20 +174,7 @@ namespace ASCOM.GeminiTelescope
                 MessageBox.Show(this, "Gemini reported an error: " + ex.Message, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
-
-        private void ToJ2000(ref double ra, ref double dec)
-        {
-
-            GeminiHardware.Instance.m_Transform.SiteElevation = GeminiHardware.Instance.Elevation;
-            GeminiHardware.Instance.m_Transform.SiteLatitude = GeminiHardware.Instance.Latitude;
-            GeminiHardware.Instance.m_Transform.SiteLongitude = GeminiHardware.Instance.Longitude;
-
-            GeminiHardware.Instance.m_Transform.SetTopocentric(ra, dec);
-
-            ra = GeminiHardware.Instance.m_Transform.RAJ2000;
-            dec = GeminiHardware.Instance.m_Transform.DecJ2000;
-        }
-
+    
         private void btnExit_Click(object sender, EventArgs e)
         {
             if (customAdded) frmUserCatalog.SaveCustom();    // in case new RA/DEC objects were added
