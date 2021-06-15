@@ -2677,6 +2677,7 @@ namespace ASCOM.GeminiTelescope
 
         public string DoMeridianFlip()
         {
+            Trace.Enter(4, "DoMeridianFlip");
             m_SlewAborted.Reset();
             Velocity = "S";
             string[] res = null;
@@ -2685,7 +2686,23 @@ namespace ASCOM.GeminiTelescope
             // this is not as documented in the manual. So, in case of a timeout of :Mf# command
             // we'll get back the result of the '\x6' command instead, (should be 'G')
 
-            DoCommandResult(new string[] { ":Mf#", "\x6" }, 90000, true, out res);
+            try
+            {
+                DoCommandResult(new string[] { ":Mf#", "\x6" }, 5000, true, out res);
+            }
+            catch (Exception ex)
+            {
+                Trace.Info(4, "DoMeridianFlip", "Exception", ex);
+            }
+
+            Trace.Exit(4, "DoMeridianFlip", res);
+
+            if (res == null)
+            {
+                //timeout? this is possible with Gemini-1 as some versions don't return any response to the :Mf# command
+                return "0";
+            }
+
             if (res[0] == "G#")    // no result was returned for :Mf# --> means successful
                 return "0";
             else
@@ -2694,6 +2711,8 @@ namespace ASCOM.GeminiTelescope
                 {
                     return res[0].TrimEnd('#'); // else it's an error code from :Mf command, return it
                 }
+
+
         }
 
 

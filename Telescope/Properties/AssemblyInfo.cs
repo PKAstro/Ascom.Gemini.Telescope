@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 //
 // TODO - Add your authorship information here
 [assembly: AssemblyTitle("Gemini Telescope Driver")]
-[assembly: AssemblyDescription("ASCOM Telescope Driver forGemini")]
+[assembly: AssemblyDescription("ASCOM Telescope Driver for Gemini")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ASCOM Initiative")]
 [assembly: AssemblyProduct("")]
@@ -35,8 +35,8 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 //
 // TODO - Set your driver's version here
-[assembly: AssemblyVersion("1.0.76.0")]
-[assembly: AssemblyFileVersion("1.0.76.0")]
+[assembly: AssemblyVersion("1.0.82.0")]
+[assembly: AssemblyFileVersion("1.0.82.0")]
 
 
 

@@ -1920,14 +1920,21 @@ namespace ASCOM.GeminiTelescope
 
                 if ((value == PierSide.pierEast && GeminiHardware.Instance.SideOfPier == "W") || (value == PierSide.pierWest && GeminiHardware.Instance.SideOfPier == "E"))
                 {
+
+                    GeminiHardware.Instance.Trace.Info(4, "IT:SideOfPier.Set", "Before DoMeridianFlip");
+
                     string res = GeminiHardware.Instance.DoMeridianFlip();
+
+                    GeminiHardware.Instance.Trace.Info(4, "IT:SideOfPier.Set",  "After DoMeridianFlip", res);
 
                     if (res == null) throw new TimeoutException("SideOfPier");
                     if (res.StartsWith("1")) throw new ASCOM.DriverException("Object below horizon");
                     if (res.StartsWith("4")) throw new ASCOM.DriverException("Position unreachable");
                     if (res.StartsWith("3")) throw new ASCOM.DriverException("Manual control");
 
+                    GeminiHardware.Instance.Trace.Info(4, "IT:SideOfPier.Set", "Wait for slew", res);
                     GeminiHardware.Instance.WaitForVelocity("S", GeminiHardware.Instance.MAX_TIMEOUT);
+                    GeminiHardware.Instance.Trace.Info(4, "IT:SideOfPier.Set", "Wait for tracking", res);
                     GeminiHardware.Instance.WaitForVelocity("TN", -1);  // :Mf is asynchronous, wait until done
                 }
                 GeminiHardware.Instance.Trace.Exit("IT:SideOfPier.Set", value);
