@@ -1394,6 +1394,11 @@ namespace ASCOM.GeminiTelescope
 
             AssertConnect();
             if (GeminiHardware.Instance.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            if (internalSlewing)
+            {
+                GeminiHardware.Instance.Trace.Info(2, "IT:PulseGuide5", SharedResources.MSG_INVALID_WHILE_SLEWING);
+                throw new DriverException(SharedResources.MSG_INVALID_WHILE_SLEWING, (int)SharedResources.INVALID_WHILE_SLEWING);
+            }
 
             string cmd = String.Empty;
 
@@ -1626,6 +1631,12 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Instance.Trace.Enter("IT:OldPulseGuide", Direction, Duration, GeminiHardware.Instance.AsyncPulseGuide);
             AssertConnect();
             if (GeminiHardware.Instance.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+
+            if (internalSlewing)
+            {
+                GeminiHardware.Instance.Trace.Info(2, "IT:OldPulseGuide", SharedResources.MSG_INVALID_WHILE_SLEWING);
+                throw new DriverException(SharedResources.MSG_INVALID_WHILE_SLEWING, (int)SharedResources.INVALID_WHILE_SLEWING);
+            }
 
             if (Duration > 60000 || Duration < 0)  // too large or negative...
                 throw new InvalidValueException("PulseGuide", Duration.ToString(), "0..60000");

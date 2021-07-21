@@ -49,6 +49,9 @@ namespace ASCOM.GeminiTelescope
         public static uint INVALID_AT_PARK = ERROR_BASE + 0x404;
         public static string MSG_INVALID_AT_PARK = "Invalid while parked";
 
+        public static uint INVALID_WHILE_SLEWING = ERROR_BASE + 0x408;
+        public static string MSG_INVALID_WHILE_SLEWING = "Guide commands are invalid while slewing";
+
         public static string MSG_GEMINI_VERSION = "Gemini level 4 or greater is required";
         public static uint SCODE_GEMINI_VERSION = ERROR_BASE + 0x407;
 
