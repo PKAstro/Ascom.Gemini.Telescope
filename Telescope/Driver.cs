@@ -1397,7 +1397,7 @@ namespace ASCOM.GeminiTelescope
             if (internalSlewing)
             {
                 GeminiHardware.Instance.Trace.Info(2, "IT:PulseGuide5", SharedResources.MSG_INVALID_WHILE_SLEWING);
-                throw new DriverException(SharedResources.MSG_INVALID_WHILE_SLEWING, (int)SharedResources.INVALID_WHILE_SLEWING);
+                return; // throw new DriverException(SharedResources.MSG_INVALID_WHILE_SLEWING, (int)SharedResources.INVALID_WHILE_SLEWING);
             }
 
             string cmd = String.Empty;
@@ -1635,7 +1635,7 @@ namespace ASCOM.GeminiTelescope
             if (internalSlewing)
             {
                 GeminiHardware.Instance.Trace.Info(2, "IT:OldPulseGuide", SharedResources.MSG_INVALID_WHILE_SLEWING);
-                throw new DriverException(SharedResources.MSG_INVALID_WHILE_SLEWING, (int)SharedResources.INVALID_WHILE_SLEWING);
+                return; // throw new DriverException(SharedResources.MSG_INVALID_WHILE_SLEWING, (int)SharedResources.INVALID_WHILE_SLEWING);
             }
 
             if (Duration > 60000 || Duration < 0)  // too large or negative...

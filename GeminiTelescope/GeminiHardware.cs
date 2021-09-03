@@ -4283,7 +4283,7 @@ namespace ASCOM.GeminiTelescope
                 // compute civil time using whole hours only, since Gemini doesn't take fractions:
                 DateTime civil = value + TimeSpan.FromHours(utc_offset_hours);
 
-                string localDate = civil.ToString("MM/dd/yy");
+                string localDate = civil.ToString("MM'/'dd'/'yy");
                 result = DoCommandResult(":SC" + localDate, MAX_TIMEOUT, false);
                 string localTime = (DoublePrecision ? civil.ToString("HH:mm:ss.fff") : civil.ToString("HH:mm:ss"));
                 result = DoCommandResult(":SL" + localTime, MAX_TIMEOUT, false);
