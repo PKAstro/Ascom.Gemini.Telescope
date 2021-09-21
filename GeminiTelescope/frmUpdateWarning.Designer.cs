@@ -104,6 +104,7 @@
             this.Name = "frmUpdateWarning";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Update Gemini Settings?";
+            this.Load += new System.EventHandler(this.frmUpdateWarning_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

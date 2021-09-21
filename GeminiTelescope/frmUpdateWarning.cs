@@ -30,5 +30,13 @@ namespace ASCOM.GeminiTelescope
         {
             DialogResult = DialogResult.OK;
         }
+
+        private void frmUpdateWarning_Load(object sender, EventArgs e)
+        {
+            this.Focus();
+            this.BringToFront();
+            this.TopMost = true;
+            this.TopMost = false;
+        }
     }
 }

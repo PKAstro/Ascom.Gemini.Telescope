@@ -188,6 +188,7 @@ namespace ASCOM.GeminiTelescope
                 m_SendAdvancedSettings = value;
                 Profile.DeviceType = "Telescope";
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "SendAdvancedSettings", value.ToString());
+                m_SendAdvancedSettings = value;
             }
         }
 
@@ -205,7 +206,6 @@ namespace ASCOM.GeminiTelescope
             }
             set
             {
-                m_SendAdvancedSettings = value;
                 Profile.DeviceType = "Telescope";
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AskForAdvancedSync", value.ToString());
             }
@@ -2922,6 +2922,8 @@ namespace ASCOM.GeminiTelescope
             if (AskForAdvancedSync)
             {
                 var frm = new frmUpdateWarning();
+            
+
                 var res = frm.ShowDialog();
                 if (frm.ckDontAskAgain.Checked)
                 {
