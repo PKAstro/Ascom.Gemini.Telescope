@@ -122,7 +122,7 @@ namespace ASCOM.GeminiTelescope
                 catch { }
             }
 #endif   
-            System.IO.FileInfo[] files = di.GetFiles("*.guc");
+            System.IO.FileInfo[] files = di.GetFiles("*.gu*");
 
             double incr =  1;
             if (files.Length != 0) incr = 100.0/files.Length;
@@ -156,8 +156,10 @@ namespace ASCOM.GeminiTelescope
         {
 
             System.IO.StreamReader fi = null;
+            bool solar = p.ToLower().EndsWith(".gu6");
+            if (solar && GeminiHardware.Instance.dVersion < 6) return false;   //solar objects only supported in L6 
 
-            try
+            try 
             {
                 fi = System.IO.File.OpenText(p);
                 while (!fi.EndOfStream)
@@ -167,6 +169,12 @@ namespace ASCOM.GeminiTelescope
                     if (newl.Length > 0 )
                     {
                         CatalogObject obj = null;
+                        if (solar)
+                        {
+                            if (CatalogObject.TryParseSolar(newl, catalog, out obj) && !dict.ContainsKey(obj.Name))
+                                dict.Add(obj.Name, obj);
+                        }
+                        else
                         if (newl.Contains(":"))
                         {
                             if (CatalogObject.TryParse(newl, catalog, out obj) && !dict.ContainsKey(obj.Name))
@@ -337,7 +345,9 @@ namespace ASCOM.GeminiTelescope
         {
             if (e.RowIndex >= 0)
             {
-                AddRow(e.RowIndex);
+                CatalogObject obj = m_Objects[gvAllObjects.Rows[e.RowIndex].Cells["Name"].Value.ToString()];
+                if (!obj.isSolar())
+                    AddRow(e.RowIndex);
                 UpdateGeminiCatalog();
             }
         }
@@ -346,7 +356,9 @@ namespace ASCOM.GeminiTelescope
         {
             foreach (DataGridViewRow r in gvAllObjects.SelectedRows)
             {
-                AddRow(r.Index);
+                CatalogObject obj = m_Objects[r.Cells["Name"].Value.ToString()];
+                if (!obj.isSolar())
+                    AddRow(r.Index);
             }
             UpdateGeminiCatalog();
         }
@@ -512,6 +524,26 @@ namespace ASCOM.GeminiTelescope
                 return;
             }
             CatalogObject obj = m_Objects[gvAllObjects.SelectedRows[0].Cells["Name"].Value.ToString()];
+            if (obj.isSolar())
+            {
+                if (sender != btnGoto)
+                    MessageBox.Show("Can't sync on Solar System objects!", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                else
+                {
+                    int solarIndex = obj.GetSolarIndex();                 
+                    var res = GeminiHardware.Instance.DoCommandResult($":M{solarIndex}", GeminiHardware.Instance.MAX_TIMEOUT, false);
+                    
+                    switch (res[0])
+                    {
+                        case '0': break;
+                        default:
+                            MessageBox.Show(res.Substring(1), SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            break;
+                    }
+                }
+                return;
+            }
+
             double ra, dec;
             obj.GetCoords(out ra, out dec);
             GeminiHardware.Instance.TargetRightAscension = ra;
@@ -792,12 +824,41 @@ namespace ASCOM.GeminiTelescope
         public RACoord RA { get; set; }
         public DECCoord DEC { get; set; }
         public string Catalog { get; set; }
+        private int SolarNumber { get; set; }
 
+        private bool _solar;
         //pre-computed site/date-time variables shared by all instances:
         private static double LST = 0;
         private static double lat = 0;
         private static double lon = 0;
         private static double horizon = 0;
+
+        internal bool isSolar()
+        {
+            return _solar;
+        }
+
+        internal static bool TryParseSolar(string s, string catalog, out CatalogObject obj)
+        {
+            obj = null;
+            string[] sp = s.Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries);
+            if (sp.Length != 2) return false;
+            try
+            {
+                obj = new CatalogObject
+                {
+                    Catalog = catalog,
+                    Name = sp[0],
+                    _solar = true,
+                    SolarNumber = int.Parse(sp[1])
+                };
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
 
         public static bool TryParse(string s, string catalog, out CatalogObject obj)
         {
@@ -808,8 +869,9 @@ namespace ASCOM.GeminiTelescope
             {
                 obj = new CatalogObject { 
                     Catalog = catalog, Name = sp[0], 
+                    _solar = false,
                     RA = new RACoord(GeminiHardware.Instance.m_Util.HMSToHours(sp[1])), 
-                    DEC = new DECCoord(GeminiHardware.Instance.m_Util.DMSToDegrees(sp[2])) };
+                    DEC = new DECCoord(GeminiHardware.Instance.m_Util.DMSToDegrees(sp[2])) };                    
             }
             catch
             {
@@ -863,6 +925,7 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
+                if (_solar) return true; //don't check solar for visibility -- always include
                 // [pk] SetTransform must been called prior to this to pre-compute values
                 // [pk] I'm ignoring precession from J2000 here, since a few arcminutes difference
                 // isn't going to matter when computing horizon coordinates to determine visibility
@@ -899,6 +962,11 @@ namespace ASCOM.GeminiTelescope
                 return false;
             }
             return true;
+        }
+
+        internal int GetSolarIndex()
+        {
+            return SolarNumber;
         }
     }
 }

@@ -373,6 +373,8 @@ namespace ASCOM.GeminiTelescope
         {
             GeminiHardware.Instance.Trace.Enter("Props:chkSendSettings", chkSendSettings.Checked);
             GeminiHardware.Instance.SendAdvancedSettings = chkSendSettings.Checked;
+            if (chkSendSettings.Checked)
+                GeminiHardware.Instance.AskForAdvancedSync = true;  // ask the user to confirm next time
         }
 
         private void SavePEC_CheckedChanged(object sender, EventArgs e)

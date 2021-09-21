@@ -719,8 +719,8 @@ namespace ASCOM.GeminiTelescope
                 System.Threading.Thread.Sleep(10); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
                 double res = GeminiHardware.Instance.Declination;  
                 
-                // adjust output to J2000 if that's the setting:
-                if (GeminiHardware.Instance.Precession)
+                // adjust output to J2000 if that's the setting when below L6
+                if (GeminiHardware.Instance.Precession && GeminiHardware.Instance.dVersion < 6)
                 {
                     GeminiHardware.Instance.Trace.Info(2, "Converting DEC to J2000", res);
                     double ra = GeminiHardware.Instance.RightAscension;
@@ -1688,8 +1688,8 @@ namespace ASCOM.GeminiTelescope
                 System.Threading.Thread.Sleep(10); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
                 double res = GeminiHardware.Instance.RightAscension;
 
-                // adjust output to J2000 if that's the setting:
-                if (GeminiHardware.Instance.Precession)
+                // adjust output to J2000 if that's the setting and level below L6:
+                if (GeminiHardware.Instance.Precession && GeminiHardware.Instance.dVersion < 6)
                 {
                     GeminiHardware.Instance.Trace.Info(2, "Converting RA to J2000", res);
                     double dec = GeminiHardware.Instance.Declination;

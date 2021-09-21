@@ -32,7 +32,7 @@ AppCopyright=Copyright © 2009-20 ASCOM Gemini Developers Group
 ;the [Code] CurStepChanged section
 AppID=ASCOM.GeminiTelescope
 
-#emit "AppName=Gemini Driver Installler " + Appver
+#emit "AppName=Gemini Driver Installer " + Appver
 ;str(Major) + "." + str(Minor);
 #emit "AppVerName=ASCOM Gemini Telescope Driver (" + Appver + ")"
 #emit "AppVersion=" + AppVer
@@ -127,6 +127,7 @@ Source: ..\Catalogs\Messier.guc; DestDir: {commonappdata}\ASCOM\Gemini Telescope
 Source: ..\Catalogs\NGC.guc; DestDir: {commonappdata}\ASCOM\Gemini Telescope .NET\Catalogs; Flags: ignoreversion
 Source: ..\Catalogs\SAO Catalog.guc; DestDir: {commonappdata}\ASCOM\Gemini Telescope .NET\Catalogs; Flags: ignoreversion
 Source: ..\Catalogs\Sharpless HII Regions.guc; DestDir: {commonappdata}\ASCOM\Gemini Telescope .NET\Catalogs; Flags: ignoreversion
+Source: ..\Catalogs\Solar System.gu6; DestDir: {commonappdata}\ASCOM\Gemini Telescope .NET\Catalogs; Flags: ignoreversion
 Source: ..\Catalogs\VDB reflection nebulae.guc; DestDir: {commonappdata}\ASCOM\Gemini Telescope .NET\Catalogs; Flags: ignoreversion
 Source: ..\Catalogs\Washington Double Star Catalog.guc; DestDir: {commonappdata}\ASCOM\Gemini Telescope .NET\Catalogs; Flags: ignoreversion
 

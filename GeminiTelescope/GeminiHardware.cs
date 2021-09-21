@@ -191,6 +191,26 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        internal bool _AskForAdvancedSync;
+        public bool AskForAdvancedSync
+        {
+            get
+            {
+                Profile.DeviceType = "Telescope";
+                var s = Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "AskForAdvancedSync", null);
+                bool res = true;
+                if (string.IsNullOrEmpty(s)) s = "True";
+                bool.TryParse(s, out res);
+                return res;
+            }
+            set
+            {
+                m_SendAdvancedSettings = value;
+                Profile.DeviceType = "Telescope";
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AskForAdvancedSync", value.ToString());
+            }
+        }
+      
 
         internal bool m_AutoStartPEC = true;
 
@@ -1145,6 +1165,7 @@ namespace ASCOM.GeminiTelescope
 
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AsyncPulseGuide", true.ToString());
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ReportPierSide", true.ToString());
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AskForAdvancedSync", true.ToString());
 
             }
 
@@ -1862,10 +1883,12 @@ namespace ASCOM.GeminiTelescope
                 }
                 else //J2000
                 {
+                    int j2000 = dVersion >= 6 ? 4 : 0;  // precess returned coordinates to J2000 in L6 or above
+
                     if (m_Refraction)
-                        DoCommandResult(":p3", MAX_TIMEOUT, false);
+                        DoCommandResult($":p{3+j2000}", MAX_TIMEOUT, false);
                     else
-                        DoCommandResult(":p1", MAX_TIMEOUT, false);
+                        DoCommandResult($":p{1+j2000}", MAX_TIMEOUT, false);
                 }
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Precession", m_Precession.ToString());
             }
@@ -2895,6 +2918,21 @@ namespace ASCOM.GeminiTelescope
         internal void SetGeminiAdvancedSettings()
         {
             Trace.Enter("SetGeminiAdvancedSettings");
+
+            if (AskForAdvancedSync)
+            {
+                var frm = new frmUpdateWarning();
+                var res = frm.ShowDialog();
+                if (frm.ckDontAskAgain.Checked)
+                {
+                    SendAdvancedSettings = (res == DialogResult.OK);
+                    AskForAdvancedSync = false;
+                }
+                if (!SendAdvancedSettings || res == DialogResult.Cancel)
+                    return;
+            }
+
+
             GeminiProperties props = new GeminiProperties();
             if (props.Serialize(false, null))   //read default profile settings
             {
@@ -4275,18 +4313,29 @@ namespace ASCOM.GeminiTelescope
             set
             {
                 int utc_offset_hours = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours;
+                string result = null;
 
-                // set timezone from PC (gemini seems to want a '+' or a '-' in front of the hours, so make sure positive
-                // number gets a '+' in front:
-                string result = DoCommandResult(":SG" + (utc_offset_hours < 0 ? "+" : "") + (-utc_offset_hours).ToString("0"), MAX_TIMEOUT, false);
+                if (dVersion < 6)
+                {
+                    // set timezone from PC (gemini seems to want a '+' or a '-' in front of the hours, so make sure positive
+                    // number gets a '+' in front:
+                    result = DoCommandResult(":SG" + (utc_offset_hours < 0 ? "+" : "") + (-utc_offset_hours).ToString("0"), MAX_TIMEOUT, false);
+                    // compute civil time using whole hours only, since Gemini doesn't take fractions:
+                    DateTime civil = value + TimeSpan.FromHours(utc_offset_hours);
 
-                // compute civil time using whole hours only, since Gemini doesn't take fractions:
-                DateTime civil = value + TimeSpan.FromHours(utc_offset_hours);
+                    string localDate = civil.ToString("MM'/'dd'/'yy");
+                    result = DoCommandResult(":SC" + localDate, MAX_TIMEOUT, false);
+                    string localTime = (DoublePrecision ? civil.ToString("HH:mm:ss.fff") : civil.ToString("HH:mm:ss"));
+                    result = DoCommandResult(":SL" + localTime, MAX_TIMEOUT, false);
+                }
+                else // for L6 and above set time/date as UTC, to avoid issues with incorrect timezone
+                {
+                    string utcDate = DateTime.UtcNow.ToString("MM'/'dd'/'yy");
+                    result = DoCommandResult(":Sc" + utcDate, MAX_TIMEOUT, false);
+                    string utcTime = (DoublePrecision ? DateTime.UtcNow.ToString("HH:mm:ss.fff") : DateTime.UtcNow.ToString("HH:mm:ss"));
+                    result = DoCommandResult(":Sl" + utcTime, MAX_TIMEOUT, false);
+                }
 
-                string localDate = civil.ToString("MM'/'dd'/'yy");
-                result = DoCommandResult(":SC" + localDate, MAX_TIMEOUT, false);
-                string localTime = (DoublePrecision ? civil.ToString("HH:mm:ss.fff") : civil.ToString("HH:mm:ss"));
-                result = DoCommandResult(":SL" + localTime, MAX_TIMEOUT, false);
             }
         }
 
