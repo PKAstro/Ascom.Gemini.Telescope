@@ -26,7 +26,7 @@
 #define AppVer ParseVersion("..\GeminiTelescope\bin\x64\Release\ASCOM.GeminiTelescope.exe", Major ,Minor ,Release ,Build) ; define version variables
 #define AppVer str(Major) + "." + str(Minor) + "." + str(Release) + "." + str(SetupVersion) ; redefine to include setup version
 
-AppCopyright=Copyright © 2009-20 ASCOM Gemini Developers Group
+AppCopyright=Copyright © 2009-21 ASCOM Gemini Developers Group
 ;AppID must not change to maintain a consistent uninstall experience although AppName can be changed.
 ;This value is hard coded in the uninstall code below. If you do change this you must change the corresponding reference in
 ;the [Code] CurStepChanged section
@@ -178,7 +178,7 @@ begin
 		RegQueryDWordValue(HKLM, 'Software\Microsoft\NET Framework Setup\NDP\v4\Client', 'Install', version);
 		if version < 1 then
 		begin
-     MsgBox('Microsoft .NET version 4.0 is not installed. You must install .NET 4.0 run-time before installing this driver.', mbCriticalError, MB_OK);
+     MsgBox('Microsoft .NET version 4.8 is not installed. You must install .NET 4.8 run-time before installing this driver.', mbCriticalError, MB_OK);
        Result:= False;
     end;
   end;

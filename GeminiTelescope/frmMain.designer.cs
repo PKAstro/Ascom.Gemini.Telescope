@@ -66,10 +66,13 @@ namespace ASCOM.GeminiTelescope
             this.focuserSetupDialogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mountParametersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.configurePECToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.observationLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configureCatalogsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.viewHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.collectReportsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutGeminiDriverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitDriverMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,6 +84,7 @@ namespace ASCOM.GeminiTelescope
             this.objectAndCoordinatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.keepThisWindowOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CheckBoxFlipDec = new System.Windows.Forms.CheckBox();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
             this.RadioButtonSlew = new System.Windows.Forms.RadioButton();
@@ -94,8 +98,6 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew3 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew4 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew1 = new ASCOM.GeminiTelescope.TButton();
-            this.configurePECToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.TableLayoutPanel3.SuspendLayout();
@@ -340,6 +342,7 @@ namespace ASCOM.GeminiTelescope
             this.configureCatalogsToolStripMenuItem,
             this.toolStripSeparator5,
             this.viewHelpToolStripMenuItem,
+            this.collectReportsMenuItem,
             this.aboutGeminiDriverToolStripMenuItem,
             this.toolStripSeparator1,
             this.exitDriverMenuItem});
@@ -376,6 +379,18 @@ namespace ASCOM.GeminiTelescope
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
             // 
+            // configurePECToolStripMenuItem
+            // 
+            this.configurePECToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.configurePECToolStripMenuItem.Name = "configurePECToolStripMenuItem";
+            resources.ApplyResources(this.configurePECToolStripMenuItem, "configurePECToolStripMenuItem");
+            this.configurePECToolStripMenuItem.Click += new System.EventHandler(this.configurePECToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            resources.ApplyResources(this.toolStripSeparator6, "toolStripSeparator6");
+            // 
             // observationLogToolStripMenuItem
             // 
             this.observationLogToolStripMenuItem.ForeColor = System.Drawing.Color.White;
@@ -401,6 +416,13 @@ namespace ASCOM.GeminiTelescope
             this.viewHelpToolStripMenuItem.Name = "viewHelpToolStripMenuItem";
             resources.ApplyResources(this.viewHelpToolStripMenuItem, "viewHelpToolStripMenuItem");
             this.viewHelpToolStripMenuItem.Click += new System.EventHandler(this.viewHelpToolStripMenuItem_Click);
+            // 
+            // collectReportsMenuItem
+            // 
+            this.collectReportsMenuItem.ForeColor = System.Drawing.Color.White;
+            this.collectReportsMenuItem.Name = "collectReportsMenuItem";
+            resources.ApplyResources(this.collectReportsMenuItem, "collectReportsMenuItem");
+            this.collectReportsMenuItem.Click += new System.EventHandler(this.collectReportsMenuItem_click);
             // 
             // aboutGeminiDriverToolStripMenuItem
             // 
@@ -487,6 +509,13 @@ namespace ASCOM.GeminiTelescope
             this.keepThisWindowOnTopToolStripMenuItem.Name = "keepThisWindowOnTopToolStripMenuItem";
             resources.ApplyResources(this.keepThisWindowOnTopToolStripMenuItem, "keepThisWindowOnTopToolStripMenuItem");
             this.keepThisWindowOnTopToolStripMenuItem.Click += new System.EventHandler(this.keepThisWindowOnTopToolStripMenuItem_Click);
+            // 
+            // viewReportToolStripMenuItem
+            // 
+            this.viewReportToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.viewReportToolStripMenuItem.Name = "viewReportToolStripMenuItem";
+            resources.ApplyResources(this.viewReportToolStripMenuItem, "viewReportToolStripMenuItem");
+            this.viewReportToolStripMenuItem.Click += new System.EventHandler(this.viewReportToolStripMenuItem_Click);
             // 
             // CheckBoxFlipDec
             // 
@@ -600,18 +629,6 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlew1_MouseDown);
             this.buttonSlew1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlew1_MouseUp);
             // 
-            // configurePECToolStripMenuItem
-            // 
-            this.configurePECToolStripMenuItem.ForeColor = System.Drawing.Color.White;
-            this.configurePECToolStripMenuItem.Name = "configurePECToolStripMenuItem";
-            resources.ApplyResources(this.configurePECToolStripMenuItem, "configurePECToolStripMenuItem");
-            this.configurePECToolStripMenuItem.Click += new System.EventHandler(this.configurePECToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator6
-            // 
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
-            resources.ApplyResources(this.toolStripSeparator6, "toolStripSeparator6");
-            // 
             // frmMain
             // 
             resources.ApplyResources(this, "$this");
@@ -634,11 +651,11 @@ namespace ASCOM.GeminiTelescope
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "frmMain";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.VisibleChanged += new System.EventHandler(this.frmMain_VisibleChanged);
-            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.frmMain_KeyUp);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmMain_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.frmMain_KeyUp);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel4.ResumeLayout(false);
@@ -652,6 +669,12 @@ namespace ASCOM.GeminiTelescope
             this.ResumeLayout(false);
             this.PerformLayout();
 
+        }
+
+        private void viewReportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmCollector frm = new frmCollector();
+            var res = frm.ShowDialog(this);
         }
 
         #endregion
@@ -713,14 +736,14 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.ToolStripMenuItem unparkToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem viewHelpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewReportToolStripMenuItem;
         private System.Windows.Forms.Label labelHA;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ToolStripMenuItem objectAndCoordinatesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem parkAtZenithToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem configurePECToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
-
-
+        private System.Windows.Forms.ToolStripMenuItem collectReportsMenuItem;
     }
 }
 

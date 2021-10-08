@@ -13,7 +13,7 @@ using System;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ASCOM Initiative")]
 [assembly: AssemblyProduct("Gemini Focuser Driver")]
-[assembly: AssemblyCopyright("Copyright © 2009-12 Paul Kanevsky")]
+[assembly: AssemblyCopyright("Copyright © 2009-21 Paul Kanevsky")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -36,8 +36,8 @@ using System;
 // by using the '*' as shown below:
 //
 // TODO - Set your driver's version here
-[assembly: AssemblyVersion("1.0.46.0")]
-[assembly: AssemblyFileVersion("1.0.46.0")]
+[assembly: AssemblyVersion("1.1.0.0")]
+[assembly: AssemblyFileVersion("1.1.0.0")]
 [assembly: ASCOM.DeviceIdAttribute("ASCOM.GeminiTelescope.Focuser")]
 
 

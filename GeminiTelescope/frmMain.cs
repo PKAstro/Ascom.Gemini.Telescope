@@ -1981,6 +1981,12 @@ namespace ASCOM.GeminiTelescope
             frmPECConfig.Show();
         }
 
+        private void collectReportsMenuItem_click(object sender, EventArgs e)
+        {
+            frmCollector frm = new frmCollector();
+            var res = frm.ShowDialog(this);
+
+        }
     }
 
 #if true
