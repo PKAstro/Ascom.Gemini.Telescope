@@ -33,6 +33,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.pbCancel = new System.Windows.Forms.Button();
             this.pbCollect = new System.Windows.Forms.Button();
+            this.ckAll = new System.Windows.Forms.CheckBox();
+            this.pbRecord = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lbCollect
@@ -52,7 +54,7 @@
             "ASCOM latest two log files"});
             this.lbCollect.Location = new System.Drawing.Point(15, 40);
             this.lbCollect.Name = "lbCollect";
-            this.lbCollect.Size = new System.Drawing.Size(431, 124);
+            this.lbCollect.Size = new System.Drawing.Size(431, 139);
             this.lbCollect.TabIndex = 0;
             // 
             // label1
@@ -68,7 +70,7 @@
             // 
             this.pbCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.pbCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.pbCancel.Location = new System.Drawing.Point(371, 184);
+            this.pbCancel.Location = new System.Drawing.Point(371, 190);
             this.pbCancel.Name = "pbCancel";
             this.pbCancel.Size = new System.Drawing.Size(75, 30);
             this.pbCancel.TabIndex = 2;
@@ -79,7 +81,7 @@
             // pbCollect
             // 
             this.pbCollect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.pbCollect.Location = new System.Drawing.Point(236, 184);
+            this.pbCollect.Location = new System.Drawing.Point(236, 190);
             this.pbCollect.Name = "pbCollect";
             this.pbCollect.Size = new System.Drawing.Size(118, 30);
             this.pbCollect.TabIndex = 3;
@@ -87,11 +89,38 @@
             this.pbCollect.UseVisualStyleBackColor = true;
             this.pbCollect.Click += new System.EventHandler(this.pbCollect_Click);
             // 
+            // ckAll
+            // 
+            this.ckAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ckAll.AutoSize = true;
+            this.ckAll.Checked = true;
+            this.ckAll.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ckAll.Location = new System.Drawing.Point(15, 190);
+            this.ckAll.Name = "ckAll";
+            this.ckAll.Size = new System.Drawing.Size(119, 17);
+            this.ckAll.TabIndex = 4;
+            this.ckAll.Text = "Check/Uncheck all";
+            this.ckAll.UseVisualStyleBackColor = true;
+            this.ckAll.CheckedChanged += new System.EventHandler(this.ckAll_CheckedChanged);
+            // 
+            // pbRecord
+            // 
+            this.pbRecord.Location = new System.Drawing.Point(308, 11);
+            this.pbRecord.Name = "pbRecord";
+            this.pbRecord.Size = new System.Drawing.Size(138, 23);
+            this.pbRecord.TabIndex = 5;
+            this.pbRecord.Text = "Record Activity";
+            this.pbRecord.UseVisualStyleBackColor = true;
+            this.pbRecord.VisibleChanged += new System.EventHandler(this.pbRecord_VisibleChanged);
+            this.pbRecord.Click += new System.EventHandler(this.pbRecord_Click);
+            // 
             // frmCollector
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(458, 221);
+            this.ClientSize = new System.Drawing.Size(458, 227);
+            this.Controls.Add(this.pbRecord);
+            this.Controls.Add(this.ckAll);
             this.Controls.Add(this.pbCollect);
             this.Controls.Add(this.pbCancel);
             this.Controls.Add(this.label1);
@@ -102,6 +131,7 @@
             this.Name = "frmCollector";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Gemini Troubleshooting Reporter";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmCollector_FormClosing);
             this.Load += new System.EventHandler(this.frmCollector_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -114,5 +144,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button pbCancel;
         private System.Windows.Forms.Button pbCollect;
+        private System.Windows.Forms.CheckBox ckAll;
+        private System.Windows.Forms.Button pbRecord;
     }
 }

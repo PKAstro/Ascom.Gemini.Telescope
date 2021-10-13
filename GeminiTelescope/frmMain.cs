@@ -48,7 +48,7 @@ namespace ASCOM.GeminiTelescope
         string m_JoystickRate = null;           // these keep last joystick rate and
         string m_JoystickDirection = null;      // direction commands issued 
 
-        bool m_ExitFormMenuCall = false;
+        internal bool m_ExitFormMenuCall = false;
 
         // last key pressed down (and not let up):
         Keys m_LastKey = Keys.None;
@@ -536,7 +536,7 @@ namespace ASCOM.GeminiTelescope
         List<msg> m_Messages = new List<msg>();
         DateTime m_LastMessageTime = DateTime.Now;
 
-        void SetBaloonText(string title, string text, ToolTipIcon icon)
+        internal void SetBaloonText(string title, string text, ToolTipIcon icon)
         {
             if (m_ShowNotifications)
             {
@@ -1981,11 +1981,25 @@ namespace ASCOM.GeminiTelescope
             frmPECConfig.Show();
         }
 
+
+        frmCollector frmCollector = null;
+
         private void collectReportsMenuItem_click(object sender, EventArgs e)
         {
-            frmCollector frm = new frmCollector();
-            var res = frm.ShowDialog(this);
-
+            if (frmCollector != null && frmCollector.Visible)
+            {
+                frmCollector.BringToFront();
+            }
+            else if (frmCollector != null && !frmCollector.Visible)
+            {
+                frmCollector.Visible = true;
+                frmCollector.BringToFront();
+            }
+            else
+            {
+                frmCollector = new frmCollector();
+                frmCollector.Show(this);
+            }
         }
     }
 

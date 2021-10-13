@@ -44,6 +44,7 @@ namespace ASCOM.GeminiTelescope
     public delegate void ModelChangedDelegate();
     public delegate void SpeedChangedDelegate();
 
+
     /// <summary>
     /// Class encapsulating all communications with Gemini L5
     /// </summary>
@@ -68,6 +69,7 @@ namespace ASCOM.GeminiTelescope
         public event ModelChangedDelegate OnModelChanged;
         public event SpeedChangedDelegate OnSpeedChanged;
 
+    
 
 
         public IPEndPoint UDP_endpoint = null;
@@ -308,7 +310,7 @@ namespace ASCOM.GeminiTelescope
         }
 
         static byte [] macro_req = new byte[] { 0x05, 00, 00, 00 };
-
+        public string macro = "";
 
         private void __UpdatePolledVariablesUDP()
         {
@@ -332,7 +334,7 @@ namespace ASCOM.GeminiTelescope
                 }
             }
 
-            string macro = getUDPCommandResult(2000);
+            macro = getUDPCommandResult(2000);
             if (macro == null)
             {
                 Trace.Error("timeout", "UpdatePolledVariablesUDP");
@@ -349,7 +351,7 @@ namespace ASCOM.GeminiTelescope
 
             Trace.Enter("_UpdatePolledVariablesSerial");
 
-            string macro = "";
+            macro = "";
 
             //lock (m_SerialPort)
             {

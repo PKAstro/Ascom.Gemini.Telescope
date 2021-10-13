@@ -11,6 +11,7 @@ using System.Net;
 using System.Text;
 using System.Windows.Forms;
 using System.IO.Compression;
+using System.Threading;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -19,6 +20,17 @@ namespace ASCOM.GeminiTelescope
         string Folder;
         string log;
 
+        System.Windows.Forms.Timer tmRecord = new System.Windows.Forms.Timer();
+
+        int activityNumber = 1;
+        bool recording = false;
+
+        bool firstTime = true;
+
+        Dictionary<int, string> activityMap;
+
+        string recordingLog = "";
+
         public frmCollector()
         {
             InitializeComponent();
@@ -26,17 +38,6 @@ namespace ASCOM.GeminiTelescope
 
         private void frmCollector_Load(object sender, EventArgs e)
         {
-            try
-            {
-                if (!GeminiHardware.Instance.Connected)
-                    GeminiHardware.Instance.Connected = true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Gemini is not connected!\r\nOnly information from the PC will be included in the report.", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Hand);
-            }
-            for (int i = 0; i < lbCollect.Items.Count; ++i)
-                lbCollect.SetItemChecked(i, true);
         }
 
         private void pbCollect_Click(object sender, EventArgs e)
@@ -47,9 +48,6 @@ namespace ASCOM.GeminiTelescope
                 return;
             }
 
-            Folder = System.IO.Path.GetTempPath() + "GeminiCollector";
-            if (Directory.Exists(Folder)) Directory.Delete(Folder, true);
-            Directory.CreateDirectory(Folder);
 
             log = $"{SharedResources.TELESCOPE_DRIVER_NAME} v{Application.ProductVersion} Troubleshooting Report\r\n{DateTime.Now.ToString("o")}\r\n";
             log += $"Selected: {String.Join(", ", lbCollect.CheckedItems.OfType<string>())}\r\n";
@@ -72,6 +70,7 @@ namespace ASCOM.GeminiTelescope
                             case 4: ASCOMPlatform(); break;
                             case 5: ASCOMProfile(); break;
                             case 6: ASCOMLog(); break;
+                            case 7: ActivityLog(); break;
                         }
                     }
                     catch (Exception ex)
@@ -121,6 +120,12 @@ namespace ASCOM.GeminiTelescope
             DialogResult = DialogResult.OK;
         }
 
+        private void ActivityLog()
+        {
+            if (string.IsNullOrEmpty(recordingLog)) return; //nothing to save
+            File.WriteAllText(Folder + "\\Activity Recording.log", recordingLog);
+        }
+
         private void ComputerInfo()
         {
            
@@ -158,6 +163,7 @@ namespace ASCOM.GeminiTelescope
 
         private void ASCOMProfile()
         {
+            Cursor.Current = Cursors.WaitCursor;
             log += $"Collecting Gemini Settings from ASCOM...";
             if (GeminiHardware.Instance.Connected)
             {
@@ -181,6 +187,8 @@ namespace ASCOM.GeminiTelescope
                 log += $"Gemini not connected";
 
             log += $"\r\n";
+
+            Cursor.Current = Cursors.Default;
         }
 
         private void ASCOMPlatform()
@@ -198,6 +206,7 @@ namespace ASCOM.GeminiTelescope
 
         private void GeminiSettings()
         {
+            Cursor.Current = Cursors.WaitCursor;
             log += $"Collecting Gemini Logs...";
 
             if (!GeminiHardware.Instance.IsEthernetConnected)
@@ -215,7 +224,7 @@ namespace ASCOM.GeminiTelescope
                         webClient.Timeout = 5000;
                         webClient.Encoding = System.Text.Encoding.UTF8;
                         try
-                        {
+                        {                          
                             webClient.DownloadFile($"ftp://{GeminiHardware.Instance.m_EthernetIP}/LOGS/RA_Enc.log", Folder + "\\Gemini_RA_Enc.log");
                             log += $"Downloaded RA_Enc.log...";
                         }
@@ -254,13 +263,16 @@ namespace ASCOM.GeminiTelescope
                 }
 
             }
+            Cursor.Current = Cursors.Default;
         }
 
         private void Status()
         {
+            Cursor.Current = Cursors.WaitCursor;
             log += $"Collecting Gemini Status...";
 
-            string status = "";
+            string status = $"{SharedResources.TELESCOPE_DRIVER_NAME} v{Application.ProductVersion} Troubleshooting Report\r\n\r\n";
+
             if (GeminiHardware.Instance.Connected)
                 status += $"Gemini Already Connected\r\n";
             else
@@ -279,7 +291,14 @@ namespace ASCOM.GeminiTelescope
                 //GeminiHardware.Instance.UpdatePolledVariables(true); // do twice to get all the variables
                 status += $"Gemini version: {GeminiHardware.Instance.dVersion}\r\nBoot Mode={GeminiHardware.Instance.m_BootMode.ToString()}\r\n";
                 status += $"Firmware={GeminiHardware.Instance.DoCommandResult(":GVD", 2000, false)} {GeminiHardware.Instance.DoCommandResult(":GVT", 2000, false)}\r\n";
-                status += $"Mount Type={GeminiHardware.Instance.DoCommandResult("<0", 2000, false)}\r\n";
+
+                string ms = GeminiHardware.Instance.DoCommandResult("<0", 2000, false);
+                int mount = 0;
+                int.TryParse(ms, out mount);
+
+                string mountName = GeminiProperties.Mount_names[mount];
+                
+                status += $"Mount Type={mountName} ({ms})\r\n";
                 status += $"Use Ethernet={GeminiHardware.Instance.m_EthernetPort}\r\nEthernet IP={GeminiHardware.Instance.m_EthernetIP}\r\nCOM Port={GeminiHardware.Instance.m_ComPort}\r\nScan COM Ports={GeminiHardware.Instance.m_ScanCOMPorts}\r\nUDP Port={GeminiHardware.Instance.m_UDPPort}\r\n";
                 if (GeminiHardware.Instance.dVersion >= 5.0)
                 {
@@ -291,6 +310,22 @@ namespace ASCOM.GeminiTelescope
                     status += $"Status Check={GeminiHardware.Instance.DoCommandResult("<99", 2000, false)}\r\n";
                     status += $"Steps to Western Limit={GeminiHardware.Instance.DoCommandResult("<225", 2000, false)}\r\n";
                     status += $"Time to Western Limit={GeminiHardware.Instance.DoCommandResult("<226", 2000, false)}\r\n";
+
+                    GeminiHardware.Instance.UpdatePolledVariables(true);
+                    var g5 = (Gemini5Hardware)GeminiHardware.Instance;
+                    status += $"{DateTime.Now.ToString("hh:mm:ss.fff")}: ENQ 0 Macro={g5.macro}\r\n";
+
+                    System.Threading.Thread.Sleep(500);
+                    GeminiHardware.Instance.UpdatePolledVariables(true);
+                    status += $"{DateTime.Now.ToString("hh:mm:ss.fff")}: ENQ 0 Macro={g5.macro}\r\n";
+
+                    System.Threading.Thread.Sleep(500);
+                    GeminiHardware.Instance.UpdatePolledVariables(true);
+                    status += $"{DateTime.Now.ToString("hh:mm:ss.fff")}: ENQ 0 Macro={g5.macro}\r\n";
+
+                    System.Threading.Thread.Sleep(500);
+                    GeminiHardware.Instance.UpdatePolledVariables(true);
+                    status += $"{DateTime.Now.ToString("hh:mm:ss.fff")}: ENQ 0 Macro={g5.macro}\r\n";
                 }
                 if (GeminiHardware.Instance.dVersion >= 5.2)
                 {
@@ -343,20 +378,24 @@ namespace ASCOM.GeminiTelescope
 
             File.WriteAllText(Folder + "\\gemini_status.log", status);
             log += $" written to {(Folder + "\\gemini_status.log")}, size={status.Length}\r\n";
+            Cursor.Current = Cursors.Default;
         }
 
         private void Network()
         {
+            Cursor.Current = Cursors.WaitCursor;
             log += $"Collecting Network settings...";
             Process p = new Process();
             // Redirect the output stream of the child process.
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.RedirectStandardError = true;
             p.StartInfo.FileName = "ipconfig.exe";
             p.StartInfo.Arguments = "/all";
             p.StartInfo.CreateNoWindow = true;
             p.Start();
             string output = p.StandardOutput.ReadToEnd();
+            output += p.StandardError.ReadToEnd();
             p.WaitForExit();
 
 
@@ -364,17 +403,49 @@ namespace ASCOM.GeminiTelescope
             // Redirect the output stream of the child process.
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.RedirectStandardError = true;
             p.StartInfo.FileName = "systeminfo.exe";
             //p.StartInfo.Arguments = "/all";
             p.StartInfo.CreateNoWindow = true;
             p.Start();
             string output2 = p.StandardOutput.ReadToEnd();
+            output2 += p.StandardError.ReadToEnd();
             p.WaitForExit();
 
-            output += "\r\n\r\n--------------------------SYSINFO-----------------\r\n\r\n" + output2;
+
+            p = new Process();
+            // Redirect the output stream of the child process.
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.RedirectStandardError = true;
+            p.StartInfo.FileName = "net.exe";
+            p.StartInfo.Arguments = "statistics workstation";
+            p.StartInfo.CreateNoWindow = true;
+            p.Start();
+            string output3 = p.StandardOutput.ReadToEnd();
+            output3 += p.StandardError.ReadToEnd();
+            p.WaitForExit();
+
+            p = new Process();
+            // Redirect the output stream of the child process.
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.RedirectStandardError = true;
+            p.StartInfo.FileName = "whoami.exe";
+            p.StartInfo.Arguments = "/GROUPS /FO LIST";
+            p.StartInfo.CreateNoWindow = true;
+            p.Start();
+            string output4 = p.StandardOutput.ReadToEnd();
+            output4 += p.StandardError.ReadToEnd();
+            p.WaitForExit();
+
+            output += "\r\n\r\n--------------------------SYSTEMINFO-----------------\r\n\r\n" + output2;
+            output += "\r\n\r\n--------------------------NET STATISTICS-----------------\r\n\r\n" + output3;
+            output += "\r\n\r\n--------------------------WHOAMI ADMIN?-----------------\r\n\r\n" + output4;
 
             File.WriteAllText(Folder + "\\network.log", output);
             log += $" written to {(Folder + "\\network.log")}, size={output.Length}\r\n";
+            Cursor.Current = Cursors.Default;
         }
 
 
@@ -403,7 +474,215 @@ namespace ASCOM.GeminiTelescope
 
         private void pbCancel_Click(object sender, EventArgs e)
         {
+            if (recording)
+            {
+                var res = MessageBox.Show("Activity recording in progress. Do you want to stop it?", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Hand);
+                if (res == DialogResult.Yes)
+                {
+                    StopRecording();
+                }
+                else
+                {
+                    return;
+                }
+            }
 
+            this.Hide();
+        }
+
+        private void ckAll_CheckedChanged(object sender, EventArgs e)
+        {
+            for (int i = 0; i < lbCollect.Items.Count; ++i)
+                lbCollect.SetItemChecked(i, ckAll.Checked);
+        }
+
+        private void frmCollector_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            frmMain frm = (Application.OpenForms[0] as frmMain);
+
+            // allow exit if main form is closing
+            if (frm.m_ExitFormMenuCall)
+                return;
+
+            if (recording)
+            {
+                var res = MessageBox.Show("Activity recording in progress. Do you want to stop it?", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Hand);
+                if (res == DialogResult.Yes)
+                {
+                    StopRecording();
+                }
+                else
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }
+
+            this.Hide();
+            e.Cancel = true;
+        }
+
+        private void pbRecord_Click(object sender, EventArgs e)
+        {
+            if (!recording)
+            {
+                StartRecording();
+            }
+            else
+            {
+                StopRecording();
+
+            }
+        }
+
+        private void StartRecording()
+        {
+            frmMain frm = (Application.OpenForms[0] as frmMain);
+
+            recording = true;
+            recordingLog = "";
+
+            lbCollect.Enabled = false;
+            pbCollect.Enabled = false;
+
+          
+            GeminiHardware.Instance.OnTransmit += Instance_OnUDPTransmit;
+            GeminiHardware.Instance.OnReceive += Instance_OnUDPReceive;
+
+            tmRecord = new System.Windows.Forms.Timer();
+            tmRecord.Interval = (GeminiHardware.Instance.IsEthernetConnected? 500 : 2000);  // slow down for serial
+            tmRecord.Tick += TmRecord_Tick;
+            tmRecord.Start();
+            pbRecord.Text = "STOP Recording";
+            pbRecord.BackColor = Color.Red;
+            frm.SetBaloonText(SharedResources.TELESCOPE_DRIVER_NAME, "Please perform test actions, then press STOP", ToolTipIcon.Info);
+        }
+
+        private void Instance_OnUDPReceive(string res)
+        {
+            if (recording)
+                recordingLog += $"{DateTime.Now.ToString("hh:mm:ss.fff")}: RECEIVED={res}\r\n";
+        }
+
+        private void Instance_OnUDPTransmit(string cmd)
+        {
+            if (recording)
+                recordingLog += $"{DateTime.Now.ToString("hh:mm:ss.fff")}: TRANSMITED={cmd}\r\n";
+        }
+
+        private void StopRecording()
+        {
+            tmRecord.Stop();
+            recording = false;
+            lbCollect.Enabled = true;
+            pbCollect.Enabled = true;
+            pbRecord.Text = "Record Activity";
+            pbRecord.BackColor = SystemColors.Control;
+
+            GeminiHardware.Instance.OnTransmit -= Instance_OnUDPTransmit;
+            GeminiHardware.Instance.OnReceive -= Instance_OnUDPReceive;
+
+            if (lbCollect.Items.Count < 8)
+            {
+                lbCollect.Items.Add("Activity Recording", true);
+            }
+            else
+                lbCollect.SetItemChecked(7, true);
+        }
+
+        object lock_poll = new object();
+
+        private void TmRecord_Tick(object sender, EventArgs e)
+        {
+            if (!GeminiHardware.Instance.Connected)
+            {
+                StopRecording();
+                return;
+            }
+
+            ThreadPool.QueueUserWorkItem(new WaitCallback(x=>{
+
+                if (Monitor.TryEnter(lock_poll, 100))
+                {
+                    if (GeminiHardware.Instance.dVersion >= 5 && GeminiHardware.Instance.IsEthernetConnected)
+                    {
+                        try
+                        {
+                            GeminiHardware.Instance.UpdatePolledVariables(true);
+                        } catch { }
+                        var g5 = (Gemini5Hardware)GeminiHardware.Instance;
+                        recordingLog += $"{DateTime.Now.ToString("hh:mm:ss.fff")}: ENQ 0 Macro={g5.macro}\r\n";
+                    }
+                    else
+                    {
+                        //try
+                        //{
+                        //    GeminiHardware.Instance.UpdatePolledVariables(true);
+                        //}
+                        //catch { }
+
+                        Debug.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")}: Poll 1={GeminiHardware.Instance.pollString1}\r\n");
+                        Debug.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")}: Poll 1={GeminiHardware.Instance.pollString2}\r\n");
+
+                        recordingLog += $"{DateTime.Now.ToString("hh:mm:ss.fff")}: Poll 1={GeminiHardware.Instance.pollString1}\r\n";
+                        recordingLog += $"{DateTime.Now.ToString("hh:mm:ss.fff")}: Poll 2={GeminiHardware.Instance.pollString2}\r\n";
+                    }
+                    Monitor.Exit(lock_poll);
+                }
+            }));
+
+            //if (GeminiHardware.Instance.dVersion >= 5)
+            //{
+            //    string display = GeminiHardware.Instance.DoCommandResult(":OO", GeminiHardware.Instance.MAX_TIMEOUT, false);
+
+            //    if (!string.IsNullOrEmpty(display) && display.Trim() != "")
+            //        recordingLog += $"{DateTime.Now.ToString("hh:mm:ss.fff")}: DISPLAY={display}\r\n";
+
+            //}
+        }
+
+        private void pbRecord_VisibleChanged(object sender, EventArgs e)
+        {
+          
+            
+            if (this.Visible)
+            {
+                Cursor.Current = Cursors.WaitCursor;
+
+                activityMap = new Dictionary<int, string>();
+                activityNumber = 1;
+                recording = false;
+
+                Folder = System.IO.Path.GetTempPath() + "GeminiCollector";
+                if (Directory.Exists(Folder)) Directory.Delete(Folder, true);
+                Directory.CreateDirectory(Folder);
+
+                try
+                {
+                    if (!GeminiHardware.Instance.Connected)
+                        GeminiHardware.Instance.Connected = true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Gemini is not connected!\r\nOnly information from the PC will be included in the report.", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                }
+
+                for (int i = 0; i < lbCollect.Items.Count; ++i)
+                    lbCollect.SetItemChecked(i, true);
+
+                if (!GeminiHardware.Instance.Connected)
+                {
+                    lbCollect.SetItemChecked(1, false);
+                    lbCollect.SetItemChecked(2, false);
+                    lbCollect.SetItemChecked(3, false);
+                    pbRecord.Enabled = false;
+                }
+                else
+                {
+                    pbRecord.Enabled = true;
+                }
+                Cursor.Current = Cursors.Default;
+            }
         }
     }
 }

@@ -37,7 +37,13 @@ namespace ASCOM.GeminiTelescope
 
     public partial class GeminiHardwareBase
     {
-        private  string EthernetResult = "";
+        public delegate void TransmitCommand(string cmd);
+        public delegate void ReceiveResult(string res);
+
+        public event TransmitCommand OnTransmit;
+        public event ReceiveResult OnReceive;
+
+        private string EthernetResult = "";
         private  HttpWebResponse Response = null;
 
         private Int32 PacketCount = 1;
@@ -166,6 +172,7 @@ namespace ASCOM.GeminiTelescope
 
         internal void TransmitUDP(string s)
         {
+            OnTransmit?.Invoke(s);
 
             UDP_buff = (UDP_buff==UDP_datagram1? UDP_datagram2 : UDP_datagram1);
             Array.Copy(System.BitConverter.GetBytes(PacketCount), 0, UDP_buff, 0, 4);
@@ -179,7 +186,7 @@ namespace ASCOM.GeminiTelescope
         }
        
         internal void TransmitUDP(byte[] cmd)
-        {
+        {        
             UDP_buff = (UDP_buff == UDP_datagram1 ? UDP_datagram2 : UDP_datagram1);
             Array.Copy(System.BitConverter.GetBytes(PacketCount), 0, UDP_buff, 0, 4);
             Trace.Info(0, "TransmitUDP packet#, cmd", PacketCount, ASCIIEncoding.ASCII.GetString(cmd));
@@ -622,6 +629,7 @@ wait_again:
             
             if (!string.IsNullOrEmpty(result)) result = DeEscape(result);
 
+            OnReceive?.Invoke(result);
             Trace.Exit(4, "GetCommandResultEthernet", command.m_Command, result);
             return result;
         }

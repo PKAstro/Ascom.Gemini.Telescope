@@ -37,6 +37,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using ASCOM.GeminiTelescope.Properties;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -3424,6 +3425,7 @@ namespace ASCOM.GeminiTelescope
 
                         int startTime = System.Environment.TickCount;
 
+                        OnTransmit?.Invoke(all_commands);
                         Transmit(all_commands);
 
                         Trace.Info(2, "Done transmitting");
@@ -3443,6 +3445,7 @@ namespace ASCOM.GeminiTelescope
 
                             Trace.Info(4, "Result", result);
 
+                            OnReceive?.Invoke(ci.m_Command + "=" + result);
 
                             if (ci.WaitObject != null)    // receive result, if one is expected
                             {
@@ -3630,14 +3633,22 @@ namespace ASCOM.GeminiTelescope
 
         internal int m_PollUpdateCount = 0;    // keep track of number of updates
 
+        object poll_lock = new object();
+
         internal virtual void UpdatePolledVariables(bool bUpdateAll)
         {
-            Trace.Enter("UpdatePolledVariables", bUpdateAll);
-            _UpdatePolledVariables();
-            //two calls needed to fetch all the variables:
-            if (bUpdateAll) _UpdatePolledVariables();
-            Trace.Exit("UpdatePolledVariables", bUpdateAll);
+            if (Monitor.TryEnter(poll_lock, 100))
+            {
+                Trace.Enter("UpdatePolledVariables", bUpdateAll);
+                _UpdatePolledVariables();
+                //two calls needed to fetch all the variables:
+                if (bUpdateAll) _UpdatePolledVariables();
+                Trace.Exit("UpdatePolledVariables", bUpdateAll);
+                Monitor.Exit(poll_lock);
+            }
         }
+
+        internal string pollString1, pollString2;
 
         /// <summary>
         /// update all variable sthat are polled on an interval
@@ -3738,7 +3749,7 @@ namespace ASCOM.GeminiTelescope
                     if (AZ != null) m_Azimuth = m_Util.DMSToDegrees(AZ);
                     if (V != null) m_Velocity = V;
                     trc = "RA=" + RA + ", DEC=" + DEC + "ALT=" + ALT + " AZ=" + AZ + " Velocity=" + Velocity;
-
+                    pollString1 = trc;
                 }
 
                 if ((level & 2) != 0)
@@ -3810,6 +3821,7 @@ namespace ASCOM.GeminiTelescope
                     }
 
                     trc += " SOP=" + SOP + " HOME=" + HOME + " Status=" + m_GeminiStatusByte.ToString();
+                    pollString2 = trc;
                 }
 
 
@@ -3824,8 +3836,11 @@ namespace ASCOM.GeminiTelescope
             catch (Exception e)
             {
                 Trace.Except(e);
-                m_SerialPort.DiscardOutBuffer();
-                DiscardInBuffer();
+                try
+                {
+                    m_SerialPort.DiscardOutBuffer();
+                    DiscardInBuffer();
+                } catch { }
             }
 
             Trace.Exit("UpdatePolledVariables");
