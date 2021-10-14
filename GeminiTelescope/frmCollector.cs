@@ -204,6 +204,36 @@ namespace ASCOM.GeminiTelescope
 
         }
 
+
+        List<string> GeminiLogsList(string folder, bool details)
+        {
+            log += $"Listing files in Gemini SD directory ftp://{GeminiHardware.Instance.m_EthernetIP}/{folder}...\r\n";
+            try
+            {
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"ftp://{GeminiHardware.Instance.m_EthernetIP}/{folder}");
+                request.Method = details? WebRequestMethods.Ftp.ListDirectoryDetails : WebRequestMethods.Ftp.ListDirectory;
+
+                request.Credentials = new NetworkCredential(GeminiHardware.Instance.m_EthernetUser, GeminiHardware.Instance.m_EthernetPassword);
+
+                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+
+                Stream responseStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(responseStream);
+                var str = reader.ReadToEnd();
+
+                reader.Close();
+                response.Close();
+                log += $"{str}";
+                return str.Split(new string [] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            }
+            catch (Exception ex)
+            {
+                log += $"Error: {ex.Message}\r\n";
+            }
+
+            return new List<string>();
+        }
+
         private void GeminiSettings()
         {
             Cursor.Current = Cursors.WaitCursor;
@@ -215,8 +245,19 @@ namespace ASCOM.GeminiTelescope
             if (GeminiHardware.Instance.dVersion >= 5 && GeminiHardware.Instance.IsEthernetConnected)
             {
                 log += $" Gemini version {GeminiHardware.Instance.dVersion}...";
+
+                GeminiLogsList("", true);
+
+                var s = GeminiLogsList("LOGS/", false);
+
+                foreach(var fname in s )
+                {
+                    DownloadGeminiFile(fname);
+                }
+#if false
                 using (MyWebClient webClient = new MyWebClient())
                 {
+                    
                     webClient.Credentials = new NetworkCredential(GeminiHardware.Instance.m_EthernetUser, GeminiHardware.Instance.m_EthernetPassword);
 
                     try
@@ -261,9 +302,40 @@ namespace ASCOM.GeminiTelescope
 
                     log += "\r\n";
                 }
-
+#endif
             }
             Cursor.Current = Cursors.Default;
+        }
+
+        private void DownloadGeminiFile(string v)
+        {
+            log += $"Downloading ... ftp://{GeminiHardware.Instance.m_EthernetIP}/LOGS/{v}\r\n";
+            try
+            {
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"ftp://{GeminiHardware.Instance.m_EthernetIP}/LOGS/{v}");
+                request.Method = WebRequestMethods.Ftp.DownloadFile;
+                request.Timeout = 5000;
+                // This example assumes the FTP site uses anonymous logon.
+                request.Credentials = new NetworkCredential(GeminiHardware.Instance.m_EthernetUser, GeminiHardware.Instance.m_EthernetPassword);
+
+                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+
+                Stream responseStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(responseStream);
+
+                using (var fileStream = File.Create(Folder+"\\" + v))
+                {                   
+                    reader.BaseStream.CopyTo(fileStream);
+                }
+
+                reader.Close();
+                response.Close();
+                log += $"  File {v} saved";
+            }
+            catch (Exception ex)
+            {
+                log += $"Error: {ex.Message}\r\n";
+            }
         }
 
         private void Status()
