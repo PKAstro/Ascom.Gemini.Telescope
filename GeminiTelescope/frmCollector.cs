@@ -207,10 +207,11 @@ namespace ASCOM.GeminiTelescope
 
         List<string> GeminiLogsList(string folder, bool details)
         {
-            log += $"Listing files in Gemini SD directory ftp://{GeminiHardware.Instance.m_EthernetIP}/{folder}...\r\n";
+            string host = GeminiHardware.Instance.m_UseDHCP ? GeminiHardware.Instance.m_GeminiDHCPName : GeminiHardware.Instance.m_EthernetIP;
+            log += $"Listing files in Gemini SD directory ftp://{host}/{folder}...\r\n\r\n";
             try
             {
-                FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"ftp://{GeminiHardware.Instance.m_EthernetIP}/{folder}");
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"ftp://{host}/{folder}");
                 request.Method = details? WebRequestMethods.Ftp.ListDirectoryDetails : WebRequestMethods.Ftp.ListDirectory;
 
                 request.Credentials = new NetworkCredential(GeminiHardware.Instance.m_EthernetUser, GeminiHardware.Instance.m_EthernetPassword);
@@ -309,10 +310,12 @@ namespace ASCOM.GeminiTelescope
 
         private void DownloadGeminiFile(string v)
         {
-            log += $"Downloading ... ftp://{GeminiHardware.Instance.m_EthernetIP}/LOGS/{v}\r\n";
+            string host = GeminiHardware.Instance.m_UseDHCP ? GeminiHardware.Instance.m_GeminiDHCPName : GeminiHardware.Instance.m_EthernetIP;
+
+            log += $"Downloading ... ftp://{host}/LOGS/{v}\r\n";
             try
             {
-                FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"ftp://{GeminiHardware.Instance.m_EthernetIP}/LOGS/{v}");
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"ftp://{host}/LOGS/{v}");
                 request.Method = WebRequestMethods.Ftp.DownloadFile;
                 request.Timeout = 5000;
                 // This example assumes the FTP site uses anonymous logon.
@@ -372,11 +375,15 @@ namespace ASCOM.GeminiTelescope
                 
                 status += $"Mount Type={mountName} ({ms})\r\n";
                 status += $"Use Ethernet={GeminiHardware.Instance.m_EthernetPort}\r\nEthernet IP={GeminiHardware.Instance.m_EthernetIP}\r\nCOM Port={GeminiHardware.Instance.m_ComPort}\r\nScan COM Ports={GeminiHardware.Instance.m_ScanCOMPorts}\r\nUDP Port={GeminiHardware.Instance.m_UDPPort}\r\n";
+
+                status += $"DRIVER SETTINGS: Use DHCP={GeminiHardware.Instance.m_UseDHCP}\r\nDHCP Name={GeminiHardware.Instance.m_GeminiDHCPName}\r\nCOM Port={GeminiHardware.Instance.m_ComPort}\r\nScan COM Ports={GeminiHardware.Instance.m_ScanCOMPorts}\r\nUDP Port={GeminiHardware.Instance.m_UDPPort}\r\n";
+
+                status += $"MOUNT SETTINGS: ";
                 if (GeminiHardware.Instance.dVersion >= 5.0)
                 {
                     status += $"IP={GeminiHardware.Instance.DoCommandResult("<801", 2000, false)}\r\nMask={GeminiHardware.Instance.DoCommandResult("<802", 2000, false)}\r\n";
                     status += $"Gateway={GeminiHardware.Instance.DoCommandResult("<803", 2000, false)}\r\nDNS={GeminiHardware.Instance.DoCommandResult("<804", 2000, false)}\r\n";
-                    status += $"DHCP={GeminiHardware.Instance.DoCommandResult("<805", 2000, false)}\r\nMAC={GeminiHardware.Instance.DoCommandResult("<818", 2000, false)}\r\n";
+                    status += $"DHCP={GeminiHardware.Instance.DoCommandResult("<810", 2000, false)}\r\nMAC={GeminiHardware.Instance.DoCommandResult("<818", 2000, false)}\r\n";
 
                     status += $"Startup Code={GeminiHardware.Instance.DoCommandResult("<96", 2000, false)}\r\n";
                     status += $"Status Check={GeminiHardware.Instance.DoCommandResult("<99", 2000, false)}\r\n";

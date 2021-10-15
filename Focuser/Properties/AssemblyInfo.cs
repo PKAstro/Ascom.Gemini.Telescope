@@ -36,8 +36,8 @@ using System;
 // by using the '*' as shown below:
 //
 // TODO - Set your driver's version here
-[assembly: AssemblyVersion("1.1.0.0")]
-[assembly: AssemblyFileVersion("1.1.0.0")]
+[assembly: AssemblyVersion("1.1.0.1")]
+[assembly: AssemblyFileVersion("1.1.0.1")]
 [assembly: ASCOM.DeviceIdAttribute("ASCOM.GeminiTelescope.Focuser")]
 
 
