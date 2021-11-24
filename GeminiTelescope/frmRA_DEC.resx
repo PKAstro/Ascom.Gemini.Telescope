@@ -112,301 +112,418 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="lbCatalog.TabIndex" type="System.Int32, mscorlib">
-    <value>11</value>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>13, 13</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="txtDEC.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
+  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>72, 23</value>
   </data>
-  <data name="txtRA.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;btnExit.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="chkJ2000.Text" xml:space="preserve">
-    <value>Coordinates are J2000</value>
-  </data>
-  <data name="&gt;&gt;btnGoto.ZOrder" xml:space="preserve">
-    <value>12</value>
-  </data>
-  <data name="&gt;&gt;btnGoto.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="label2.Text" xml:space="preserve">
-    <value>RA:</value>
-  </data>
-  <data name="btnGoto.Text" xml:space="preserve">
-    <value>Go To</value>
-  </data>
-  <data name="txtRA.PromptChar" type="System.Char, mscorlib" xml:space="preserve">
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="label1.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
-  <data name="&gt;&gt;btnExit.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="label1.Text" xml:space="preserve">
+    <value>Object Name:</value>
   </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="chkJ2000.Size" type="System.Drawing.Size, System.Drawing">
-    <value>132, 17</value>
-  </data>
-  <data name="&gt;&gt;label2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="txtRA.Mask" xml:space="preserve">
-    <value>00:00:00</value>
-  </data>
-  <data name="&gt;&gt;txtRA.ZOrder" xml:space="preserve">
-    <value>10</value>
-  </data>
-  <data name="&gt;&gt;label1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="chkJ2000.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 13</value>
-  </data>
-  <data name="&gt;&gt;btnExit.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="label4.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+  <data name="label1.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleRight</value>
   </data>
-  <data name="btnExit.Text" xml:space="preserve">
-    <value>Exit</value>
+  <data name="&gt;&gt;label1.Name" xml:space="preserve">
+    <value>label1</value>
   </data>
-  <data name="&gt;&gt;txtDEC.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="&gt;&gt;label1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="pbCatalog.TabIndex" type="System.Int32, mscorlib">
-    <value>12</value>
-  </data>
-  <data name="&gt;&gt;pbCatalog.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="txtRA.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Right</value>
-  </data>
-  <data name="&gt;&gt;lbCatalog.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label2.Name" xml:space="preserve">
-    <value>label2</value>
-  </data>
-  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
-    <value>Manual</value>
-  </data>
-  <data name="&gt;&gt;chkJ2000.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>375, 157</value>
-  </data>
-  <data name="&gt;&gt;btnGoto.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="txtDEC.Size" type="System.Drawing.Size, System.Drawing">
-    <value>109, 20</value>
-  </data>
-  <data name="label4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 46</value>
-  </data>
-  <data name="&gt;&gt;label3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="txtRA.Size" type="System.Drawing.Size, System.Drawing">
-    <value>109, 20</value>
-  </data>
-  <data name="&gt;&gt;btnSync.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="txtRA.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Lucida Console, 9.75pt</value>
-  </data>
-  <data name="txtDEC.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Right</value>
-  </data>
-  <data name="pbCatalog.Location" type="System.Drawing.Point, System.Drawing">
-    <value>293, 97</value>
-  </data>
-  <data name="&gt;&gt;pbCatalog.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label4.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="label3.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="&gt;&gt;lbCatalog.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="btnSync.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="txtObject.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;btnExit.Name" xml:space="preserve">
-    <value>btnExit</value>
-  </data>
-  <data name="&gt;&gt;lbCatalog.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="label4.Text" xml:space="preserve">
-    <value>Catalog:</value>
-  </data>
-  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>6, 13</value>
-  </data>
-  <data name="&gt;&gt;label3.Parent" xml:space="preserve">
+  <data name="&gt;&gt;label1.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
     <value>13</value>
   </data>
-  <data name="&gt;&gt;txtRA.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;pbCatalog.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;btnSync.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 23</value>
-  </data>
-  <data name="btnSync.Text" xml:space="preserve">
-    <value>Sync</value>
-  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="btnGoto.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>System</value>
-  </data>
-  <data name="btnSync.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
-    <value>System</value>
-  </data>
-  <data name="btnExit.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
-    <value>System</value>
-  </data>
-  <data name="txtDEC.Mask" xml:space="preserve">
-    <value>#00:00:00</value>
-  </data>
-  <data name="btnGoto.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 13</value>
-  </data>
-  <data name="txtRA.Location" type="System.Drawing.Point, System.Drawing">
-    <value>91, 70</value>
-  </data>
-  <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
-    <value>11</value>
-  </data>
-  <data name="btnGoto.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
-  </data>
-  <data name="lbCatalog.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;btnAddAlign.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;label3.ZOrder" xml:space="preserve">
-    <value>9</value>
-  </data>
-  <data name="label2.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 13</value>
-  </data>
-  <data name="&gt;&gt;btnSync.ZOrder" xml:space="preserve">
-    <value>6</value>
   </data>
   <data name="btnGoto.Location" type="System.Drawing.Point, System.Drawing">
     <value>293, 10</value>
   </data>
+  <data name="btnGoto.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnGoto.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="btnGoto.Text" xml:space="preserve">
+    <value>Go To</value>
+  </data>
+  <data name="&gt;&gt;btnGoto.Name" xml:space="preserve">
+    <value>btnGoto</value>
+  </data>
+  <data name="&gt;&gt;btnGoto.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnGoto.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnGoto.ZOrder" xml:space="preserve">
+    <value>12</value>
+  </data>
+  <data name="txtRA.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Lucida Console, 9.75pt</value>
+  </data>
+  <data name="txtRA.Location" type="System.Drawing.Point, System.Drawing">
+    <value>91, 70</value>
+  </data>
+  <data name="txtRA.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="txtRA.Mask" xml:space="preserve">
+    <value>00:00:00</value>
+  </data>
+  <data name="txtRA.PromptChar" type="System.Char, mscorlib" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="txtRA.Size" type="System.Drawing.Size, System.Drawing">
+    <value>109, 20</value>
+  </data>
+  <data name="txtRA.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="txtRA.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="&gt;&gt;txtRA.Name" xml:space="preserve">
+    <value>txtRA</value>
+  </data>
+  <data name="&gt;&gt;txtRA.Type" xml:space="preserve">
+    <value>System.Windows.Forms.MaskedTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtRA.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;txtRA.ZOrder" xml:space="preserve">
+    <value>11</value>
+  </data>
+  <data name="txtDEC.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Lucida Console, 9.75pt</value>
+  </data>
+  <data name="txtDEC.Location" type="System.Drawing.Point, System.Drawing">
+    <value>91, 96</value>
+  </data>
+  <data name="txtDEC.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="txtDEC.Mask" xml:space="preserve">
+    <value>#00:00:00</value>
+  </data>
+  <data name="txtDEC.PromptChar" type="System.Char, mscorlib" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="txtDEC.Size" type="System.Drawing.Size, System.Drawing">
+    <value>109, 20</value>
+  </data>
+  <data name="txtDEC.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="txtDEC.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="&gt;&gt;txtDEC.Name" xml:space="preserve">
+    <value>txtDEC</value>
+  </data>
+  <data name="&gt;&gt;txtDEC.Type" xml:space="preserve">
+    <value>System.Windows.Forms.MaskedTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtDEC.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;txtDEC.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>13, 98</value>
+  </data>
+  <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>72, 13</value>
+  </data>
+  <data name="label3.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
   <data name="label3.Text" xml:space="preserve">
     <value>DEC:</value>
   </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>frmRA_DEC</value>
-  </data>
-  <data name="btnSync.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
-  </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>Object RA and DEC Coordinates</value>
+  <data name="label3.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleRight</value>
   </data>
   <data name="&gt;&gt;label3.Name" xml:space="preserve">
     <value>label3</value>
   </data>
-  <data name="&gt;&gt;lbCatalog.Name" xml:space="preserve">
-    <value>lbCatalog</value>
+  <data name="&gt;&gt;label3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="btnSync.Location" type="System.Drawing.Point, System.Drawing">
-    <value>293, 41</value>
-  </data>
-  <data name="&gt;&gt;label2.Parent" xml:space="preserve">
+  <data name="&gt;&gt;label3.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="txtObject.Size" type="System.Drawing.Size, System.Drawing">
-    <value>191, 21</value>
-  </data>
-  <data name="&gt;&gt;label1.Name" xml:space="preserve">
-    <value>label1</value>
-  </data>
-  <data name="btnAddAlign.Text" xml:space="preserve">
-    <value>Add'l Align</value>
-  </data>
-  <data name="lbCatalog.Location" type="System.Drawing.Point, System.Drawing">
-    <value>92, 46</value>
-  </data>
-  <data name="&gt;&gt;txtDEC.Type" xml:space="preserve">
-    <value>System.Windows.Forms.MaskedTextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="label2.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleRight</value>
+  <data name="&gt;&gt;label3.ZOrder" xml:space="preserve">
+    <value>10</value>
   </data>
   <data name="txtObject.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
   </data>
-  <data name="&gt;&gt;txtRA.Type" xml:space="preserve">
-    <value>System.Windows.Forms.MaskedTextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="txtObject.Location" type="System.Drawing.Point, System.Drawing">
+    <value>91, 14</value>
   </data>
-  <data name="&gt;&gt;txtDEC.ZOrder" xml:space="preserve">
-    <value>8</value>
+  <data name="txtObject.Size" type="System.Drawing.Size, System.Drawing">
+    <value>191, 21</value>
   </data>
-  <data name="&gt;&gt;btnAddAlign.Name" xml:space="preserve">
-    <value>btnAddAlign</value>
-  </data>
-  <data name="&gt;&gt;btnSync.Name" xml:space="preserve">
-    <value>btnSync</value>
-  </data>
-  <data name="label2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 72</value>
-  </data>
-  <data name="&gt;&gt;chkJ2000.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="txtObject.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
   </data>
   <data name="&gt;&gt;txtObject.Name" xml:space="preserve">
     <value>txtObject</value>
   </data>
+  <data name="&gt;&gt;txtObject.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtObject.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;txtObject.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="btnSync.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>System</value>
+  </data>
+  <data name="btnSync.Location" type="System.Drawing.Point, System.Drawing">
+    <value>293, 41</value>
+  </data>
+  <data name="btnSync.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnSync.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="btnSync.Text" xml:space="preserve">
+    <value>Sync</value>
+  </data>
+  <data name="&gt;&gt;btnSync.Name" xml:space="preserve">
+    <value>btnSync</value>
+  </data>
+  <data name="&gt;&gt;btnSync.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnSync.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnSync.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="btnAddAlign.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>System</value>
+  </data>
+  <data name="btnAddAlign.Location" type="System.Drawing.Point, System.Drawing">
+    <value>293, 68</value>
+  </data>
+  <data name="btnAddAlign.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnAddAlign.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="btnAddAlign.Text" xml:space="preserve">
+    <value>Add'l Align</value>
+  </data>
+  <data name="&gt;&gt;btnAddAlign.Name" xml:space="preserve">
+    <value>btnAddAlign</value>
+  </data>
+  <data name="&gt;&gt;btnAddAlign.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnAddAlign.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnAddAlign.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="btnExit.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>System</value>
+  </data>
+  <data name="btnExit.Location" type="System.Drawing.Point, System.Drawing">
+    <value>293, 126</value>
+  </data>
+  <data name="btnExit.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
   <data name="btnExit.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
+  </data>
+  <data name="btnExit.Text" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="&gt;&gt;btnExit.Name" xml:space="preserve">
+    <value>btnExit</value>
+  </data>
+  <data name="&gt;&gt;btnExit.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnExit.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnExit.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="chkJ2000.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="chkJ2000.Location" type="System.Drawing.Point, System.Drawing">
+    <value>91, 129</value>
+  </data>
+  <data name="chkJ2000.Size" type="System.Drawing.Size, System.Drawing">
+    <value>132, 17</value>
+  </data>
+  <data name="chkJ2000.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="chkJ2000.Text" xml:space="preserve">
+    <value>Coordinates are J2000</value>
+  </data>
+  <data name="&gt;&gt;chkJ2000.Name" xml:space="preserve">
+    <value>chkJ2000</value>
+  </data>
+  <data name="&gt;&gt;chkJ2000.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkJ2000.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;chkJ2000.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="label4.Location" type="System.Drawing.Point, System.Drawing">
+    <value>13, 46</value>
+  </data>
+  <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>72, 13</value>
+  </data>
+  <data name="label4.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="label4.Text" xml:space="preserve">
+    <value>Catalog:</value>
+  </data>
+  <data name="label4.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleRight</value>
+  </data>
+  <data name="&gt;&gt;label4.Name" xml:space="preserve">
+    <value>label4</value>
+  </data>
+  <data name="&gt;&gt;label4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label4.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="lbCatalog.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lbCatalog.Location" type="System.Drawing.Point, System.Drawing">
+    <value>92, 46</value>
+  </data>
+  <data name="lbCatalog.Size" type="System.Drawing.Size, System.Drawing">
+    <value>0, 13</value>
+  </data>
+  <data name="lbCatalog.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="&gt;&gt;lbCatalog.Name" xml:space="preserve">
+    <value>lbCatalog</value>
+  </data>
+  <data name="&gt;&gt;lbCatalog.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lbCatalog.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;lbCatalog.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="pbCatalog.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>System</value>
+  </data>
+  <data name="pbCatalog.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="pbCatalog.Location" type="System.Drawing.Point, System.Drawing">
+    <value>293, 97</value>
+  </data>
+  <data name="pbCatalog.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="pbCatalog.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="pbCatalog.Text" xml:space="preserve">
+    <value>Catalogs...</value>
+  </data>
+  <data name="&gt;&gt;pbCatalog.Name" xml:space="preserve">
+    <value>pbCatalog</value>
+  </data>
+  <data name="&gt;&gt;pbCatalog.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pbCatalog.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;pbCatalog.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="ckRA.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
+    <value>Button</value>
+  </data>
+  <data name="ckRA.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="ckRA.Location" type="System.Drawing.Point, System.Drawing">
+    <value>44, 70</value>
+  </data>
+  <data name="ckRA.Size" type="System.Drawing.Size, System.Drawing">
+    <value>35, 23</value>
+  </data>
+  <data name="ckRA.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="ckRA.Text" xml:space="preserve">
+    <value>RA:</value>
+  </data>
+  <data name="&gt;&gt;ckRA.Name" xml:space="preserve">
+    <value>ckRA</value>
+  </data>
+  <data name="&gt;&gt;ckRA.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ckRA.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;ckRA.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>6, 13</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>375, 157</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -2104,133 +2221,16 @@
         AAAAAAAAAAAAAACAAQAAwAMAAPgfAAD//wAA
 </value>
   </data>
-  <data name="label1.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleRight</value>
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
+    <value>Manual</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>Object RA and DEC Coordinates</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>frmRA_DEC</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;btnAddAlign.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="lbCatalog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>0, 13</value>
-  </data>
-  <data name="&gt;&gt;pbCatalog.Name" xml:space="preserve">
-    <value>pbCatalog</value>
-  </data>
-  <data name="label3.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleRight</value>
-  </data>
-  <data name="&gt;&gt;txtObject.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="label4.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
-  </data>
-  <data name="txtDEC.PromptChar" type="System.Char, mscorlib" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="txtDEC.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Lucida Console, 9.75pt</value>
-  </data>
-  <data name="chkJ2000.Location" type="System.Drawing.Point, System.Drawing">
-    <value>91, 129</value>
-  </data>
-  <data name="btnAddAlign.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
-    <value>System</value>
-  </data>
-  <data name="&gt;&gt;chkJ2000.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;txtObject.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;label4.Name" xml:space="preserve">
-    <value>label4</value>
-  </data>
-  <data name="pbCatalog.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="&gt;&gt;label1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="btnExit.Location" type="System.Drawing.Point, System.Drawing">
-    <value>293, 126</value>
-  </data>
-  <data name="btnAddAlign.Location" type="System.Drawing.Point, System.Drawing">
-    <value>293, 68</value>
-  </data>
-  <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 98</value>
-  </data>
-  <data name="txtDEC.Location" type="System.Drawing.Point, System.Drawing">
-    <value>91, 96</value>
-  </data>
-  <data name="&gt;&gt;btnGoto.Name" xml:space="preserve">
-    <value>btnGoto</value>
-  </data>
-  <data name="label1.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;txtDEC.Name" xml:space="preserve">
-    <value>txtDEC</value>
-  </data>
-  <data name="txtDEC.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="txtRA.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="btnExit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
-  </data>
-  <data name="&gt;&gt;chkJ2000.Name" xml:space="preserve">
-    <value>chkJ2000</value>
-  </data>
-  <data name="&gt;&gt;label4.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 13</value>
-  </data>
-  <data name="pbCatalog.Text" xml:space="preserve">
-    <value>Catalogs...</value>
-  </data>
-  <data name="&gt;&gt;txtRA.Name" xml:space="preserve">
-    <value>txtRA</value>
-  </data>
-  <data name="pbCatalog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
-  </data>
-  <data name="btnAddAlign.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="btnAddAlign.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
-  </data>
-  <data name="&gt;&gt;txtObject.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="txtObject.Location" type="System.Drawing.Point, System.Drawing">
-    <value>91, 14</value>
-  </data>
-  <data name="label1.Text" xml:space="preserve">
-    <value>Object Name:</value>
-  </data>
-  <data name="chkJ2000.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="pbCatalog.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
-    <value>System</value>
-  </data>
-  <data name="&gt;&gt;btnAddAlign.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>German</value>
-  </metadata>
 </root>

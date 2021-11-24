@@ -1493,11 +1493,13 @@ namespace ASCOM.GeminiTelescope
                 return false;
             }
 
+            PropertyInfo[] ps = typeof(GeminiProperties).GetProperties(BindingFlags.Public | BindingFlags.SetProperty | BindingFlags.GetProperty | BindingFlags.Instance);
+            if (write && !ValidateProperties(ps)) return false;
+
             frmProgress.Initialize(0, 100, write ? "Sending Settings to Gemini" : "Getting Settings from Gemini", null);
             frmProgress.ShowProgress(null);
 
-            PropertyInfo[] ps = typeof(GeminiProperties).GetProperties(BindingFlags.Public | BindingFlags.SetProperty | BindingFlags.GetProperty | BindingFlags.Instance);
-
+         
             //sort all properties in the order of their 'Sequence' attribute
             // missing sequence attribute means that sequence number is 99
             Array.Sort(ps, new SequenceCompare());
@@ -1544,6 +1546,86 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Instance.Trace.Exit("GeminiProps:SyncWithGemini", write);
             return bSuccess;
         }
+
+        private bool ValidateProperties(PropertyInfo[] ps)
+        {
+            List<string> warning = new List<string>();
+            bool blat = false, blon = false, butc = false;
+
+            int utc = 0;
+
+            foreach (PropertyInfo p in ps)
+            {
+                string name = p.Name;
+
+                PropertyInfo pGemini = typeof(GeminiProperties).GetProperty(p.Name + "_Gemini", BindingFlags.NonPublic | BindingFlags.SetProperty | BindingFlags.GetProperty | BindingFlags.Instance);
+
+                try
+                {
+
+                    if (pGemini != null)
+                        if (pGemini.GetSetMethod(true) != null && p.GetGetMethod() != null)
+                            switch (p.Name)
+                            {
+                                case "Latitude":
+                                    {
+                                        double lat = (double)p.GetValue(this, null);
+
+                                        if (Math.Round(lat, 5) == 34.08967)
+                                            blat = true;
+                                        break;
+                                    }
+                                case "Longitude":
+                                    {
+                                        double lon = (double)p.GetValue(this, null);
+
+                                        if (Math.Round(lon, 5) == -118.343)
+                                            blon = true;
+                                        break;
+
+                                    }
+                                case "UTC_Offset":
+                                    {
+                                        utc = (int)p.GetValue(this, null);
+
+                                        if (utc == 8 || (int)(TimeZoneInfo.Local.GetUtcOffset(DateTime.Now)).TotalHours != -utc)
+                                            butc = true;
+                                        break;
+                                    }
+                            }
+                }
+                catch (Exception ex)
+                {
+                    GeminiHardware.Instance.Trace.Except(ex);
+                    return true;
+                }
+            }
+
+
+
+            string err = "";
+
+            if (blon && blat && butc)
+                err = "Profile settings that you are about to send to Gemini appear to contain some default values instead of actual settings. Do you still want to send this to Gemini?\r\n\r\n(For example, check geo locationand UTC offset)";
+            else if (butc)
+            {
+                err = $"Settings that you are about to send to Gemini specify UTC Offset of ({-utc}) that doesn't match your PC ({(int)(TimeZoneInfo.Local.GetUtcOffset(DateTime.Now)).TotalHours}). Do you still want to update Gemini?";
+            }
+
+            GeminiHardware.Instance.Trace.Error(err);
+            if (err!="")
+            {
+                var r = MessageBox.Show(err, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button3);
+                if (r != DialogResult.Yes)
+                {
+                    GeminiHardware.Instance.Trace.Error("Not updating");
+                    return false;
+                }
+            }
+            GeminiHardware.Instance.Trace.Error("Updating");
+            return true;
+        }
+
 
 
 

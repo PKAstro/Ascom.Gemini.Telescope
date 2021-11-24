@@ -78,7 +78,17 @@ namespace ASCOM.GeminiTelescope
                 //        customAdded = true;
                 //    }
                 //}
-                txtRA.Text = obj.RA.ToString(":", ":");
+
+                if (ckRA.Checked)
+                {
+                    var ra = obj.RA.RA;
+
+                    double sidereal_time = GeminiHardware.Instance.SiderealTime;
+                    var ha = ConditionHA(sidereal_time - ra);
+                    txtRA.Text = (Math.Sign(ha) < 0 ? "-" : "+") + GeminiHardware.Instance.m_Util.HoursToHMS(ha);
+                }
+                else
+                   txtRA.Text = obj.RA.ToString(":", ":");
                 txtDEC.Text = (Math.Sign(obj.DEC.DEC)>=0? "+":"-") + obj.DEC.ToString(":", ":");
                 chkJ2000.Checked = true;    //catalogs are all in J2000
                 lbCatalog.Text = obj.Catalog;
@@ -87,7 +97,10 @@ namespace ASCOM.GeminiTelescope
             {
                 if (GeminiHardware.Instance.Connected)
                 {
-                    txtRA.Text = GeminiHardware.Instance.m_Util.HoursToHMS(GeminiHardware.Instance.RightAscension, ":", ":", "");
+                    if (ckRA.Checked)
+                        txtRA.Text = GeminiHardware.Instance.m_Util.HoursToHMS(GeminiHardware.Instance.HourAngle, ":", ":", "");
+                    else
+                        txtRA.Text = GeminiHardware.Instance.m_Util.HoursToHMS(GeminiHardware.Instance.RightAscension, ":", ":", "");
                     txtDEC.Text = (Math.Sign(GeminiHardware.Instance.Declination)>=0? "+":"-") + GeminiHardware.Instance.m_Util.DegreesToDMS(GeminiHardware.Instance.Declination, ":", ":", ".0");
                     if (GeminiHardware.Instance.Precession)
                         chkJ2000.Checked = true;
@@ -118,10 +131,24 @@ namespace ASCOM.GeminiTelescope
             SetButtonState();
         }
 
+        private double ConditionHA(double HA)
+        {
+            double retVal = HA; // Set the return value to the received HA
+            if (HA <= -12.0) retVal += 24.0; // It is less or equal to -12 so convert to a positive value
+            if (HA > 12.0) retVal -= 24.0; // It is greater than 12.0 so convert to a negative value
+            return retVal;
+        }
 
         private void btnGoto_Click(object sender, EventArgs e)
         {
             double ra = GeminiHardware.Instance.m_Util.HMSToHours(txtRA.Text);
+            if (ckRA.Checked) //convert from HA
+            {
+                double sidereal_time = GeminiHardware.Instance.SiderealTime;
+                ra = ConditionHA(sidereal_time - ra);
+                if (ra >= 24) ra -= 24;
+                if (ra < 0) ra += 24;
+            }
             double dec =  GeminiHardware.Instance.m_Util.DMSToDegrees(txtDEC.Text);
 
             if (ra==0 && dec==0)
@@ -136,8 +163,11 @@ namespace ASCOM.GeminiTelescope
                 obj = frmUserCatalog.m_Objects[key];
             else
             {
-                if (!chkJ2000.Checked) AstronomyFunctions.ToJ2000(ref ra, ref dec);
-
+                if (!chkJ2000.Checked && !ckRA.Checked)
+                {
+                    ra = ra / 24 * 360.0;   // ra needs to be in degrees
+                    AstronomyFunctions.ToJ2000(ref ra, ref dec);
+                }
                 key = frmUserCatalog.AddCustom(txtObject.Text, ra, dec);
 
                 if (key != null) obj = frmUserCatalog.m_Objects[key];
@@ -211,7 +241,39 @@ namespace ASCOM.GeminiTelescope
             ((frmMain)this.Owner).DoCatalogManagerDialog();
         }
 
+        private void ckRA_CheckedChanged(object sender, EventArgs e)
+        {
+            //chkJ2000.Checked = false;
+            if (ckRA.Checked)
+            {
+                ckRA.Text = "HA:";
 
+                var t = txtRA.Text;
+
+                var ra = GeminiHardware.Instance.m_Util.HMSToHours(t);
+                double sidereal_time = GeminiHardware.Instance.SiderealTime;
+                var ha = ConditionHA(sidereal_time - ra);
+           
+                txtRA.Mask = "#00:00:00";
+                txtRA.Text = (Math.Sign(ha)<0? "-" : "+") + GeminiHardware.Instance.m_Util.HoursToHMS(ha);
+                
+            }
+            else
+            {
+                ckRA.Text = "RA:";
+
+                var t = txtRA.Text;           
+
+                var ha = GeminiHardware.Instance.m_Util.HMSToHours(t);
+                double sidereal_time = GeminiHardware.Instance.SiderealTime;
+                var ra = sidereal_time - (ha );
+                if (ra >= 24) ra -= 24;
+                if (ra < 0) ra += 24;
+                txtRA.Mask = "00:00:00";
+                txtRA.Text =  GeminiHardware.Instance.m_Util.HoursToHMS(ra);
+        
+            }
+        }
     }
 
 }
