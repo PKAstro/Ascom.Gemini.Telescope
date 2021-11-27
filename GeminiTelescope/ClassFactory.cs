@@ -192,6 +192,12 @@ namespace ASCOM.GeminiTelescope
             IntPtr nullPtr = new IntPtr(0);
             ppvObject = nullPtr;
 
+
+            if (m_ClassType.FullName.Contains(".GeminiTelescope2."))
+            {
+                SharedResources.TELESCOPE_PROGRAM_ID = "ASCOM.GeminiTelescope2.Telescope";
+            }
+
             //
             // Handle specific requests for implemented interfaces
             //

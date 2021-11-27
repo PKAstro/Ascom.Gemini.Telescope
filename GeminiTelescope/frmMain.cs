@@ -65,6 +65,13 @@ namespace ASCOM.GeminiTelescope
             InitializeComponent();
             tmrUpdate.Interval = 2000;
 
+            if (SharedResources.GEMINI_INSTANCE_NUMBER == 2)
+            {
+                SharedResources.TELESCOPE_PROGRAM_ID = "ASCOM.GeminiTelescope2.Telescope";
+                SharedResources.TELESCOPE_DRIVER_NAME += " #2";
+                SharedResources.DEAULT_PROFILE = "GeminiDefaultProfile2.gp";
+            }
+
             tmrUpdate.Elapsed += new System.Timers.ElapsedEventHandler(tmrUpdate_Tick);
             tmrUpdate.Start();
             GeminiHardware.Instance.OnConnect += new ConnectDelegate(OnConnectEvent);

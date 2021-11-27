@@ -94,6 +94,13 @@ Source: ..\Telescope\bin\x64\Release\ASCOM.GeminiTelescope.Telescope.pdb; DestDi
 Source: ..\Telescope\bin\x86\Release\ASCOM.GeminiTelescope.Telescope.dll; DestDir: {cf}\ASCOM\Telescope\Gemini\GeminiTelescopeServedClasses; Check: NotIs64BitInstallMode; Flags: ignoreversion
 Source: ..\Telescope\bin\x86\Release\ASCOM.GeminiTelescope.Telescope.pdb; DestDir: {cf}\ASCOM\Telescope\Gemini\GeminiTelescopeServedClasses; Check: NotIs64BitInstallMode; Flags: ignoreversion
 
+Source: ..\Telescope\bin\x64\Release\ASCOM.GeminiTelescope.Telescope.2.dll; DestDir: {cf}\ASCOM\Telescope\Gemini\GeminiTelescopeServedClasses; Check: Is64BitInstallMode; Flags: ignoreversion; Tasks: ; Languages: 
+Source: ..\Telescope\bin\x64\Release\ASCOM.GeminiTelescope.Telescope.2.pdb; DestDir: {cf}\ASCOM\Telescope\Gemini\GeminiTelescopeServedClasses; Check: Is64BitInstallMode; Flags: ignoreversion
+Source: ..\Telescope\bin\x86\Release\ASCOM.GeminiTelescope.Telescope.2.dll; DestDir: {cf}\ASCOM\Telescope\Gemini\GeminiTelescopeServedClasses; Check: NotIs64BitInstallMode; Flags: ignoreversion
+Source: ..\Telescope\bin\x86\Release\ASCOM.GeminiTelescope.Telescope.2.pdb; DestDir: {cf}\ASCOM\Telescope\Gemini\GeminiTelescopeServedClasses; Check: NotIs64BitInstallMode; Flags: ignoreversion
+
+
+
 Source: ..\Focuser\bin\x64\Release\ASCOM.GeminiTelescope.Focuser.dll; DestDir: {cf}\ASCOM\Telescope\Gemini\GeminiTelescopeServedClasses; Check: Is64BitInstallMode; Flags: ignoreversion
 Source: ..\Focuser\bin\x64\Release\ASCOM.GeminiTelescope.Focuser.pdb; DestDir: {cf}\ASCOM\Telescope\Gemini\GeminiTelescopeServedClasses; Check: Is64BitInstallMode; Flags: ignoreversion
 Source: ..\Focuser\bin\x86\Release\ASCOM.GeminiTelescope.Focuser.dll; DestDir: {cf}\ASCOM\Telescope\Gemini\GeminiTelescopeServedClasses; Check: NotIs64BitInstallMode; Flags: ignoreversion

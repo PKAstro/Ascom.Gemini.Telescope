@@ -219,7 +219,7 @@ namespace ASCOM.GeminiTelescope
         // folder to be in the solution folder, while we are executing in
         // the GeminiTelescope\bin\Debug subfolder.
         //
-        private static bool LoadComObjectAssemblies()
+        private static bool LoadComObjectAssemblies(bool all_instances = false)
         {
             m_ComObjectAssys = new ArrayList();
             m_ComObjectTypes = new ArrayList();
@@ -252,7 +252,9 @@ namespace ASCOM.GeminiTelescope
                         object[] attrbutes = info.GetCustomAttributes(typeof(ServedClassNameAttribute), false);
                         if (attrbutes.Length > 0)
                         {
-                            if ((SharedResources.GEMINI_INSTANCE_NUMBER == 1 && !type.FullName.Contains(".GeminiTelescope.")) ||
+                            
+                            if (!all_instances)
+                               if ((SharedResources.GEMINI_INSTANCE_NUMBER == 1 && !type.FullName.Contains(".GeminiTelescope.")) ||
                                 (SharedResources.GEMINI_INSTANCE_NUMBER == 2 && !type.FullName.Contains(".GeminiTelescope2.")))
                                 continue;   // skip if this is not the instance that serves this gemini number
 
@@ -339,6 +341,7 @@ namespace ASCOM.GeminiTelescope
             // If reached here, we're running elevated
             //
 
+            LoadComObjectAssemblies(true);  //reload all assemblies, not just instance-specific ones, so we can register them
             Assembly assy = Assembly.GetExecutingAssembly();
             Attribute attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyTitleAttribute));
             string assyTitle = ((AssemblyTitleAttribute)attr).Title;
@@ -627,6 +630,7 @@ namespace ASCOM.GeminiTelescope
             // Add the event handler for handling non-UI thread exceptions to the event. 
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
+            MessageBox.Show("AAAAA");
 
             try
             {

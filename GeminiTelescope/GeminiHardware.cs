@@ -59,12 +59,13 @@ namespace ASCOM.GeminiTelescope
 
     public class GeminiHardware
     {
-        static Gemini5Hardware m_Instance = new Gemini5Hardware();
+        static Gemini5Hardware m_Instance = null;//
 
         static public Gemini5Hardware Instance
         {
             get
             {
+                if (m_Instance == null) m_Instance = new Gemini5Hardware();
                 return m_Instance;
             }
 
@@ -1137,6 +1138,8 @@ namespace ASCOM.GeminiTelescope
 
             //Telescope Settings
             Profile.DeviceType = "Telescope";
+            MessageBox.Show(SharedResources.TELESCOPE_PROGRAM_ID, "ZZZZ");
+
             if (Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "RegVer", "") != SharedResources.REGISTRATION_VERSION)
             {
                 Trace.Info(2, "New Profile version");
