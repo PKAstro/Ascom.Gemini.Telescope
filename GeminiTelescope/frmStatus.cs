@@ -80,6 +80,7 @@ namespace ASCOM.GeminiTelescope
                 tmrUpdate.Start();
                 SharedResources.SetTopWindow(this);
                 this.Move += new System.EventHandler(this.frmStatus_Move);
+                SharedResources.SetInstance(this);
             }
             catch { }
         }

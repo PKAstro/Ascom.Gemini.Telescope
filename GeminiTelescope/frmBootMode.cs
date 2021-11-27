@@ -18,6 +18,7 @@ namespace ASCOM.GeminiTelescope
         private void frmBootMode_Load(object sender, EventArgs e)
         {
             SharedResources.SetTopWindow(this);
+            SharedResources.SetInstance(this);
         }
 
         public GeminiHardwareBase.GeminiBootMode BootMode

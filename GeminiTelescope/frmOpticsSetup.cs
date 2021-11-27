@@ -125,5 +125,10 @@ namespace ASCOM.GeminiTelescope
                 e.Handled = true;
             }
         }
+
+        private void frmOpticsSetup_Load(object sender, EventArgs e)
+        {
+            SharedResources.SetInstance(this);
+        }
     }
 }

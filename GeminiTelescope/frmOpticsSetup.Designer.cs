@@ -274,6 +274,7 @@
             this.Name = "frmOpticsSetup";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Optics";
+            this.Load += new System.EventHandler(this.frmOpticsSetup_Load);
             this.groupBox1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();

@@ -38,6 +38,10 @@ namespace ASCOM.GeminiTelescope
 
         private void frmCollector_Load(object sender, EventArgs e)
         {
+            if (SharedResources.GEMINI_INSTANCE_NUMBER > 1)
+            {
+                this.Text += $" #{SharedResources.GEMINI_INSTANCE_NUMBER}";
+            }
         }
 
         private void pbCollect_Click(object sender, EventArgs e)

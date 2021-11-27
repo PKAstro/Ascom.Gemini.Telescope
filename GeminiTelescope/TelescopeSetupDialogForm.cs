@@ -526,6 +526,8 @@ namespace ASCOM.GeminiTelescope
             {
                 this.chkSetLanguage.Visible = false;
             }
+
+            SharedResources.SetInstance(this);
         }
 
         private void buttonVirtualPort_Click(object sender, EventArgs e)

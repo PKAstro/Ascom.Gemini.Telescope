@@ -252,8 +252,12 @@ namespace ASCOM.GeminiTelescope
                         object[] attrbutes = info.GetCustomAttributes(typeof(ServedClassNameAttribute), false);
                         if (attrbutes.Length > 0)
                         {
+                            if ((SharedResources.GEMINI_INSTANCE_NUMBER == 1 && !type.FullName.Contains(".GeminiTelescope.")) ||
+                                (SharedResources.GEMINI_INSTANCE_NUMBER == 2 && !type.FullName.Contains(".GeminiTelescope2.")))
+                                continue;   // skip if this is not the instance that serves this gemini number
+
                             //MessageBox.Show("Adding Type: " + type.Name + " " + type.FullName);
-                            m_ComObjectTypes.Add(type); //PWGS - much simpler
+                                m_ComObjectTypes.Add(type); //PWGS - much simpler
                             m_ComObjectAssys.Add(so);
                         }
                     }
@@ -629,8 +633,22 @@ namespace ASCOM.GeminiTelescope
                 mut = new Mutex(false, SharedResources.TELESCOPE_PROGRAM_ID + "_Mutex");
                 if (!mut.WaitOne(500))
                 {
-                    MessageBox.Show("Another instance of " + SharedResources.TELESCOPE_DRIVER_NAME + " is already running.\r\nPlease close it first.", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    var a = MessageBox.Show("Another instance of " + SharedResources.TELESCOPE_DRIVER_NAME + " is already running.\r\n\r\nWould you like to start another instance to connect to a different Gemini unit?", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+                    if (a == DialogResult.Yes)
+                    { //starting another instance
+                        SharedResources.TELESCOPE_PROGRAM_ID = "ASCOM.GeminiTelescope2.Telescope";
+                        SharedResources.TELESCOPE_DRIVER_NAME += " #2";
+                        SharedResources.DEAULT_PROFILE = "GeminiDefaultProfile2.gp";
+                        SharedResources.GEMINI_INSTANCE_NUMBER = 2;
+
+                        mut = new Mutex(false, SharedResources.TELESCOPE_PROGRAM_ID + "_Mutex");
+                        if (!mut.WaitOne(500))
+                        {
+                            MessageBox.Show("Another instance of " + SharedResources.TELESCOPE_DRIVER_NAME + " is already running.\r\nPlease close it before starting this one.", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    else
+                        return;
                 }
             }
             catch
@@ -647,7 +665,7 @@ namespace ASCOM.GeminiTelescope
             m_iServerLocks = 0;
             m_uiMainThreadId = GetCurrentThreadId();
             Thread.CurrentThread.Name = "Main Thread";
-
+  
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             m_MainForm = new frmMain();

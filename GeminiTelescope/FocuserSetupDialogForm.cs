@@ -144,6 +144,7 @@ namespace ASCOM.GeminiTelescope
         private void FocuserSetupDialogForm_Load(object sender, EventArgs e)
         {
             SharedResources.SetTopWindow(this);
+            SharedResources.SetInstance(this);
         }
     }
 }

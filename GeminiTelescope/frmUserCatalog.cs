@@ -221,6 +221,10 @@ namespace ASCOM.GeminiTelescope
             SetButtonState();
             GeminiHardware.Instance.OnConnect += new ConnectDelegate(OnConnect);
             frmProgress.HideProgress();
+            if (SharedResources.GEMINI_INSTANCE_NUMBER > 1)
+            {
+                this.Text += $" #{SharedResources.GEMINI_INSTANCE_NUMBER}";
+            }
         }
 
         void SetButtonState()

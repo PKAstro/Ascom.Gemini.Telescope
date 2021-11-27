@@ -1209,6 +1209,11 @@ namespace ASCOM.GeminiTelescope
 
             SharedResources.SetTopWindow(this);
 
+            if (SharedResources.GEMINI_INSTANCE_NUMBER > 1)
+            {
+                this.Text += $" #{SharedResources.GEMINI_INSTANCE_NUMBER}";
+                this.BackColor = Color.FromArgb(0,0,96);
+            }
             SetSlewButtons();
             SetTopMost();
             if (!GeminiHardware.Instance.ShowHandbox && GeminiTelescope.m_bComStart) this.Hide();

@@ -32,7 +32,7 @@ namespace ASCOM.GeminiTelescope
             chkUnparkMode.Checked = (GeminiHardware.Instance.GeminiStopMode == 2);
 
             pbSetHome.Visible = (GeminiHardware.Instance.dVersion > 5.1);   // can't set home if not >= L5.2
-
+            SharedResources.SetInstance(this);
         }
 
         private void pbGetPos_Click(object sender, EventArgs e)

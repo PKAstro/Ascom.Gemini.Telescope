@@ -129,27 +129,7 @@
   <metadata name="geminiPropertiesBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <metadata name="geminiPropertiesBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <metadata name="menuUpdate.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>654, 17</value>
-  </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="pbCustom.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6
-        JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAAr2AAAK9gHCr3ADAAABzklE
-        QVQ4T6WSwUuTcRjHZTs4LGwbitCk2t4lwdyWrw2LqBEygrFDJ/+DQef+ABsd8+BBvYiXgmbCBhN3KJZp
-        RV7K2mQijvQwPIQZm6iD2Pv6yWewRN+Foj94foeX5/v5Pe/z/TYB56raFYvFOEsdAZzmaDpU/uyzXdmn
-        u6dPPv0fkEwmiUQihMNhQqEQau8tfD5/Tby09utkQC6XIxqN4na7sVgsmExm2todbG7rfFk+BUDXdeLx
-        OIriwmQ209x8gatODxtbOh+yW9zwqtLWGKBpGolE4mBsFavNzuXOazgVL9c9t/nxUyOzWMLV1S2tRoCI
-        8/k894NBLllt3L33gNGJ1zwaeIwn8JDlos70QhnHFUXajYBSqcTg4FNsdjv+mwGS6U+1sSfTWZ48e8G3
-        dZ2pj2XaOhzSbgTMvp+jR+3F6VKIT7+riWVseVnEC6saL2d3aLW2S/tRgPi8UljH61MJ9ocpblYN4vm8
-        xvibXVouWkVyCKiHpHzg81QqQ+BOkMznFYP4bbbK2EwDQD1h4rOM/b3wm6GRVwZx+muV4dSeEVBPmIRE
-        fBarZNuyMPlnGVteFvHzVMUIkGTVS0IiPotVsm1ZmAiO1z/A2Yumv1fm41A4pECxAAAAAElFTkSuQmCC
-</value>
-  </data>
   <data name="pbSetSafetyLimit.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6
@@ -161,6 +141,9 @@
         SbsBtHmNLzY5dIxVUMp7rZ+09wqciQcZYxUkBWMVJB7/ZwAA4djU9I5dK1UAAAAASUVORK5CYII=
 </value>
   </data>
+  <metadata name="menuUpdate.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>654, 17</value>
+  </metadata>
   <data name="pbController.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6
@@ -190,6 +173,20 @@
 </value>
   </data>
   <data name="pbSpeed.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6
+        JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAAr2AAAK9gHCr3ADAAABzklE
+        QVQ4T6WSwUuTcRjHZTs4LGwbitCk2t4lwdyWrw2LqBEygrFDJ/+DQef+ABsd8+BBvYiXgmbCBhN3KJZp
+        RV7K2mQijvQwPIQZm6iD2Pv6yWewRN+Foj94foeX5/v5Pe/z/TYB56raFYvFOEsdAZzmaDpU/uyzXdmn
+        u6dPPv0fkEwmiUQihMNhQqEQau8tfD5/Tby09utkQC6XIxqN4na7sVgsmExm2todbG7rfFk+BUDXdeLx
+        OIriwmQ209x8gatODxtbOh+yW9zwqtLWGKBpGolE4mBsFavNzuXOazgVL9c9t/nxUyOzWMLV1S2tRoCI
+        8/k894NBLllt3L33gNGJ1zwaeIwn8JDlos70QhnHFUXajYBSqcTg4FNsdjv+mwGS6U+1sSfTWZ48e8G3
+        dZ2pj2XaOhzSbgTMvp+jR+3F6VKIT7+riWVseVnEC6saL2d3aLW2S/tRgPi8UljH61MJ9ocpblYN4vm8
+        xvibXVouWkVyCKiHpHzg81QqQ+BOkMznFYP4bbbK2EwDQD1h4rOM/b3wm6GRVwZx+muV4dSeEVBPmIRE
+        fBarZNuyMPlnGVteFvHzVMUIkGTVS0IiPotVsm1ZmAiO1z/A2Yumv1fm41A4pECxAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="pbCustom.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6
         JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAAr2AAAK9gHCr3ADAAABzklE

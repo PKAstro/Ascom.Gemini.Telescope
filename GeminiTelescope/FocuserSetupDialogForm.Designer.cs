@@ -552,7 +552,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FocuserSetupDialogForm";
-            this.Text = global::ASCOM.GeminiTelescope.Properties.Resources.SetupFocuser;
+            this.Text = "Gemini Focuser Setup";
             this.Load += new System.EventHandler(this.FocuserSetupDialogForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             this.groupBox2.ResumeLayout(false);

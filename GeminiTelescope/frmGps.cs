@@ -94,7 +94,7 @@ namespace ASCOM.GeminiTelescope
             interpreter.InvalidData += new NmeaInterpreter.InvalidDataEventHandler(interpreter_InvalidData);
             interpreter.DataTimeout += new NmeaInterpreter.DataTimeoutEventHandler(interpreter_DataTimeout);
             GeminiHardware.Instance.Trace.Exit("frmGPS_Load");
-
+            SharedResources.SetInstance(this);
         }
         private void ProcessForm(string latitude, string longitude, string elevation)
         {

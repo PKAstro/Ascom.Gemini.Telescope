@@ -93,5 +93,10 @@ namespace ASCOM.GeminiTelescope
         {
             if (m_CancelDelegate != null) m_CancelDelegate();
         }
+
+        private void frmProgress_Load(object sender, EventArgs e)
+        {
+            SharedResources.SetInstance(this);
+        }
     }
 }

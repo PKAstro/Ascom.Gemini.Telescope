@@ -124,6 +124,10 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Instance.OnConnect += new ConnectDelegate(OnConnect);
             ObsTime.UTC = chkUTC.Checked;
             pbFromGemini_Click(pbFromGemini, null);
+            if (SharedResources.GEMINI_INSTANCE_NUMBER > 1)
+            {
+                this.Text += $" #{SharedResources.GEMINI_INSTANCE_NUMBER}";
+            }
         }
 
 

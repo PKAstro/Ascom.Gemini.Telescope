@@ -31,7 +31,7 @@ namespace ASCOM.GeminiTelescope
             tmrUpdate.Interval = 1000;
             tmrUpdate.Start();
             cbSaveAs.Text = "CurrPEC.pec";
-
+            SharedResources.SetInstance(this);
         }
 
         void tmrUpdate_Tick(object sender, EventArgs e)

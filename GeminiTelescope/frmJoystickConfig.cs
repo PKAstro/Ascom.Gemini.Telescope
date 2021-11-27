@@ -165,6 +165,7 @@ namespace ASCOM.GeminiTelescope
                 {
                     int idx = cmb.Items.Add(asc);
                 }
+                SharedResources.SetInstance(this);
             }
 
 

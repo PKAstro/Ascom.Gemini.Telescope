@@ -42,7 +42,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Instance.OnConnect += new ConnectDelegate(OnConnectChange);
 
             OnConnectChange(false, 1);
-
+            SharedResources.SetInstance(this);
         }
 
         void OnConnectChange(bool connect, int clients)
@@ -126,7 +126,7 @@ namespace ASCOM.GeminiTelescope
 
         private void frmModel_Load(object sender, EventArgs e)
         {
-
+            SharedResources.SetInstance(this);
         }
 
     }

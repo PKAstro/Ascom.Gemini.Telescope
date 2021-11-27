@@ -32,6 +32,7 @@ using ASCOM.Interface;
 using ASCOM.GeminiTelescope;
 
 using System.IO;
+using System.Windows.Forms;
 
 /// <summary>
 /// Need to add CommandNative to standard ITelescope interface for backward compatibility with
@@ -222,11 +223,7 @@ namespace ASCOM.GeminiTelescope
     // _Telescope from being created and used as the [default] interface
     //
 
-    [ASCOM.DeviceId("ASCOM.GeminiTelescope.Telescope", DeviceName = "ASCOM.GeminiTelescope.Telescope")]
-    [ASCOM.ServedClassNameAttribute("Gemini Telescope .NET")]
-    [Guid("7e30c546-1a9a-4ed4-98d7-03eb167e2c9a")]
-    [ClassInterface(ClassInterfaceType.None)]
-    public class Telescope : ReferenceCountedObjectBase, IGeminiTelescope
+    public partial class Telescope1 : ReferenceCountedObjectBase, IGeminiTelescope
     {
         //
         // Driver ID and descriptive string that shows in the Chooser
@@ -262,14 +259,13 @@ namespace ASCOM.GeminiTelescope
         //
         // Constructor - Must be public for COM registration!
         //
-        public Telescope()
+        public Telescope1()
         {
-
             //m_TrackingRates = new TrackingRates();
         }
 
 
-        ~Telescope()
+        ~Telescope1()
         {
             if (m_Connected)
             {
@@ -279,7 +275,7 @@ namespace ASCOM.GeminiTelescope
         }
 
 
-        #region Private Code
+#region Private Code
 
         /// <summary>
         /// Processes a command string that comes from outside the driver and may have its leading 
@@ -326,12 +322,12 @@ namespace ASCOM.GeminiTelescope
             if (!IsConnected) throw new ASCOM.NotConnectedException();
         }
 
-        #endregion
+#endregion
         //
         // PUBLIC COM INTERFACE ITelescope IMPLEMENTATION
         //
 
-        #region ITelescope Members
+#region ITelescope Members
 
         public void AbortSlew()
         {
@@ -2380,7 +2376,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Instance.Trace.Exit("IT:Unpark");
         }
 
-        #endregion
+#endregion
 
 
         public string Action(string ActionName, string ActionParameters)
@@ -2439,7 +2435,7 @@ namespace ASCOM.GeminiTelescope
             m_dMinimum = Minimum;
         }
 
-        #region IRate Members
+#region IRate Members
 
         public double Maximum
         {
@@ -2453,7 +2449,7 @@ namespace ASCOM.GeminiTelescope
             set { m_dMinimum = value; }
         }
 
-        #endregion
+#endregion
     }
 
     //
@@ -2524,7 +2520,7 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        #region IAxisRates Members
+#region IAxisRates Members
 
         public int Count
         {
@@ -2541,7 +2537,7 @@ namespace ASCOM.GeminiTelescope
             get { return (IRate)m_Rates[Index - 1]; }	// 1-based
         }
 
-        #endregion
+#endregion
 
     }
 
@@ -2575,7 +2571,7 @@ namespace ASCOM.GeminiTelescope
             m_TrackingRates = new DriveRates[] { DriveRates.driveSidereal, DriveRates.driveKing, DriveRates.driveLunar, DriveRates.driveSolar };
         }
 
-        #region ITrackingRates Members
+#region ITrackingRates Members
 
         public int Count
         {
@@ -2592,9 +2588,9 @@ namespace ASCOM.GeminiTelescope
         {
             get { return m_TrackingRates[Index - 1]; }	// 1-based
         }
-        #endregion
+#endregion
 
-        #region IEnumerator implementation
+#region IEnumerator implementation
 
         public bool MoveNext()
         {
@@ -2616,6 +2612,6 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        #endregion
+#endregion
     }
 }

@@ -40,6 +40,8 @@ namespace ASCOM.GeminiTelescope
             txtObject.AutoCompleteCustomSource = coll;
             SetButtonState();
             chkJ2000.Checked = true;
+
+            SharedResources.SetInstance(this);
         }
 
 

@@ -89,8 +89,9 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmProgress";
-            this.Opacity = 0.97;
+            this.Opacity = 0.97D;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Load += new System.EventHandler(this.frmProgress_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

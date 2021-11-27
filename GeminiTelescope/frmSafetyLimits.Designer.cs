@@ -313,6 +313,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Set RA Safety Limits";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSafetyLimits_FormClosing);
+            this.Load += new System.EventHandler(this.frmSafetyLimits_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();

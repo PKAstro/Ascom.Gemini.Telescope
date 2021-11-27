@@ -148,5 +148,9 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        private void frmNetworkSettings_Load(object sender, EventArgs e)
+        {
+            SharedResources.SetInstance(this);
+        }
     }
 }

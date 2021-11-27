@@ -160,5 +160,10 @@ namespace ASCOM.GeminiTelescope
                     chkNudge.Checked = false;
             }
         }
+
+        private void frmSafetyLimits_Load(object sender, EventArgs e)
+        {
+            SharedResources.SetInstance(this);
+        }
     }
 }

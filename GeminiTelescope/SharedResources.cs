@@ -16,6 +16,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
+using System.Linq;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -28,6 +30,7 @@ namespace ASCOM.GeminiTelescope
         public static string TELESCOPE_PROGRAM_ID = "ASCOM.GeminiTelescope.Telescope";  //Key used to store the settings
         public static string FOCUSER_PROGRAM_ID = "ASCOM.GeminiTelescope.Focuser";  //Key used to store the settings
         public static string REGISTRATION_VERSION = "1";
+        public static int GEMINI_INSTANCE_NUMBER = 1;
 
         public static int GEMINI_POLLING_INTERVAL = 1000;             //Seconds to use for Polling Gemini status
 
@@ -118,6 +121,30 @@ namespace ASCOM.GeminiTelescope
             Win32API.SetWindowPos(window.Handle, Win32API.HWND_TOPMOST, 0, 0, 0, 0, Win32API.SWP_NOMOVE | Win32API.SWP_NOSIZE);
             Win32API.SetWindowPos(window.Handle, Win32API.HWND_NOTTOPMOST, 0, 0, 0, 0, Win32API.SWP_NOMOVE | Win32API.SWP_NOSIZE);
             Win32API.SetForegroundWindow(window.Handle);
+        }
+
+        public static IEnumerable<Control> GetAll(Control control)
+        {
+            var controls = control.Controls.Cast<Control>();
+
+            return controls.SelectMany(ctrl => GetAll(ctrl))
+                                      .Concat(controls);
+                                      
+        }
+
+        public static void SetInstance(System.Windows.Forms.Form f)
+        {
+            
+            if (GEMINI_INSTANCE_NUMBER == 2)
+            {
+                f.Text += $" #{GEMINI_INSTANCE_NUMBER}";
+                f.BackColor = System.Drawing.Color.FromArgb(0, 0, 96);
+                foreach(System.Windows.Forms.Control c in GetAll(f as Control))
+                {
+                    if (c.BackColor == System.Drawing.Color.Black)
+                        c.BackColor = f.BackColor;
+                }
+            }
         }
     }
 }

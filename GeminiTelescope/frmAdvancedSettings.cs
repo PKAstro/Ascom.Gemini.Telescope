@@ -441,6 +441,7 @@ namespace ASCOM.GeminiTelescope
         private void frmAdvancedSettings_Load(object sender, EventArgs e)
         {
             SetCollapsedGroups();
+            SharedResources.SetInstance(this);
         }
 
         Control m_ParentPanel = null;
