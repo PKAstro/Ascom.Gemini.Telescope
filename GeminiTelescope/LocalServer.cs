@@ -647,6 +647,7 @@ namespace ASCOM.GeminiTelescope
                         if (!mut.WaitOne(500))
                         {
                             MessageBox.Show("Another instance of " + SharedResources.TELESCOPE_DRIVER_NAME + " is already running.\r\nPlease close it before starting this one.", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
                         }
                     }
                     else
