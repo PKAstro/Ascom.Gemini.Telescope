@@ -1137,8 +1137,7 @@ namespace ASCOM.GeminiTelescope
             Trace.Enter("GetProfileSettings");
 
             //Telescope Settings
-            Profile.DeviceType = "Telescope";
-            MessageBox.Show(SharedResources.TELESCOPE_PROGRAM_ID, "ZZZZ");
+            Profile.DeviceType = "Telescope";          
 
             if (Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "RegVer", "") != SharedResources.REGISTRATION_VERSION)
             {

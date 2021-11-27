@@ -630,8 +630,6 @@ namespace ASCOM.GeminiTelescope
             // Add the event handler for handling non-UI thread exceptions to the event. 
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
-            MessageBox.Show("AAAAA");
-
             try
             {
                 mut = new Mutex(false, SharedResources.TELESCOPE_PROGRAM_ID + "_Mutex");
