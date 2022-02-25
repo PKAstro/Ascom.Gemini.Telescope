@@ -603,5 +603,24 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+
+
+        /// <summary>
+        /// return integer servo firmware Level number for Gemini (L6 and above):
+        /// </summary>
+        public int GeminiServoFirmwareVersion(bool bRA)
+        {
+            if (GeminiHardware.Instance.GeminiLevel >= 6)
+            {
+                string r = DoCommandResult("<400:", MAX_TIMEOUT, false);
+                if (r != null)
+                {
+                    var rd = r.Split(';');
+                    if (rd.Length == 2)
+                        return int.Parse(rd[bRA? 0 : 1]);
+                }
+            }
+            return 1;
+        }
     }
 }

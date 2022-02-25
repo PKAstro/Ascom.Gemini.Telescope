@@ -56,6 +56,19 @@ namespace ASCOM.GeminiTelescope
             if (GeminiHardware.Instance.dVersion < 5.1)
                 cbGeometry.Enabled = false;
 
+
+            cbDECMultiplier.Enabled = false;
+            cbRAMultiplier.Enabled = false;
+            if (GeminiHardware.Instance.Connected && GeminiHardware.Instance.GeminiLevel >= 6)
+            {
+                if (GeminiHardware.Instance.GeminiServoFirmwareVersion(true) >= 2)
+                    cbRAMultiplier.Enabled = true;
+
+                if (GeminiHardware.Instance.GeminiServoFirmwareVersion(false) >= 2)
+                    cbDECMultiplier.Enabled = true;
+            }
+
+
             comboBox1.Items.AddRange(GeminiProperties.Brightness_names);
             comboBox2.Items.AddRange(GeminiProperties.HandController_names);
             comboBox3.Items.AddRange(GeminiProperties.TrackingRate_names);

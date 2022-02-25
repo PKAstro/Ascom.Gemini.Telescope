@@ -1080,6 +1080,56 @@ namespace ASCOM.GeminiTelescope
 
 
         [Sequence(7)]
+        public int ServoEncoderMultiplierRA
+        {
+            get { return (int)get_Profile("ServoEncoderMultiplierRA", 1); }
+            set { mProfile["ServoEncoderMultiplierRA"] = value; IsDirty = true; }
+        }
+
+        private int ServoEncoderMultiplierRA_Gemini
+        {
+            get
+            {
+                if (GeminiHardware.Instance.GeminiServoFirmwareVersion(true) >= 2)
+                    return (get_int_Prop("<401:") & 1) == 1 ? 4 : 1;
+                return 1;
+            }
+            set
+            {
+                if (GeminiHardware.Instance.GeminiServoFirmwareVersion(true) >= 2)
+                {
+                    int r = (get_int_Prop("<401:") & 2) | (value == 1 ? 0 : 1);
+                    GeminiHardware.Instance.DoCommandResult(">401:" + r.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
+                }
+            }
+        }
+
+        [Sequence(7)]
+        public int ServoEncoderMultiplierDEC
+        {
+            get { return (int)get_Profile("ServoEncoderMultiplierDEC", 1); }
+            set { mProfile["ServoEncoderMultiplierDEC"] = value; IsDirty = true; }
+        }
+
+        private int ServoEncoderMultiplierDEC_Gemini
+        {
+            get {
+                if (GeminiHardware.Instance.GeminiServoFirmwareVersion(false) >= 2)
+                    return (get_int_Prop("<401:") & 2) == 2? 4 : 1;
+                return 1;               
+            }
+            set
+            {
+                if (GeminiHardware.Instance.GeminiServoFirmwareVersion(false) >= 2)
+                {
+                    int r = (get_int_Prop("<401:") & 1) | (value == 1 ? 0 : 2);
+                    GeminiHardware.Instance.DoCommandResult(">401:" + r.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
+                }
+            }
+        }
+
+
+        [Sequence(7)]
         public bool UseEncoders
         {
             get { return (bool)get_Profile("UseEncoders", false); }
