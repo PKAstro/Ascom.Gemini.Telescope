@@ -61,10 +61,10 @@ namespace ASCOM.GeminiTelescope
             cbRAMultiplier.Enabled = false;
             if (GeminiHardware.Instance.Connected && GeminiHardware.Instance.GeminiLevel >= 6)
             {
-                if (GeminiHardware.Instance.GeminiServoFirmwareVersion(true) >= 2)
+                if (GeminiHardware.Instance.ServoFirmwareVersion(true) >= 2)
                     cbRAMultiplier.Enabled = true;
 
-                if (GeminiHardware.Instance.GeminiServoFirmwareVersion(false) >= 2)
+                if (GeminiHardware.Instance.ServoFirmwareVersion(false) >= 2)
                     cbDECMultiplier.Enabled = true;
             }
 

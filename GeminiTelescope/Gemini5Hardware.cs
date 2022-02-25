@@ -608,11 +608,13 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// return integer servo firmware Level number for Gemini (L6 and above):
         /// </summary>
-        public int GeminiServoFirmwareVersion(bool bRA)
+        public int ServoFirmwareVersion(bool bRA)
         {
+            Trace.Enter(2, "ServoFirmwareVersion");
             if (GeminiHardware.Instance.GeminiLevel >= 6)
             {
                 string r = DoCommandResult("<400:", MAX_TIMEOUT, false);
+                Trace.Info(2, "ServoFirmwareVersion", r);
                 if (r != null)
                 {
                     var rd = r.Split(';');

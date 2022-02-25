@@ -1090,13 +1090,13 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                if (GeminiHardware.Instance.GeminiServoFirmwareVersion(true) >= 2)
+                if (GeminiHardware.Instance.ServoFirmwareVersion(true) >= 2)
                     return (get_int_Prop("<401:") & 1) == 1 ? 4 : 1;
                 return 1;
             }
             set
             {
-                if (GeminiHardware.Instance.GeminiServoFirmwareVersion(true) >= 2)
+                if (GeminiHardware.Instance.ServoFirmwareVersion(true) >= 2)
                 {
                     int r = (get_int_Prop("<401:") & 2) | (value == 1 ? 0 : 1);
                     GeminiHardware.Instance.DoCommandResult(">401:" + r.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
@@ -1114,13 +1114,13 @@ namespace ASCOM.GeminiTelescope
         private int ServoEncoderMultiplierDEC_Gemini
         {
             get {
-                if (GeminiHardware.Instance.GeminiServoFirmwareVersion(false) >= 2)
+                if (GeminiHardware.Instance.ServoFirmwareVersion(false) >= 2)
                     return (get_int_Prop("<401:") & 2) == 2? 4 : 1;
                 return 1;               
             }
             set
             {
-                if (GeminiHardware.Instance.GeminiServoFirmwareVersion(false) >= 2)
+                if (GeminiHardware.Instance.ServoFirmwareVersion(false) >= 2)
                 {
                     int r = (get_int_Prop("<401:") & 1) | (value == 1 ? 0 : 2);
                     GeminiHardware.Instance.DoCommandResult(">401:" + r.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
