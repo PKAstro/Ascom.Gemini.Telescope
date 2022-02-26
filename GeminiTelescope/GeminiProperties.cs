@@ -787,6 +787,118 @@ namespace ASCOM.GeminiTelescope
         }
 
         [Sequence(20)]
+        public double FlipPointEast
+        {
+            get { return (double)get_Profile("FlipPointEast", 0.0); }
+            set { mProfile["FlipPointEast"] = value; IsDirty = true; }
+        }
+
+        private double FlipPointEast_Gemini
+        {
+            get
+            {
+                if (GeminiHardware.Instance.GeminiLevel >= 6)
+                {
+
+                    string res = get_Prop("<227:");
+                    int d = 0, m = 0;
+                    try
+                    {
+                        //<ddd>d<mm>
+                        d = int.Parse(res.Substring(0, 3));
+                        m = int.Parse(res.Substring(4, 2));
+                    }
+                    catch { }
+                    return ((double)d) + ((double)m / 60.0);
+                }
+                else return 0;
+            }
+            set
+            {
+                if (GeminiHardware.Instance.GeminiLevel >= 6)
+                {
+
+                    string cmd = ">227:" + string.Format("{0:000}d{1:00}", Math.Truncate(value), (value - Math.Truncate(value)) * 60.0);
+                    GeminiHardware.Instance.DoCommandResult(cmd, GeminiHardware.Instance.MAX_TIMEOUT, false);
+                }
+            }
+        }
+
+        [Sequence(20)]
+        public bool FlipPointsEnabled
+        {
+            get { return (bool)get_Profile("FlipPointEnabled", false); }
+            set { mProfile["FlipPointEnabled"] = value; IsDirty = true; }
+        }
+
+        private bool FlipPointsEnabled_Gemini
+        {
+            get
+            {
+                if (GeminiHardware.Instance.GeminiLevel >= 6)
+                {
+
+                    int res = get_int_Prop("<229:");
+                    return res!=0;
+                }
+                else return false;
+            }
+            set
+            {
+                if (GeminiHardware.Instance.GeminiLevel >= 6)
+                {
+
+                    string cmd = ">229:" + (value ? "3" : "0"); // turn on both or none
+                    GeminiHardware.Instance.DoCommandResult(cmd, GeminiHardware.Instance.MAX_TIMEOUT, false);
+                }
+            }
+        }
+
+        [Sequence(20)]
+        public double FlipPointWest
+        {
+            get { return (double)get_Profile("FlipPointWest", 0.0); }
+            set { mProfile["FlipPointWest"] = value; IsDirty = true; }
+        }
+
+        private double FlipPointWest_Gemini
+        {
+            get
+            {
+                if (GeminiHardware.Instance.GeminiLevel >= 6)
+                { 
+                    string res = get_Prop("<228:");
+                    int d = 0, m = 0;
+                    try
+                    {
+                        //<ddd>d<mm>
+                        d = int.Parse(res.Substring(0, 3));
+                        m = int.Parse(res.Substring(4, 2));
+                    }
+                    catch { }
+                    return ((double)d) + ((double)m / 60.0);
+                }
+                else
+                    return 0;
+            }
+
+            set
+            {
+                if (GeminiHardware.Instance.GeminiLevel >= 6)
+                {
+                    string cmd = ">228:" + string.Format("{0:000}d{1:00}", Math.Truncate(value), (value - Math.Truncate(value)) * 60.0);
+                    GeminiHardware.Instance.DoCommandResult(cmd, GeminiHardware.Instance.MAX_TIMEOUT, false);
+                }
+            }
+
+        }
+
+
+
+
+
+
+        [Sequence(20)]
         public bool PEC_Is_On
         {
             get { return (bool)get_Profile("PEC_Is_On", false);}

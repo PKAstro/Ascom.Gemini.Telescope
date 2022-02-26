@@ -116,6 +116,9 @@ namespace ASCOM.GeminiTelescope
         private void defaultGotoLimit_Click(object sender, EventArgs e)
         {
             numericUpDown4.Value = 0.00M;
+            numericUpDown5.Value = 0.00M;
+            numericUpDown3.Value = 0.00M;
+            ckEnableFlipPoints.Checked = false;
         }
 
         private void LosmandyDefault_Click(object sender, EventArgs e)
@@ -164,6 +167,12 @@ namespace ASCOM.GeminiTelescope
         private void frmSafetyLimits_Load(object sender, EventArgs e)
         {
             SharedResources.SetInstance(this);
+            if (GeminiHardware.Instance.GeminiLevel < 6)
+            {
+                numericUpDown5.Enabled = false;
+                numericUpDown3.Enabled = false;
+                ckEnableFlipPoints.Enabled = false;
+            }
         }
     }
 }
