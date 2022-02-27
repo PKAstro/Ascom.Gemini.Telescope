@@ -98,6 +98,7 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew3 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew4 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew1 = new ASCOM.GeminiTelescope.TButton();
+            this.terminalMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.TableLayoutPanel3.SuspendLayout();
@@ -343,6 +344,7 @@ namespace ASCOM.GeminiTelescope
             this.toolStripSeparator5,
             this.viewHelpToolStripMenuItem,
             this.collectReportsMenuItem,
+            this.terminalMenuItem,
             this.aboutGeminiDriverToolStripMenuItem,
             this.toolStripSeparator1,
             this.exitDriverMenuItem});
@@ -629,6 +631,13 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlew1_MouseDown);
             this.buttonSlew1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlew1_MouseUp);
             // 
+            // terminalMenuItem
+            // 
+            this.terminalMenuItem.ForeColor = System.Drawing.Color.White;
+            this.terminalMenuItem.Name = "terminalMenuItem";
+            resources.ApplyResources(this.terminalMenuItem, "terminalMenuItem");
+            this.terminalMenuItem.Click += new System.EventHandler(this.terminalMenuItem_Click);
+            // 
             // frmMain
             // 
             resources.ApplyResources(this, "$this");
@@ -744,6 +753,7 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.ToolStripMenuItem configurePECToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.ToolStripMenuItem collectReportsMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem terminalMenuItem;
     }
 }
 

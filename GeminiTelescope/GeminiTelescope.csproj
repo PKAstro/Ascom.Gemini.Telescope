@@ -268,6 +268,12 @@
     <Compile Include="frmSafetyLimits.Designer.cs">
       <DependentUpon>frmSafetyLimits.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmTerminal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTerminal.Designer.cs">
+      <DependentUpon>frmTerminal.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmUpdateWarning.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -415,6 +421,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmSafetyLimits.resx">
       <DependentUpon>frmSafetyLimits.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTerminal.resx">
+      <DependentUpon>frmTerminal.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmUpdateWarning.resx">
       <DependentUpon>frmUpdateWarning.cs</DependentUpon>

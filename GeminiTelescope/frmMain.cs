@@ -2013,6 +2013,21 @@ namespace ASCOM.GeminiTelescope
                 frmCollector.Show(this);
             }
         }
+
+        frmTerminal term = null;
+
+        private void terminalMenuItem_Click(object sender, EventArgs e)
+        {
+            if (term == null)
+            {
+                term = new frmTerminal();
+                term.Show(this);
+            }
+            else
+            {
+                term.Visible = true;
+            }
+        }
     }
 
 #if true

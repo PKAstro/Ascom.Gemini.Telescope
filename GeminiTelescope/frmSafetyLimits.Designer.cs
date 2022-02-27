@@ -34,10 +34,16 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.geminiPropertiesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.label2 = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.ckEnableFlipPoints = new System.Windows.Forms.CheckBox();
+            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
+            this.label5 = new System.Windows.Forms.Label();
+            this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
+            this.label6 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
@@ -46,21 +52,15 @@
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.chkNudge = new System.Windows.Forms.CheckBox();
-            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
-            this.label5 = new System.Windows.Forms.Label();
-            this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
-            this.label6 = new System.Windows.Forms.Label();
-            this.ckEnableFlipPoints = new System.Windows.Forms.CheckBox();
-            this.geminiPropertiesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
-            this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -129,6 +129,10 @@
             this.numericUpDown2.Size = new System.Drawing.Size(106, 20);
             this.numericUpDown2.TabIndex = 31;
             // 
+            // geminiPropertiesBindingSource
+            // 
+            this.geminiPropertiesBindingSource.DataSource = typeof(ASCOM.GeminiTelescope.GeminiProperties);
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -190,6 +194,83 @@
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Meridian Flip Settings";
+            // 
+            // ckEnableFlipPoints
+            // 
+            this.ckEnableFlipPoints.AutoSize = true;
+            this.ckEnableFlipPoints.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.geminiPropertiesBindingSource, "FlipPointsEnabled", true));
+            this.ckEnableFlipPoints.Location = new System.Drawing.Point(11, 62);
+            this.ckEnableFlipPoints.Name = "ckEnableFlipPoints";
+            this.ckEnableFlipPoints.Size = new System.Drawing.Size(96, 17);
+            this.ckEnableFlipPoints.TabIndex = 43;
+            this.ckEnableFlipPoints.Text = "Use Flip Points";
+            this.ckEnableFlipPoints.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown3
+            // 
+            this.numericUpDown3.BackColor = System.Drawing.Color.Black;
+            this.numericUpDown3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.numericUpDown3.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "FlipPointWest", true));
+            this.numericUpDown3.DecimalPlaces = 2;
+            this.numericUpDown3.ForeColor = System.Drawing.Color.Lime;
+            this.numericUpDown3.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numericUpDown3.Location = new System.Drawing.Point(211, 118);
+            this.numericUpDown3.Maximum = new decimal(new int[] {
+            180,
+            0,
+            0,
+            0});
+            this.numericUpDown3.Name = "numericUpDown3";
+            this.numericUpDown3.Size = new System.Drawing.Size(81, 20);
+            this.numericUpDown3.TabIndex = 42;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.ForeColor = System.Drawing.Color.Lime;
+            this.label5.Location = new System.Drawing.Point(30, 120);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(175, 13);
+            this.label5.TabIndex = 41;
+            this.label5.Text = "Western Flip Point (° from Meridian):";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // numericUpDown5
+            // 
+            this.numericUpDown5.BackColor = System.Drawing.Color.Black;
+            this.numericUpDown5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.numericUpDown5.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "FlipPointEast", true));
+            this.numericUpDown5.DecimalPlaces = 2;
+            this.numericUpDown5.ForeColor = System.Drawing.Color.Lime;
+            this.numericUpDown5.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numericUpDown5.Location = new System.Drawing.Point(211, 87);
+            this.numericUpDown5.Maximum = new decimal(new int[] {
+            180,
+            0,
+            0,
+            0});
+            this.numericUpDown5.Name = "numericUpDown5";
+            this.numericUpDown5.Size = new System.Drawing.Size(81, 20);
+            this.numericUpDown5.TabIndex = 40;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.ForeColor = System.Drawing.Color.Lime;
+            this.label6.Location = new System.Drawing.Point(34, 89);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(171, 13);
+            this.label6.TabIndex = 39;
+            this.label6.Text = "Eastern Flip Point (° from Meridian):";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // button1
             // 
@@ -301,87 +382,6 @@
             this.chkNudge.UseVisualStyleBackColor = true;
             this.chkNudge.CheckedChanged += new System.EventHandler(this.chkNudge_CheckedChanged);
             // 
-            // numericUpDown3
-            // 
-            this.numericUpDown3.BackColor = System.Drawing.Color.Black;
-            this.numericUpDown3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.numericUpDown3.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "FlipPointWest", true));
-            this.numericUpDown3.DecimalPlaces = 2;
-            this.numericUpDown3.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown3.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.numericUpDown3.Location = new System.Drawing.Point(211, 118);
-            this.numericUpDown3.Maximum = new decimal(new int[] {
-            180,
-            0,
-            0,
-            0});
-            this.numericUpDown3.Name = "numericUpDown3";
-            this.numericUpDown3.Size = new System.Drawing.Size(81, 20);
-            this.numericUpDown3.TabIndex = 42;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.ForeColor = System.Drawing.Color.Lime;
-            this.label5.Location = new System.Drawing.Point(34, 120);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(174, 13);
-            this.label5.TabIndex = 41;
-            this.label5.Text = "Western Flip point (° from Meridian):";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // numericUpDown5
-            // 
-            this.numericUpDown5.BackColor = System.Drawing.Color.Black;
-            this.numericUpDown5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.numericUpDown5.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "FlipPointEast", true));
-            this.numericUpDown5.DecimalPlaces = 2;
-            this.numericUpDown5.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown5.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.numericUpDown5.Location = new System.Drawing.Point(211, 87);
-            this.numericUpDown5.Maximum = new decimal(new int[] {
-            180,
-            0,
-            0,
-            0});
-            this.numericUpDown5.Name = "numericUpDown5";
-            this.numericUpDown5.Size = new System.Drawing.Size(81, 20);
-            this.numericUpDown5.TabIndex = 40;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.ForeColor = System.Drawing.Color.Lime;
-            this.label6.Location = new System.Drawing.Point(34, 89);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(171, 13);
-            this.label6.TabIndex = 39;
-            this.label6.Text = "Eastern Flip Point (° from Meridian):";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // ckEnableFlipPoints
-            // 
-            this.ckEnableFlipPoints.AutoSize = true;
-            this.ckEnableFlipPoints.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.geminiPropertiesBindingSource, "FlipPointsEnabled", true));
-            this.ckEnableFlipPoints.Location = new System.Drawing.Point(11, 62);
-            this.ckEnableFlipPoints.Name = "ckEnableFlipPoints";
-            this.ckEnableFlipPoints.Size = new System.Drawing.Size(117, 17);
-            this.ckEnableFlipPoints.TabIndex = 43;
-            this.ckEnableFlipPoints.Text = "Use Flip Points (L6)";
-            this.ckEnableFlipPoints.UseVisualStyleBackColor = true;
-            // 
-            // geminiPropertiesBindingSource
-            // 
-            this.geminiPropertiesBindingSource.DataSource = typeof(ASCOM.GeminiTelescope.GeminiProperties);
-            // 
             // frmSafetyLimits
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -406,15 +406,15 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
