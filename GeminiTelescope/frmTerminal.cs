@@ -53,19 +53,24 @@ namespace ASCOM.GeminiTelescope
 
                     if (GeminiHardware.Instance.Connected && line.Length > 0 && start_chars.IndexOf(line[0]) >= 0)
                     {
-                        bool bRaw = false;
-                        if (line.StartsWith("@"))
+                        var cmds = line.Split(new string[] { "#" }, StringSplitOptions.RemoveEmptyEntries);
+                        for (int i = 0; i < cmds.Length; ++i)
                         {
-                            bRaw = true;
-                            line = line.Substring(1);
+                            string ln = cmds[i];
+                            bool bRaw = false;
+                            if (ln.StartsWith("@"))
+                            {
+                                bRaw = true;
+                                ln = ln.Substring(1);
+                            }
+                            if (i == 0) result = ""; else result += "   ";
+
+                            string s = GeminiHardware.Instance.DoCommandResult(ln, GeminiHardware.Instance.MAX_TIMEOUT, bRaw);
+                            if (s == null)
+                                result += "TIMEOUT!!!";
+                            else
+                                result += s;
                         }
-
-                        string s = GeminiHardware.Instance.DoCommandResult(line, GeminiHardware.Instance.MAX_TIMEOUT, bRaw);
-                        if (s == null)
-                            result = "TIMEOUT!!!";
-                        else
-                            result = s;
-
                     }
 
                     result = Regex.Replace(result,
@@ -76,6 +81,7 @@ namespace ASCOM.GeminiTelescope
                     txtTerm.Text = txtTerm.Text.Substring(0, start) + $"{DateTime.Now.ToLongTimeString()} [{line}] Response: {result}\r\n" + txtTerm.Text.Substring(start, txtTerm.Text.Length - start);
                     txtTerm.SelectionStart = txtTerm.Text.Length;
                     txtTerm.SelectionLength = 0;
+                    txtTerm.ScrollToCaret();
 
                 }
                 catch (Exception ex)
