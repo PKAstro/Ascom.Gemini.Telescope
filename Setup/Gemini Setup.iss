@@ -161,6 +161,7 @@ Type: dirifempty; Name: {cf}\ASCOM\Telescope\Gemini\
 function InitializeSetup(): Boolean;
   var
 	version: cardinal;
+  release: cardinal;
 
 begin
   // Initialise return value
@@ -183,9 +184,10 @@ begin
   if Result then // check for .NET 3.5 SP1
   begin
 		RegQueryDWordValue(HKLM, 'Software\Microsoft\NET Framework Setup\NDP\v4\Client', 'Install', version);
-		if version < 1 then
+		RegQueryDWordValue(HKLM, 'Software\Microsoft\NET Framework Setup\NDP\v4\Client', 'Release', release);
+		if (version < 1) or (release < 528040) then
 		begin
-     MsgBox('Microsoft .NET version 4.8 is not installed. You must install .NET 4.8 run-time before installing this driver.', mbCriticalError, MB_OK);
+     MsgBox('Microsoft .NET version 4.8 is not installed. You must install .NET 4.8 run-time before installing this driver. Download it from here: https://go.microsoft.com/fwlink/?linkid=2088631', mbCriticalError, MB_OK);
        Result:= False;
     end;
   end;
