@@ -85,7 +85,7 @@
             this.numericUpDown17 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown7 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown6 = new System.Windows.Forms.NumericUpDown();
-            this.label11 = new System.Windows.Forms.Label();
+            this.lblGuideSpeed = new System.Windows.Forms.Label();
             this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
             this.label10 = new System.Windows.Forms.Label();
             this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
@@ -882,7 +882,7 @@
             this.tableLayoutPanel3.Controls.Add(this.numericUpDown17, 1, 2);
             this.tableLayoutPanel3.Controls.Add(this.numericUpDown7, 3, 2);
             this.tableLayoutPanel3.Controls.Add(this.numericUpDown6, 3, 1);
-            this.tableLayoutPanel3.Controls.Add(this.label11, 2, 1);
+            this.tableLayoutPanel3.Controls.Add(this.lblGuideSpeed, 2, 1);
             this.tableLayoutPanel3.Controls.Add(this.numericUpDown5, 3, 0);
             this.tableLayoutPanel3.Controls.Add(this.label10, 2, 0);
             this.tableLayoutPanel3.Controls.Add(this.numericUpDown4, 1, 1);
@@ -985,18 +985,18 @@
             0,
             65536});
             // 
-            // label11
+            // lblGuideSpeed
             // 
-            this.label11.AutoSize = true;
-            this.label11.BackColor = System.Drawing.Color.Transparent;
-            this.label11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label11.ForeColor = System.Drawing.Color.Lime;
-            this.label11.Location = new System.Drawing.Point(223, 32);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(104, 32);
-            this.label11.TabIndex = 19;
-            this.label11.Text = "Guiding Speed  (0.2..0.8)";
-            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblGuideSpeed.AutoSize = true;
+            this.lblGuideSpeed.BackColor = System.Drawing.Color.Transparent;
+            this.lblGuideSpeed.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblGuideSpeed.ForeColor = System.Drawing.Color.Lime;
+            this.lblGuideSpeed.Location = new System.Drawing.Point(223, 32);
+            this.lblGuideSpeed.Name = "lblGuideSpeed";
+            this.lblGuideSpeed.Size = new System.Drawing.Size(104, 32);
+            this.lblGuideSpeed.TabIndex = 19;
+            this.lblGuideSpeed.Text = "Guiding Speed  (0.2..0.8)";
+            this.lblGuideSpeed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // numericUpDown5
             // 
@@ -1105,7 +1105,7 @@
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(104, 32);
             this.label7.TabIndex = 4;
-            this.label7.Text = "Goto Slew Speed (20..2000)";
+            this.label7.Text = "Goto Slew Speed (20..2500)";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label8
@@ -1118,7 +1118,7 @@
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(104, 32);
             this.label8.TabIndex = 0;
-            this.label8.Text = "Manual Slew Speed (20..2000)";
+            this.label8.Text = "Manual Slew Speed (20..2500)";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label9
@@ -1662,7 +1662,7 @@
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(104, 29);
             this.label18.TabIndex = 19;
-            this.label18.Text = "DEC Enc. Resolution (+/- 2048..32768):";
+            this.label18.Text = "Dec Enc Resolution (+/- 2048..32768):";
             this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // numericUpDown18
@@ -1697,7 +1697,7 @@
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(104, 29);
             this.label22.TabIndex = 4;
-            this.label22.Text = "RA Enc. Resolution (+/- 2048..32768):";
+            this.label22.Text = "RA Enc Resolution (+/- 2048..32768):";
             this.label22.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // checkBox5
@@ -1850,7 +1850,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.NumericUpDown numericUpDown6;
-        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label lblGuideSpeed;
         private System.Windows.Forms.NumericUpDown numericUpDown5;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.NumericUpDown numericUpDown4;

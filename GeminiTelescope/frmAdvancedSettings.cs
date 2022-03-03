@@ -66,7 +66,12 @@ namespace ASCOM.GeminiTelescope
 
                 if (GeminiHardware.Instance.ServoFirmwareVersion(false) >= 2)
                     cbDECMultiplier.Enabled = true;
+
+                lblGuideSpeed.Text = "Guiding Speed (0.2...0.9)";
+                numericUpDown6.Maximum = 0.9M;
             }
+
+
 
 
             comboBox1.Items.AddRange(GeminiProperties.Brightness_names);

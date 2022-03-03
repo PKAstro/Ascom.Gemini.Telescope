@@ -1709,6 +1709,9 @@ namespace ASCOM.GeminiTelescope
             return bSuccess;
         }
 
+        static bool butc_asked = false;
+        static bool bgeo_asked = false;
+
         private bool ValidateProperties(PropertyInfo[] ps)
         {
             List<string> warning = new List<string>();
@@ -1750,7 +1753,7 @@ namespace ASCOM.GeminiTelescope
                                     {
                                         utc = (int)p.GetValue(this, null);
 
-                                        if (utc == 8 || (int)(TimeZoneInfo.Local.GetUtcOffset(DateTime.Now)).TotalHours != -utc)
+                                        if ((int)(TimeZoneInfo.Local.GetUtcOffset(DateTime.Now)).TotalHours != -utc)
                                             butc = true;
                                         break;
                                     }
@@ -1767,11 +1770,15 @@ namespace ASCOM.GeminiTelescope
 
             string err = "";
 
-            if (blon && blat && butc)
+            if (blon && blat && !bgeo_asked)
+            {
                 err = "Profile settings that you are about to send to Gemini appear to contain some default values instead of actual settings. Do you still want to send this to Gemini?\r\n\r\n(For example, check geo locationand UTC offset)";
-            else if (butc)
+                bgeo_asked = true;
+            }
+            else if (butc && !butc_asked)
             {
                 err = $"Settings that you are about to send to Gemini specify UTC Offset of ({-utc}) that doesn't match your PC ({(int)(TimeZoneInfo.Local.GetUtcOffset(DateTime.Now)).TotalHours}). Do you still want to update Gemini?";
+                butc_asked = true;
             }
 
             GeminiHardware.Instance.Trace.Error(err);
