@@ -88,7 +88,15 @@ namespace ASCOM.GeminiTelescope
 
             int pos = -1;
             int j =1;
-            for (int i = PECOneWorm; i <= 25600; i+=PECOneWorm, j++)
+
+            int max = 25600;
+            if (GeminiHardware.Instance.GeminiLevel > 5)
+            {
+                // no limit on PEC table in L6
+                max = PECOneWorm * 4;   // up to 4x worm cycle
+            }
+
+            for (int i = PECOneWorm; i <= max; i+=PECOneWorm, j++)
             {
                 cbPECMax.Items.Add(j.ToString("00") + " x Worm  " + i.ToString() + " steps");
                 if (i == PECMax) pos = j-1;
