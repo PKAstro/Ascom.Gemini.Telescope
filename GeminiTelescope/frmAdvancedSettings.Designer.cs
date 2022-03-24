@@ -48,6 +48,7 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.groupBox1 = new Indigo.CollapsibleGroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.cbBuzzer = new System.Windows.Forms.ComboBox();
             this.cbGeometry = new System.Windows.Forms.ComboBox();
             this.label23 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
@@ -56,11 +57,10 @@
             this.label15 = new System.Windows.Forms.Label();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.labelBuzzer = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.pbSetSafetyLimit = new System.Windows.Forms.Button();
             this.checkBox7 = new System.Windows.Forms.CheckBox();
@@ -68,6 +68,8 @@
             this.menuUpdate = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menuItemGetSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemSendSettings = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.groupBox2 = new Indigo.CollapsibleGroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.checkBox8 = new System.Windows.Forms.CheckBox();
@@ -355,23 +357,25 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel1.Controls.Add(this.cbBuzzer, 1, 5);
             this.tableLayoutPanel1.Controls.Add(this.cbGeometry, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.label23, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.label21, 2, 4);
-            this.tableLayoutPanel1.Controls.Add(this.label2, 1, 5);
+            this.tableLayoutPanel1.Controls.Add(this.label2, 2, 5);
             this.tableLayoutPanel1.Controls.Add(this.cbMountType, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.label15, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.checkBox2, 2, 1);
             this.tableLayoutPanel1.Controls.Add(this.label3, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.labelBuzzer, 0, 5);
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.comboBox1, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.comboBox2, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.checkBox1, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.checkBox3, 2, 2);
             this.tableLayoutPanel1.Controls.Add(this.dateTimePicker1, 1, 4);
             this.tableLayoutPanel1.Controls.Add(this.pbSetSafetyLimit, 2, 3);
             this.tableLayoutPanel1.Controls.Add(this.checkBox7, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.pbController, 3, 5);
+            this.tableLayoutPanel1.Controls.Add(this.checkBox3, 2, 2);
+            this.tableLayoutPanel1.Controls.Add(this.comboBox1, 1, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel1.MaximumSize = new System.Drawing.Size(540, 137);
@@ -386,6 +390,20 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(465, 137);
             this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // cbBuzzer
+            // 
+            this.cbBuzzer.BackColor = System.Drawing.Color.Black;
+            this.cbBuzzer.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "Buzzer", true));
+            this.cbBuzzer.DisplayMember = "name";
+            this.cbBuzzer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbBuzzer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbBuzzer.ForeColor = System.Drawing.Color.Lime;
+            this.cbBuzzer.FormattingEnabled = true;
+            this.cbBuzzer.Location = new System.Drawing.Point(113, 118);
+            this.cbBuzzer.Name = "cbBuzzer";
+            this.cbBuzzer.Size = new System.Drawing.Size(104, 21);
+            this.cbBuzzer.TabIndex = 38;
             // 
             // cbGeometry
             // 
@@ -432,13 +450,12 @@
             // 
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.tableLayoutPanel1.SetColumnSpan(this.label2, 2);
             this.label2.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "EastSafetyLimit", true));
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label2.ForeColor = System.Drawing.Color.Lime;
-            this.label2.Location = new System.Drawing.Point(113, 115);
+            this.label2.Location = new System.Drawing.Point(223, 115);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(324, 22);
+            this.label2.Size = new System.Drawing.Size(214, 22);
             this.label2.TabIndex = 13;
             this.label2.Text = "East Safety Limit: 000 deg";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -497,8 +514,21 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(104, 23);
             this.label3.TabIndex = 4;
-            this.label3.Text = "Hand Controller Mode:";
+            this.label3.Text = "Hand Controller:";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // labelBuzzer
+            // 
+            this.labelBuzzer.AutoSize = true;
+            this.labelBuzzer.BackColor = System.Drawing.Color.Transparent;
+            this.labelBuzzer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelBuzzer.ForeColor = System.Drawing.Color.Lime;
+            this.labelBuzzer.Location = new System.Drawing.Point(3, 115);
+            this.labelBuzzer.Name = "labelBuzzer";
+            this.labelBuzzer.Size = new System.Drawing.Size(104, 22);
+            this.labelBuzzer.TabIndex = 4;
+            this.labelBuzzer.Text = "Buzzer:";
+            this.labelBuzzer.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label1
             // 
@@ -512,20 +542,6 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "LED Brightness:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.BackColor = System.Drawing.Color.Black;
-            this.comboBox1.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "LEDBrightness", true));
-            this.comboBox1.DisplayMember = "name";
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.comboBox1.ForeColor = System.Drawing.Color.Lime;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(113, 49);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(104, 21);
-            this.comboBox1.TabIndex = 1;
             // 
             // comboBox2
             // 
@@ -555,21 +571,6 @@
             this.checkBox1.TabIndex = 4;
             this.checkBox1.Text = "Sync performs Additional Align:";
             this.checkBox1.UseVisualStyleBackColor = false;
-            // 
-            // checkBox3
-            // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.BackColor = System.Drawing.Color.Transparent;
-            this.checkBox3.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.checkBox3.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.geminiPropertiesBindingSource, "DoesRefraction", true));
-            this.checkBox3.Dock = System.Windows.Forms.DockStyle.Right;
-            this.checkBox3.ForeColor = System.Drawing.Color.Lime;
-            this.checkBox3.Location = new System.Drawing.Point(272, 49);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(165, 17);
-            this.checkBox3.TabIndex = 6;
-            this.checkBox3.Text = "Gemini Calculates Refraction:";
-            this.checkBox3.UseVisualStyleBackColor = false;
             // 
             // dateTimePicker1
             // 
@@ -661,6 +662,35 @@
             this.menuItemSendSettings.Size = new System.Drawing.Size(184, 22);
             this.menuItemSendSettings.Text = "Send Settings To Gemini";
             this.menuItemSendSettings.Click += new System.EventHandler(this.menuItemSendSettings_Click);
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.BackColor = System.Drawing.Color.Transparent;
+            this.checkBox3.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBox3.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.geminiPropertiesBindingSource, "DoesRefraction", true));
+            this.checkBox3.Dock = System.Windows.Forms.DockStyle.Right;
+            this.checkBox3.ForeColor = System.Drawing.Color.Lime;
+            this.checkBox3.Location = new System.Drawing.Point(272, 49);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(165, 17);
+            this.checkBox3.TabIndex = 6;
+            this.checkBox3.Text = "Gemini Calculates Refraction:";
+            this.checkBox3.UseVisualStyleBackColor = false;
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.BackColor = System.Drawing.Color.Black;
+            this.comboBox1.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "LEDBrightness", true));
+            this.comboBox1.DisplayMember = "name";
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboBox1.ForeColor = System.Drawing.Color.Lime;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(113, 49);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(104, 21);
+            this.comboBox1.TabIndex = 1;
             // 
             // groupBox2
             // 
@@ -1829,6 +1859,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label labelBuzzer;
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.CheckBox checkBox2;
@@ -1920,5 +1951,6 @@
         private System.Windows.Forms.ComboBox cbDECMultiplier;
         private System.Windows.Forms.ComboBox cbRAMultiplier;
         private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.ComboBox cbBuzzer;
     }
 }

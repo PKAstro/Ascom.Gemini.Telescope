@@ -65,7 +65,7 @@ namespace ASCOM.GeminiTelescope
         static public string[] TrackingRate_names = { "Sidereal", "King Rate", "Lunar", "Solar", "Terrestrial", "Closed Loop", "Comet Rate" };
         static public string[] HandController_names = { "Visual", "Photo", "All Speeds" };
         static public string[] Brightness_names = { "100%", "53%", "40%", "27%", "20%", "13%", "6.6%"  };
-
+        static public string[] Buzzer_states = { "On", "Off" };
         static public string[] Brightness_namesL5 = {"100%", "53%", "40%", "27%", "20%", "13%", "6.6%", "0%", "-6.6%", "-13%", "-20%"};
         /// <summary>
         /// true if these properties have not been sync'ed with Gemini yet
@@ -492,6 +492,38 @@ namespace ASCOM.GeminiTelescope
                         GeminiHardware.Instance.DoCommandResult(":SB" + i.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
             }
         }
+
+        [Sequence(99)]
+        public string Buzzer
+        {
+            get { return (string)get_Profile("Buzzer", Buzzer_states[0]); }
+            set { mProfile["Buzzer"] = value; IsDirty = true; }
+        }
+
+        private string Buzzer_Gemini
+        {
+            get
+            {
+                int res = get_int_Prop("<60:");
+                string[] bn = Buzzer_states;
+                if (GeminiHardware.Instance.GeminiLevel < 6 || res < 0 || res >= bn.Length)
+                    return bn[0];   //always On             
+                return bn[res];
+            }
+            set
+            {
+                string[] bn = Buzzer_states;
+                if (GeminiHardware.Instance.GeminiLevel < 6)
+                    return; 
+
+                for (int i = 0; i < bn.Length; ++i)
+                    if (bn[i].Equals(value))
+                        GeminiHardware.Instance.DoCommandResult(">60:" + i.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
+            }
+        }
+
+
+
 
         [Sequence(99)]
         public bool SyncDoesAlign

@@ -56,6 +56,8 @@ namespace ASCOM.GeminiTelescope
             if (GeminiHardware.Instance.dVersion < 5.1)
                 cbGeometry.Enabled = false;
 
+            if (GeminiHardware.Instance.dVersion < 6)
+                cbBuzzer.Enabled = false;
 
             cbDECMultiplier.Enabled = false;
             cbRAMultiplier.Enabled = false;
@@ -79,6 +81,7 @@ namespace ASCOM.GeminiTelescope
             comboBox3.Items.AddRange(GeminiProperties.TrackingRate_names);
             cbMountType.Items.AddRange(GeminiProperties.Mount_names);
             cbGeometry.Items.AddRange(GeminiProperties.Geometry_names);
+            cbBuzzer.Items.AddRange(GeminiProperties.Buzzer_states);
 
             GeminiProperties props = new GeminiProperties();
 

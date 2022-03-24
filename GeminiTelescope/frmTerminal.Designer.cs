@@ -46,6 +46,7 @@
             this.txtTerm.Size = new System.Drawing.Size(694, 329);
             this.txtTerm.TabIndex = 0;
             this.txtTerm.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtTerm_KeyUp);
+            this.txtTerm.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtTerm_PreviewKeyDown);
             // 
             // frmTerminal
             // 

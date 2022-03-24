@@ -93,5 +93,15 @@ namespace ASCOM.GeminiTelescope
                     txtTerm.SelectionLength = 0;
                 }
         }
+
+        private void txtTerm_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Return)
+            {        
+                var idx = txtTerm.GetLineFromCharIndex(txtTerm.SelectionStart);
+                var line = txtTerm.Lines[idx];
+                txtTerm.SelectionStart = txtTerm.GetFirstCharIndexOfCurrentLine() + line.Length;
+            }
+        }
     }
 }

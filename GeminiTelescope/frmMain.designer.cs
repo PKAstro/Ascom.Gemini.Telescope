@@ -73,6 +73,7 @@ namespace ASCOM.GeminiTelescope
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.viewHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.collectReportsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.terminalMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutGeminiDriverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitDriverMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -94,11 +95,11 @@ namespace ASCOM.GeminiTelescope
             this.BalloonIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.pbStop = new System.Windows.Forms.Button();
             this.checkboxPEC = new System.Windows.Forms.CheckBox();
+            this.picButtons = new System.Windows.Forms.PictureBox();
             this.buttonSlew2 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew3 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew4 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew1 = new ASCOM.GeminiTelescope.TButton();
-            this.terminalMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.TableLayoutPanel3.SuspendLayout();
@@ -106,6 +107,7 @@ namespace ASCOM.GeminiTelescope
             this.contextMenuStrip1.SuspendLayout();
             this.contextMenuStrip3.SuspendLayout();
             this.GroupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picButtons)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -226,9 +228,9 @@ namespace ASCOM.GeminiTelescope
             // ButtonPark
             // 
             this.ButtonPark.AccessibleDescription = global::ASCOM.GeminiTelescope.Properties.Resources.Park;
+            resources.ApplyResources(this.ButtonPark, "ButtonPark");
             this.ButtonPark.BackColor = System.Drawing.Color.Black;
             this.ButtonPark.ContextMenuStrip = this.contextMenuStrip2;
-            resources.ApplyResources(this.ButtonPark, "ButtonPark");
             this.ButtonPark.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.ButtonPark.ForeColor = System.Drawing.Color.White;
             this.ButtonPark.Name = "ButtonPark";
@@ -238,6 +240,7 @@ namespace ASCOM.GeminiTelescope
             // contextMenuStrip2
             // 
             this.contextMenuStrip2.BackColor = System.Drawing.Color.Black;
+            this.contextMenuStrip2.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.parkAtCustomParkPositionToolStripMenuItem,
             this.toolStripMenuItem1,
@@ -309,9 +312,9 @@ namespace ASCOM.GeminiTelescope
             // ButtonConnect
             // 
             this.ButtonConnect.AccessibleDescription = global::ASCOM.GeminiTelescope.Properties.Resources.Connect;
+            resources.ApplyResources(this.ButtonConnect, "ButtonConnect");
             this.ButtonConnect.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.TableLayoutPanel3.SetColumnSpan(this.ButtonConnect, 3);
-            resources.ApplyResources(this.ButtonConnect, "ButtonConnect");
             this.ButtonConnect.Name = "ButtonConnect";
             this.ButtonConnect.Text = global::ASCOM.GeminiTelescope.Properties.Resources.Connect;
             this.ButtonConnect.UseVisualStyleBackColor = false;
@@ -320,9 +323,9 @@ namespace ASCOM.GeminiTelescope
             // ButtonSetup
             // 
             this.ButtonSetup.AccessibleDescription = global::ASCOM.GeminiTelescope.Properties.Resources.Setup;
+            resources.ApplyResources(this.ButtonSetup, "ButtonSetup");
             this.ButtonSetup.BackColor = System.Drawing.Color.Black;
             this.ButtonSetup.ContextMenuStrip = this.contextMenuStrip1;
-            resources.ApplyResources(this.ButtonSetup, "ButtonSetup");
             this.ButtonSetup.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.ButtonSetup.ForeColor = System.Drawing.Color.White;
             this.ButtonSetup.Name = "ButtonSetup";
@@ -332,6 +335,7 @@ namespace ASCOM.GeminiTelescope
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.BackColor = System.Drawing.Color.Black;
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.setupDialogToolStripMenuItem,
             this.focuserSetupDialogToolStripMenuItem,
@@ -426,6 +430,13 @@ namespace ASCOM.GeminiTelescope
             resources.ApplyResources(this.collectReportsMenuItem, "collectReportsMenuItem");
             this.collectReportsMenuItem.Click += new System.EventHandler(this.collectReportsMenuItem_click);
             // 
+            // terminalMenuItem
+            // 
+            this.terminalMenuItem.ForeColor = System.Drawing.Color.White;
+            this.terminalMenuItem.Name = "terminalMenuItem";
+            resources.ApplyResources(this.terminalMenuItem, "terminalMenuItem");
+            this.terminalMenuItem.Click += new System.EventHandler(this.terminalMenuItem_Click);
+            // 
             // aboutGeminiDriverToolStripMenuItem
             // 
             this.aboutGeminiDriverToolStripMenuItem.ForeColor = System.Drawing.Color.White;
@@ -459,6 +470,7 @@ namespace ASCOM.GeminiTelescope
             // contextMenuStrip3
             // 
             this.contextMenuStrip3.BackColor = System.Drawing.Color.Black;
+            this.contextMenuStrip3.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.contextMenuStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem5,
             this.toolStripMenuItem6,
@@ -593,6 +605,15 @@ namespace ASCOM.GeminiTelescope
             this.checkboxPEC.UseVisualStyleBackColor = false;
             this.checkboxPEC.Click += new System.EventHandler(this.checkboxPEC_Clicked);
             // 
+            // picButtons
+            // 
+            this.picButtons.BackgroundImage = global::ASCOM.GeminiTelescope.Properties.Resources.buttons;
+            resources.ApplyResources(this.picButtons, "picButtons");
+            this.picButtons.Name = "picButtons";
+            this.picButtons.TabStop = false;
+            this.picButtons.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picButtons_MouseDown);
+            this.picButtons.MouseUp += new System.Windows.Forms.MouseEventHandler(this.picButtons_MouseUp);
+            // 
             // buttonSlew2
             // 
             resources.ApplyResources(this.buttonSlew2, "buttonSlew2");
@@ -631,18 +652,12 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlew1_MouseDown);
             this.buttonSlew1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlew1_MouseUp);
             // 
-            // terminalMenuItem
-            // 
-            this.terminalMenuItem.ForeColor = System.Drawing.Color.White;
-            this.terminalMenuItem.Name = "terminalMenuItem";
-            resources.ApplyResources(this.terminalMenuItem, "terminalMenuItem");
-            this.terminalMenuItem.Click += new System.EventHandler(this.terminalMenuItem_Click);
-            // 
             // frmMain
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
+            this.Controls.Add(this.picButtons);
             this.Controls.Add(this.buttonSlew2);
             this.Controls.Add(this.tableLayoutPanel4);
             this.Controls.Add(this.tableLayoutPanel1);
@@ -675,6 +690,7 @@ namespace ASCOM.GeminiTelescope
             this.contextMenuStrip3.ResumeLayout(false);
             this.GroupBox1.ResumeLayout(false);
             this.GroupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picButtons)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -754,6 +770,7 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.ToolStripMenuItem collectReportsMenuItem;
         private System.Windows.Forms.ToolStripMenuItem terminalMenuItem;
+        private System.Windows.Forms.PictureBox picButtons;
     }
 }
 

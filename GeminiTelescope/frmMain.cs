@@ -7,6 +7,8 @@ using System.Windows.Forms;
 using ASCOM.GeminiTelescope.Properties;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Drawing.Drawing2D;
+using System.Diagnostics;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -2028,6 +2030,119 @@ namespace ASCOM.GeminiTelescope
                 term.Visible = true;
             }
         }
+
+
+        Region N, S, W, E;
+
+        private void picButtons_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (N == null) CreateRegions();
+
+            if(N.IsVisible(e.X, e.Y))
+            {
+                picButtons.BackgroundImage = Resources.buttons_N;
+                buttonSlew1_MouseDown(sender, e);
+                Debug.WriteLine("North");
+            }
+            else if (S.IsVisible(e.X, e.Y))
+            {
+                picButtons.BackgroundImage = Resources.buttons_S;
+                buttonSlew2_MouseDown(sender, e);
+                Debug.WriteLine("South");
+            }
+            else if (W.IsVisible(e.X, e.Y))
+            {
+                picButtons.BackgroundImage = Resources.buttons_W;
+
+                buttonSlew4_MouseDown(sender, e);
+
+                Debug.WriteLine("West");
+
+            }
+            else if (E.IsVisible(e.X, e.Y))
+            {
+                picButtons.BackgroundImage = Resources.buttons_E;
+
+                buttonSlew3_MouseDown(sender, e);
+                Debug.WriteLine("East");
+            }
+        }
+
+        private void picButtons_MouseUp(object sender, MouseEventArgs e)
+        {
+            ((Control)sender).Capture = false;
+
+            picButtons.BackgroundImage = Resources.buttons;
+
+            if (GeminiHardware.Instance.Connected)
+                GeminiHardware.Instance.DoCommand(":Q", false);
+        }
+
+        private void CreateRegions()
+        {
+            int _buttonsize = picButtons.Width / 2;
+
+            int x = _buttonsize;
+            int y = 0;
+
+            Point[] pts = {   new Point(x - _buttonsize / 2, y + _buttonsize / 2),
+                              new Point(x, y),
+                              new Point(x + _buttonsize / 2 , y + _buttonsize / 2),
+                              new Point(x, y + _buttonsize),
+                              new Point(x - _buttonsize / 2, y + _buttonsize / 2) };
+
+            GraphicsPath p = new GraphicsPath();
+            p.AddPolygon(pts);
+            p.CloseFigure();
+            N = new Region(p);
+
+            x = _buttonsize;
+            y = _buttonsize;
+
+            pts = new Point[] {
+                    new Point(x - _buttonsize / 2, y + _buttonsize / 2),
+                    new Point(x, y),
+                    new Point(x + _buttonsize / 2 , y + _buttonsize / 2),
+                    new Point(x, y + _buttonsize),
+                    new Point(x - _buttonsize / 2, y + _buttonsize / 2) };
+
+            p = new GraphicsPath();
+            p.AddPolygon(pts);
+            p.CloseFigure();
+            S = new Region(p);
+
+
+            x = _buttonsize / 2;
+            y = _buttonsize / 2;
+
+            pts = new Point[] {
+                    new Point(x - _buttonsize / 2, y + _buttonsize / 2),
+                    new Point(x, y),
+                    new Point(x + _buttonsize / 2 , y + _buttonsize / 2),
+                    new Point(x, y + _buttonsize),
+                    new Point(x - _buttonsize / 2, y + _buttonsize / 2) };
+
+            p = new GraphicsPath();
+            p.AddPolygon(pts);
+            p.CloseFigure();
+            W = new Region(p);
+
+            x = _buttonsize + _buttonsize / 2;
+            y = _buttonsize / 2;
+
+            pts = new Point[] {
+                    new Point(x - _buttonsize / 2, y + _buttonsize / 2),
+                    new Point(x, y),
+                    new Point(x + _buttonsize / 2 , y + _buttonsize / 2),
+                    new Point(x, y + _buttonsize),
+                    new Point(x - _buttonsize / 2, y + _buttonsize / 2) };
+
+            p = new GraphicsPath();
+            p.AddPolygon(pts);
+            p.CloseFigure();
+            E = new Region(p);
+        }
+
     }
 
 #if true

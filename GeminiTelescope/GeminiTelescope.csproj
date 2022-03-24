@@ -533,6 +533,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ReadMe.htm" />
+    <None Include="Resources\buttons-N.png" />
+    <None Include="Resources\buttons-W.png" />
+    <None Include="Resources\buttons-E.png" />
+    <None Include="Resources\buttons-S.png" />
+    <None Include="Resources\buttons.png" />
     <None Include="app.config" />
     <None Include="Resources\no fix satellite.png" />
     <None Include="Resources\satellite.png" />

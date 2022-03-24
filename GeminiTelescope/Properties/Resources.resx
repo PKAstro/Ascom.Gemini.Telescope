@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="GoHome" xml:space="preserve">
     <value>Go Home</value>
@@ -471,7 +471,7 @@ Are you sure you want to do this?</value>
   <data name="SetFastFocuser" xml:space="preserve">
     <value>Set Fast Focuser Speed</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="starfield" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\starfield.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -808,5 +808,20 @@ RA</value>
   </data>
   <data name="ParkAtZenith" xml:space="preserve">
     <value>Park at Zenith</value>
+  </data>
+  <data name="buttons" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\buttons.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttons_E" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\buttons-E.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttons_N" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\buttons-N.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttons_S" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\buttons-S.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttons_W" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\buttons-W.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

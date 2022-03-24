@@ -23,6 +23,8 @@ namespace ASCOM.GeminiTelescope
                               new Point(_buttonsize / 2 - 1, _buttonsize - 1) };
 
             GraphicsPath p = new GraphicsPath();
+            Region r = new Region(p);
+
             p.AddPolygon(pts);
             p.CloseFigure();
             p.FillMode = FillMode.Alternate;
