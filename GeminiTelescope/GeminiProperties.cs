@@ -504,10 +504,18 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                int res = get_int_Prop("<60:");
                 string[] bn = Buzzer_states;
-                if (GeminiHardware.Instance.GeminiLevel < 6 || res < 0 || res >= bn.Length)
+
+                if (GeminiHardware.Instance.GeminiLevel < 6 || !GeminiHardware.Instance.Connected)
                     return bn[0];   //always On             
+                int res = 0;
+
+                try
+                {
+                    res = get_int_Prop("<60:");
+                    if (res < 0 || res >= bn.Length)
+                        return bn[0];   //always On            
+                } catch { } 
                 return bn[res];
             }
             set
@@ -1223,7 +1231,7 @@ namespace ASCOM.GeminiTelescope
         }
 
 
-        [Sequence(7)]
+        [Sequence(20)]
         public int ServoEncoderMultiplierRA
         {
             get { return (int)get_Profile("ServoEncoderMultiplierRA", 1); }
@@ -1248,7 +1256,7 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        [Sequence(7)]
+        [Sequence(20)]
         public int ServoEncoderMultiplierDEC
         {
             get { return (int)get_Profile("ServoEncoderMultiplierDEC", 1); }
@@ -1732,7 +1740,7 @@ namespace ASCOM.GeminiTelescope
                 {
                     GeminiHardware.Instance.Trace.Except(ex);
                     bSuccess = false;
-                    break;
+                    //break;
                 }
             }
 
