@@ -602,6 +602,8 @@ namespace ASCOM.GeminiTelescope
                 }
                 else
                     this.groupBox4.IsCollapsed = true;
+
+                groupBox4.ForeColor = (groupBox4.IsCollapsed ? Color.Gray : Color.White);
             }
         }
 

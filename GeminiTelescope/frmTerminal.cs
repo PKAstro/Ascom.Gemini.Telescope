@@ -65,7 +65,24 @@ namespace ASCOM.GeminiTelescope
                             }
                             if (i == 0) result = ""; else result += "   ";
 
-                            string s = GeminiHardware.Instance.DoCommandResult(ln, GeminiHardware.Instance.MAX_TIMEOUT, bRaw);
+                            GeminiCommand.ResultType gemini_result = GeminiCommand.ResultType.HashChar;
+                            int char_count = 0;
+                            GeminiCommand gmc = GeminiHardware.Instance.FindGeminiCommand(ln);
+
+                            if (gmc != null)
+                            {
+                                gemini_result = gmc.Type;
+                                char_count = gmc.Chars;
+                            }
+
+                            string s = null;
+                            if (gemini_result == GeminiCommand.ResultType.NoResult)
+                                GeminiHardware.Instance.DoCommand(ln, bRaw);
+                            else
+                                s = GeminiHardware.Instance.DoCommandResult(ln, GeminiHardware.Instance.MAX_TIMEOUT,        bRaw);
+                            if (gemini_result == GeminiCommand.ResultType.NoResult)
+                                result += "(none)";
+                            else
                             if (s == null)
                                 result += "TIMEOUT!!!";
                             else

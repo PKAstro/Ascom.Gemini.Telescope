@@ -262,5 +262,20 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        /// <summary>
+        /// this adds commands present in Gemini II (Level 6)
+        /// This is only called if L6 is detected
+        /// </summary>
+        public static void GeminiCommandsL6()
+        {
+            // if we didn't add these L6 commands yet, do this now
+            if (!Commands.ContainsKey(":Mp"))
+            {
+                Commands.Add(":MP", new GeminiCommand(GeminiCommand.ResultType.ZeroOrHash, 0));
+                Commands.Add(":Mp", new GeminiCommand(GeminiCommand.ResultType.ZeroOrHash, 1));
+                Commands.Add(":Gl#", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
+                Commands.Add(":Sl", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
+            }
+        }
     }
 }

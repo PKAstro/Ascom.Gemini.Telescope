@@ -3574,6 +3574,7 @@ namespace ASCOM.GeminiTelescope
                     GeminiLevel = int.Parse(ver.Substring(0, 1));
                     // add and remove commands as needed for Level 5
                     if (GeminiLevel > 4) GeminiCommands.GeminiCommandsL5();
+                    if (GeminiLevel > 5) GeminiCommands.GeminiCommandsL6();
                 }
             }
 
