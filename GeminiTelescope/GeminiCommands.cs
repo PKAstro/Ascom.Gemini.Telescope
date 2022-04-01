@@ -240,7 +240,7 @@ namespace ASCOM.GeminiTelescope
                 Commands.Remove("<226:");    //delete custom implementation used for L4 mounts, this is implemented in firmware in L5
                 Commands.Add(":GW", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
                 Commands.Add(":Gw", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
-                Commands.Add(":Gu", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
+                Commands.Add(":Gu", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 2));
                 Commands.Add(":GI", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
                 Commands.Add(":OO", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
                 Commands.Add(":Oo", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
