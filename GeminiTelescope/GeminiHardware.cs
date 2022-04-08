@@ -4664,8 +4664,8 @@ namespace ASCOM.GeminiTelescope
                 throw new ASCOM.Utilities.Exceptions.InvalidValueException("Mount not aligned");
             }
             if (result[3].StartsWith("6")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to outside of safety limits");
-            if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Invalid RA coordinate");
-            if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Invalid DEC coordinates");
+            if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("RA coordinate is invalid or inaccessible");
+            if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("DEC coordinates is invalid or inaccessible");
             m_Velocity = "S";   //set the correct velocity until next poll update
         }
 
@@ -4699,8 +4699,8 @@ namespace ASCOM.GeminiTelescope
                 throw new ASCOM.Utilities.Exceptions.InvalidValueException("Mount not aligned");
             }
             if (result[3].StartsWith("6")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to outside of safety limits");
-            if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Invalid RA coordinate");
-            if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Invalid DEC coordinate");
+            if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("RA coordinate is invalid or inaccessible");
+            if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("DEC coordinate is invalid or inaccessible");
 
             m_Velocity = "S";   //set the correct velocity until next poll update
         }
@@ -4767,8 +4767,8 @@ namespace ASCOM.GeminiTelescope
             DoCommandResult(cmd, MAX_TIMEOUT / 2, false, out result);
             if (result == null || result[0] == null || result[2] == null || result[3] == null)
                 throw new TimeoutException("Slew to Alt/Az");
-            if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Alt value is invalid");
-            if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Az value is invalid");
+            if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Alt value is invalid or inaccessible");
+            if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Az value is invalid or inaccessible");
             if (result[3].StartsWith("1")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: Object below horizon");
             if (result[3].StartsWith("2")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: No object selected");
             if (result[3].StartsWith("3")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: Manual control");
@@ -4798,8 +4798,8 @@ namespace ASCOM.GeminiTelescope
 
             if (result == null || result[0] == null || result[2] == null || result[3] == null)
                 throw new TimeoutException("Slew to Alt/Az");
-            if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Alt value is invalid");
-            if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Az value is invalid");
+            if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Alt value is invalid or inaccessible");
+            if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Az value is invalid or inaccessible");
             if (result[3].StartsWith("1")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: Object below horizon");
             if (result[3].StartsWith("2")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: No object selected");
             if (result[3].StartsWith("3")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: Manual control");
