@@ -73,9 +73,11 @@ namespace ASCOM.GeminiTelescope
 
         private void buttonRemove_Click(object sender, EventArgs e)
         {
-            m_OpticInfos.RemoveAt(listBoxOptics.SelectedIndex + 1);
-            listBoxOptics.Items.RemoveAt(listBoxOptics.SelectedIndex);
-            
+            if (listBoxOptics.SelectedIndex >= 0)
+            {
+                m_OpticInfos.RemoveAt(listBoxOptics.SelectedIndex + 1);
+                listBoxOptics.Items.RemoveAt(listBoxOptics.SelectedIndex);
+            }
         }
 
         private void textBoxFocalLength_KeyPress(object sender, KeyPressEventArgs e)

@@ -373,10 +373,10 @@ namespace ASCOM.GeminiTelescope
                 try
                 {
                     double area = Math.PI * ((ApertureDiameter / 2.0) * (ApertureDiameter / 2.0));
-                    double obstruction = double.Parse(GeminiHardware.Instance.OpticsObstruction.Split('~')[GeminiHardware.Instance.OpticsValueIndex]);
+                    double obstruction = double.Parse(GeminiHardware.Instance.OpticsObstruction.Split('~')[GeminiHardware.Instance.OpticsValueIndex])/1000; //in meters
                     area -= Math.PI * ((obstruction / 2.0) * (obstruction / 2.0));
                     GeminiHardware.Instance.Trace.Enter("IT:ApertureArea.Get", area);
-                    return area / 1000; // in meters
+                    return area; // in meters
                 }
                 catch { return 0; }
             }
