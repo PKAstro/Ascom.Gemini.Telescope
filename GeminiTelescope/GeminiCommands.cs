@@ -105,7 +105,7 @@ namespace ASCOM.GeminiTelescope
             Commands.Add(":GVP", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
             Commands.Add(":GVT", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
 
-            Commands.Add(":Gv", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1)); //N/T/G//C/S are possible return values
+            Commands.Add(":Gv", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1)); //N/T/G/C/S/! are possible return values
             Commands.Add(":GZ", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
             Commands.Add(":hP", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
             Commands.Add(":hC", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));

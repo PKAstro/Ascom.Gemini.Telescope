@@ -116,8 +116,11 @@ namespace ASCOM.GeminiTelescope
             if (e.KeyCode == Keys.Return)
             {        
                 var idx = txtTerm.GetLineFromCharIndex(txtTerm.SelectionStart);
-                var line = txtTerm.Lines[idx];
-                txtTerm.SelectionStart = txtTerm.GetFirstCharIndexOfCurrentLine() + line.Length;
+                if (idx < txtTerm.Lines.Length)
+                {
+                    var line = txtTerm.Lines[idx];
+                    txtTerm.SelectionStart = txtTerm.GetFirstCharIndexOfCurrentLine() + line.Length;
+                }
             }
         }
     }

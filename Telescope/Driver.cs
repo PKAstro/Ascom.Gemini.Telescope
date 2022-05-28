@@ -334,7 +334,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Instance.Trace.Enter("IT:AbortSlew");
             AssertConnect();
             if (GeminiHardware.Instance.AtHome || GeminiHardware.Instance.AtPark)
-                throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+                throw new ASCOM.InvalidOperationException(SharedResources.MSG_INVALID_AT_PARK);
             GeminiHardware.Instance.AbortSlewSync();
             GeminiHardware.Instance.Trace.Exit("IT:AbortSlew");
         }
@@ -750,14 +750,17 @@ namespace ASCOM.GeminiTelescope
                 {
 
                     double frequency = 12000000;
+                    double drateDivisor = double.Parse(rateDivisor);
 
-                    double stepsPerSecond = (frequency) / double.Parse(rateDivisor);
+                    if (drateDivisor == 0) return 0;    // no divisor, so no tracking
+
+                    double stepsPerSecond = (frequency) / drateDivisor;
                     double arcSecondsPerStep = 1296000.00 / (Math.Abs(double.Parse(wormGearRatio)) * double.Parse(spurGearRatio) * double.Parse(encoderResolution));
 
                     double rate = arcSecondsPerStep * stepsPerSecond;
 
                     GeminiHardware.Instance.Trace.Exit("L5DeclinationRate.Get", rate);
-                    return rate;
+                    return Math.Round(rate, 4);
                 }
                 else
                     throw new TimeoutException("L5DeclinationRate");
@@ -783,7 +786,9 @@ namespace ASCOM.GeminiTelescope
 
                     int rateDivisor = (int)((frequency) / stepsPerSecond + 0.5);
 
-                    //if (rateDivisor < -65535 || rateDivisor > 65535) throw new InvalidValueException("DeclinationRate", value.ToString(), "Rate cannot be implemented");
+                  
+                    if (value != 0)
+                        GeminiHardware.Instance.DoCommand(">137:", false); // set Comet tracking rate so we can adjust DEC rate
 
                     string cmd = ">412:" + rateDivisor.ToString();
                     GeminiHardware.Instance.DoCommandResult(cmd, GeminiHardware.Instance.MAX_TIMEOUT, false);
@@ -829,7 +834,7 @@ namespace ASCOM.GeminiTelescope
                     }
 
                     GeminiHardware.Instance.Trace.Exit("IT:DeclinationRate.Get", rate);
-                    return rate;
+                    return Math.Round(rate, 4);
                 }
                 else
                     throw new TimeoutException("DeclinationRate");
@@ -856,11 +861,21 @@ namespace ASCOM.GeminiTelescope
                     double arcSecondsPerStep = 1296000.00 / (double.Parse(wormGearRatio) * double.Parse(spurGearRatio) * double.Parse(encoderResolution));
                     double stepsPerSecond = value / arcSecondsPerStep;
 
+                    // L4
                     //1500000/22.881835938 = 65536
                     // 1500000/65536 = 22.881835938
+                    // L5
+                    // 12000000 / 2147483647
 
-                    int divisor = (int)(22.8881835938 / stepsPerSecond + 0.5);
-                    if (divisor < -65535 || divisor > 65535) throw new InvalidValueException("DeclinationRate", value.ToString(), "Rate is not implemented");
+                    double step = GeminiHardware.Instance.GeminiLevel >= 5 ? 12000000.0 : 1500000.0;
+
+                    int divisor = (int)(step / stepsPerSecond + 0.5);
+                    if (GeminiHardware.Instance.GeminiLevel  < 5 && (divisor < -65535 || divisor > 65535))
+                        throw new InvalidValueException("DeclinationRate", value.ToString(), "Rate is not implemented");
+
+                    if (value != 0)
+                        GeminiHardware.Instance.DoCommand(">137:", false); // set Comet tracking rate so we can adjust DEC rate
+
                     string cmd = ">412:" + divisor.ToString();
                     GeminiHardware.Instance.DoCommandResult(cmd, GeminiHardware.Instance.MAX_TIMEOUT, false);
                     GeminiHardware.Instance.Trace.Exit("IT:DeclinationRate.Set", value);
@@ -1166,7 +1181,7 @@ namespace ASCOM.GeminiTelescope
             AssertConnect();
 
             if (GeminiHardware.Instance.AtPark)
-                throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+                throw new InvalidOperationException(SharedResources.MSG_INVALID_AT_PARK);
 
             if (GeminiHardware.Instance.AtHome) return;
             /*
@@ -1275,7 +1290,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Instance.Trace.Enter("IT:MoveAxis", Axis, Rate);
 
             AssertConnect();
-            if (GeminiHardware.Instance.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            if (GeminiHardware.Instance.AtPark) throw new ASCOM.InvalidOperationException(SharedResources.MSG_INVALID_AT_PARK);
 
 
             string[] cmds = { null, null };
@@ -1353,6 +1368,7 @@ namespace ASCOM.GeminiTelescope
 
             GeminiHardware.Instance.DoCommandResult(cmds, GeminiHardware.Instance.MAX_TIMEOUT / 2, false);
             GeminiHardware.Instance.WaitForVelocity("GCS", GeminiHardware.Instance.MAX_TIMEOUT);
+            GeminiHardware.Instance.Velocity = "S"; //slew, as per ASCOM spec
             GeminiHardware.Instance.Trace.Exit("IT:MoveAxis", Axis, Rate);
         }
 
@@ -1389,7 +1405,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Instance.Trace.Enter("IT:PulseGuide5", Direction, Duration);
 
             AssertConnect();
-            if (GeminiHardware.Instance.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            if (GeminiHardware.Instance.AtPark) throw new ASCOM.InvalidOperationException(SharedResources.MSG_INVALID_AT_PARK);
             if (internalSlewing)
             {
                 GeminiHardware.Instance.Trace.Info(2, "IT:PulseGuide5", SharedResources.MSG_INVALID_WHILE_SLEWING);
@@ -1460,7 +1476,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Instance.Trace.Enter("IT:PulseGuide", Direction, Duration);
 
             AssertConnect();
-            if (GeminiHardware.Instance.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            if (GeminiHardware.Instance.AtPark) throw new ASCOM.InvalidOperationException(SharedResources.MSG_INVALID_AT_PARK);
 
             // don't update mount parameters each time a guide command is issued: this will slow things down while guiding
             // do it on a polling interval:
@@ -1499,7 +1515,7 @@ namespace ASCOM.GeminiTelescope
             }
 
             if (m_GuideRateStepsPerMilliSecond == 0) // never did get the rate! 
-                throw new ASCOM.DriverException(SharedResources.MSG_INVALID_VALUE, (int)SharedResources.SCODE_INVALID_VALUE);
+                throw new ASCOM.InvalidValueException(SharedResources.MSG_INVALID_VALUE);
 
             string cmd = String.Empty;
 
@@ -1626,7 +1642,7 @@ namespace ASCOM.GeminiTelescope
         {
             GeminiHardware.Instance.Trace.Enter("IT:OldPulseGuide", Direction, Duration, GeminiHardware.Instance.AsyncPulseGuide);
             AssertConnect();
-            if (GeminiHardware.Instance.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            if (GeminiHardware.Instance.AtPark) throw new ASCOM.InvalidOperationException(SharedResources.MSG_INVALID_AT_PARK);
 
             if (internalSlewing)
             {
@@ -1729,15 +1745,19 @@ namespace ASCOM.GeminiTelescope
                         frequency = 12000000;
                     }
 
-                    double stepsPerSecond = (frequency / preScaler) / double.Parse(rateDivisor);
+                    double drateDivisor = double.Parse(rateDivisor);
+                    if (drateDivisor == 0) return 0;
+
+                    double stepsPerSecond = (frequency / preScaler) / drateDivisor;
                     double arcSecondsPerStep = 1296000.00 / (Math.Abs(double.Parse(wormGearRatio)) * double.Parse(spurGearRatio) * double.Parse(encoderResolution));
 
                     double rate = arcSecondsPerStep * stepsPerSecond;
 
-                    double offsetRate = (rate - SharedResources.EARTH_ANG_ROT_DEG_MIN * 60) / 0.9972695677;
+                    double sidereal = 15.041112373821779; // computed from Gemini divisor - actual sidereal rate of tracking
+                    double offsetRate = (rate - sidereal) / 0.9972695677;
 
                     GeminiHardware.Instance.Trace.Exit("IT:RightAscensionRate.Get", offsetRate);
-                    return offsetRate;
+                    return Math.Round(offsetRate, 4);
                 }
                 else
                     throw new TimeoutException("RightAscensionRate");
@@ -1777,9 +1797,9 @@ namespace ASCOM.GeminiTelescope
                         frequency = 12000000;
                     }
 
+                    double sidereal = 15.041112373821779; // computed from Gemini divisor - actual sidereal rate of tracking
 
-                    double offsetRate = value * 0.9972695677 + SharedResources.EARTH_ANG_ROT_DEG_MIN * 60; //arcseconds per second
-
+                    double offsetRate = value * 0.9972695677 + sidereal; //arcseconds per second
 
                     double arcSecondsPerStep = 1296000.00 / (Math.Abs(double.Parse(wormGearRatio)) * double.Parse(spurGearRatio) * double.Parse(encoderResolution));
 
@@ -1789,6 +1809,9 @@ namespace ASCOM.GeminiTelescope
 
                     if (GeminiHardware.Instance.GeminiLevel < 5)
                         if (rateDivisor < 256 || rateDivisor > 65535) throw new InvalidValueException("RightAscensionRate", value.ToString(), "Rate cannot be implemented");
+
+                    if (value != 0)
+                        GeminiHardware.Instance.DoCommand(">137:", false); // set Comet tracking rate so we can adjust RA rate
 
                     string cmd = ">411:" + rateDivisor.ToString();
                     GeminiHardware.Instance.DoCommandResult(cmd, GeminiHardware.Instance.MAX_TIMEOUT, false);
@@ -1877,9 +1900,9 @@ namespace ASCOM.GeminiTelescope
                         string res = GeminiHardware.Instance.DoMeridianFlip();
 
                         if (res == null) throw new TimeoutException("SideOfPier");
-                        if (res.StartsWith("1")) throw new ASCOM.DriverException("Object below horizon");
-                        if (res.StartsWith("4")) throw new ASCOM.DriverException("Position unreachable");
-                        if (res.StartsWith("3")) throw new ASCOM.DriverException("Manual control");
+                        if (res.StartsWith("1")) throw new ASCOM.InvalidOperationException("Object below horizon");
+                        if (res.StartsWith("4")) throw new ASCOM.InvalidOperationException("Position unreachable");
+                        if (res.StartsWith("3")) throw new ASCOM.InvalidOperationException("Manual control");
 
                         GeminiHardware.Instance.WaitForVelocity("S", GeminiHardware.Instance.MAX_TIMEOUT);
                         GeminiHardware.Instance.WaitForVelocity("TN", -1);  // :Mf is asynchronous, wait until done
@@ -1935,9 +1958,9 @@ namespace ASCOM.GeminiTelescope
                     GeminiHardware.Instance.Trace.Info(4, "IT:SideOfPier.Set",  "After DoMeridianFlip", res);
 
                     if (res == null) throw new TimeoutException("SideOfPier");
-                    if (res.StartsWith("1")) throw new ASCOM.DriverException("Object below horizon");
-                    if (res.StartsWith("4")) throw new ASCOM.DriverException("Position unreachable");
-                    if (res.StartsWith("3")) throw new ASCOM.DriverException("Manual control");
+                    if (res.StartsWith("1")) throw new ASCOM.InvalidOperationException("Object below horizon");
+                    if (res.StartsWith("4")) throw new ASCOM.InvalidOperationException("Position unreachable");
+                    if (res.StartsWith("3")) throw new ASCOM.InvalidOperationException("Manual control");
 
                     GeminiHardware.Instance.Trace.Info(4, "IT:SideOfPier.Set", "Wait for slew", res);
                     GeminiHardware.Instance.WaitForVelocity("S", GeminiHardware.Instance.MAX_TIMEOUT);
@@ -2044,7 +2067,7 @@ namespace ASCOM.GeminiTelescope
         {
             GeminiHardware.Instance.Trace.Enter("IT:SlewToAltAz", Azimuth, Altitude);
             AssertConnect();
-            if (GeminiHardware.Instance.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            if (GeminiHardware.Instance.AtPark) throw new InvalidOperationException(SharedResources.MSG_INVALID_AT_PARK);
 
             GeminiHardware.Instance.TargetAzimuth = Azimuth;
             GeminiHardware.Instance.TargetAltitude = Altitude;
@@ -2059,7 +2082,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Instance.Trace.Enter("IT:SlewToAltAzAsync", Azimuth, Altitude);
 
             AssertConnect();
-            if (GeminiHardware.Instance.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            if (GeminiHardware.Instance.AtPark) throw new InvalidOperationException(SharedResources.MSG_INVALID_AT_PARK);
 
             GeminiHardware.Instance.TargetAzimuth = Azimuth;
             GeminiHardware.Instance.TargetAltitude = Altitude;
@@ -2076,7 +2099,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Instance.Trace.Enter("IT:SlewToCoordinates", RightAscension, Declination);
             AssertConnect();
 
-            if (GeminiHardware.Instance.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            if (GeminiHardware.Instance.AtPark) throw new InvalidOperationException(SharedResources.MSG_INVALID_AT_PARK);
 
             GeminiHardware.Instance.TargetRightAscension = RightAscension;
             GeminiHardware.Instance.TargetDeclination = Declination;
@@ -2094,7 +2117,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Instance.Trace.Enter("IT:SlewToCoordinatesAsync", RightAscension, Declination);
             AssertConnect();
 
-            if (GeminiHardware.Instance.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            if (GeminiHardware.Instance.AtPark) throw new InvalidOperationException(SharedResources.MSG_INVALID_AT_PARK);
 
             GeminiHardware.Instance.TargetRightAscension = RightAscension;
             GeminiHardware.Instance.TargetDeclination = Declination;
@@ -2113,7 +2136,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Instance.Trace.Enter("IT:SlewToTarget", GeminiHardware.Instance.TargetRightAscension, GeminiHardware.Instance.TargetDeclination);
             AssertConnect();
 
-            if (GeminiHardware.Instance.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            if (GeminiHardware.Instance.AtPark) throw new InvalidOperationException(SharedResources.MSG_INVALID_AT_PARK);
 
             if (internalSlewing) GeminiHardware.Instance.AbortSlewSync();
             GeminiHardware.Instance.Velocity = "S";
@@ -2128,7 +2151,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Instance.Trace.Enter("IT:SlewToTargetAsync", GeminiHardware.Instance.TargetRightAscension, GeminiHardware.Instance.TargetDeclination);
             AssertConnect();
 
-            if (GeminiHardware.Instance.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            if (GeminiHardware.Instance.AtPark) throw new InvalidOperationException(SharedResources.MSG_INVALID_AT_PARK);
 
             if (internalSlewing)  GeminiHardware.Instance.AbortSlewSync();
             GeminiHardware.Instance.Velocity = "S";
@@ -2174,20 +2197,12 @@ namespace ASCOM.GeminiTelescope
 
         public void SyncToAltAz(double Azimuth, double Altitude)
         {
-            try
-            {
-                GeminiHardware.Instance.Trace.Enter("IT:SyncToAltAz", Azimuth, Altitude);
-                AssertConnect();
+            GeminiHardware.Instance.Trace.Enter("IT:SyncToAltAz", Azimuth, Altitude);
+            AssertConnect();
 
-                GeminiHardware.Instance.SyncHorizonCoordinates(Azimuth, Altitude);
+            GeminiHardware.Instance.SyncHorizonCoordinates(Azimuth, Altitude);
 
-                GeminiHardware.Instance.Trace.Exit("IT:SyncToAltAz", Azimuth, Altitude);
-            }
-            catch (Exception ex)
-            {
-                GeminiHardware.Instance.Trace.Exit("IT:SyncToAltAz", "Exception: ", ex.ToString());
-
-            }
+            GeminiHardware.Instance.Trace.Exit("IT:SyncToAltAz", Azimuth, Altitude);
         }
 
         public void SyncToCoordinates(double RightAscension, double Declination)
@@ -2196,7 +2211,7 @@ namespace ASCOM.GeminiTelescope
 
             AssertConnect();
             if (GeminiHardware.Instance.AtPark)
-                throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+                throw new ASCOM.InvalidOperationException(SharedResources.MSG_INVALID_AT_PARK);
 
             GeminiHardware.Instance.SyncToEquatorialCoords(RightAscension, Declination);
             GeminiHardware.Instance.Trace.Exit("IT:SyncToCoordinates", RightAscension, Declination);
@@ -2208,10 +2223,10 @@ namespace ASCOM.GeminiTelescope
             AssertConnect();
 
             if (GeminiHardware.Instance.AtPark)
-                throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+                throw new ASCOM.InvalidOperationException(SharedResources.MSG_INVALID_AT_PARK);
 
             if (TargetDeclination == SharedResources.INVALID_DOUBLE || TargetRightAscension == SharedResources.INVALID_DOUBLE)
-                throw new ASCOM.DriverException(SharedResources.MSG_PROP_NOT_SET, (int)SharedResources.SCODE_PROP_NOT_SET);
+                throw new ASCOM.InvalidOperationException(SharedResources.MSG_PROP_NOT_SET);
             GeminiHardware.Instance.SyncEquatorial();
             GeminiHardware.Instance.Trace.Exit("IT:SyncToTarget", GeminiHardware.Instance.TargetRightAscension, GeminiHardware.Instance.TargetDeclination);
         }
@@ -2332,6 +2347,8 @@ namespace ASCOM.GeminiTelescope
                     case DriveRates.driveKing: cmd = ">132:"; break;
                     case DriveRates.driveLunar: cmd = ">133:"; break;
                     case DriveRates.driveSolar: cmd = ">134:"; break;
+                    default:
+                        throw new ASCOM.InvalidValueException("TrackingRate.Set", value.ToString(), "Sidereal,King,Lunar,Solar");
                 }
                 GeminiHardware.Instance.DoCommandResult(cmd, GeminiHardware.Instance.MAX_TIMEOUT, false);
                 GeminiHardware.Instance.Trace.Exit("IT:TrackingRate.Set", value);

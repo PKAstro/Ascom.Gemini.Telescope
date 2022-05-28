@@ -2419,6 +2419,8 @@ namespace ASCOM.GeminiTelescope
                 if (EndOfPulseGuide > 0) return true;   // pulse-guide hasn't completed yet!
 
                 string l_Velocity = DoCommandResult(":Gv", MAX_TIMEOUT, false); //Get current velocity
+
+                if (l_Velocity == "!") l_Velocity = "N";    // stall = no tracking
                 if (l_Velocity != null) Velocity = l_Velocity;  //set main velocity value, since we just got it
                 if (l_Velocity == "G" || l_Velocity == "C") return true; // If G or C (?) then we are pulse guiding 
                 else return false; // Some other rate so we are not pulse guiding
@@ -2529,6 +2531,8 @@ namespace ASCOM.GeminiTelescope
                 Trace.Exit(2, "GetVelocitySync", "timeout! returns " + Velocity);
                 return Velocity; //last known (polled) value if timeout
             }
+
+            if (res == "!") res = "N";  //stall  = no tracking
 
             Trace.Exit(4, "GetVelocitySync", res);
             return res;
@@ -2907,7 +2911,7 @@ namespace ASCOM.GeminiTelescope
 
                         Disconnect();
 
-                        throw new ASCOM.DriverException(SharedResources.MSG_NOT_CONNECTED, (int)SharedResources.SCODE_NOT_CONNECTED);
+                        throw new ASCOM.InvalidOperationException(SharedResources.MSG_NOT_CONNECTED);
                     }
                 }
 
@@ -3567,7 +3571,7 @@ namespace ASCOM.GeminiTelescope
                         Disconnect();
 
                         if (OnError != null) OnError(SharedResources.TELESCOPE_DRIVER_NAME, SharedResources.MSG_GEMINI_VERSION);
-                        throw new DriverException(SharedResources.MSG_GEMINI_VERSION, (int)SharedResources.SCODE_GEMINI_VERSION);
+                        throw new InvalidOperationException(SharedResources.MSG_GEMINI_VERSION);
                     }
 
                     m_GeminiVersion = ver;
@@ -3745,11 +3749,14 @@ namespace ASCOM.GeminiTelescope
                         Trace.Error("timeout", command.m_Command);
                         return;
                     }
+                    if (V == "!") V = "N";  // stall == no tracking
 
                     if (RA != null) m_RightAscension = m_Util.HMSToHours(RA);
                     if (DEC != null) m_Declination = m_Util.DMSToDegrees(DEC);
                     if (ALT != null) m_Altitude = m_Util.DMSToDegrees(ALT);
                     if (AZ != null) m_Azimuth = m_Util.DMSToDegrees(AZ);
+                    if (V == "!") V = "N"; //stall = no tracking
+
                     if (V != null) m_Velocity = V;
                     trc = "RA=" + RA + ", DEC=" + DEC + "ALT=" + ALT + " AZ=" + AZ + " Velocity=" + Velocity;
                     pollString1 = trc;
@@ -4328,7 +4335,7 @@ namespace ASCOM.GeminiTelescope
                     return geminiDateTime;
                 }
                 catch (Exception ex)
-                { throw new ASCOM.DriverException("Error reading UTCDate: " + ex.ToString(), (int)SharedResources.SCODE_INVALID_VALUE); };
+                { throw new ASCOM.InvalidOperationException("Error reading UTCDate: " + ex.ToString()); };
             }
             set
             {
@@ -4369,7 +4376,7 @@ namespace ASCOM.GeminiTelescope
             string latitudedddmm = (DoublePrecision ? DegreesToDMS(Latitude) : m_Util.DegreesToDM(Latitude, "*", ""));
             string result = DoCommandResult(":St" + latitudedddmm, MAX_TIMEOUT, false);
             if (result == null || result != "1")
-                throw new ASCOM.Utilities.Exceptions.InvalidValueException("Latitidue not set");
+                throw new ASCOM.InvalidValueException("Latitidue not set");
         }
 
         /// <summary>
@@ -4382,7 +4389,7 @@ namespace ASCOM.GeminiTelescope
             string longitudedddmm = (DoublePrecision ? DegreesToDMS(-Longitude) : m_Util.DegreesToDM(-Longitude, "*", ""));  // Gemini has the reverse notion of longitude sign: + for West, - for East
             string result = DoCommandResult(":Sg" + longitudedddmm, MAX_TIMEOUT, false);
             if (result == null || result != "1")
-                throw new ASCOM.Utilities.Exceptions.InvalidValueException("Longitude not set");
+                throw new ASCOM.InvalidValueException("Longitude not set");
         }
 
         /// <summary>
@@ -4417,7 +4424,10 @@ namespace ASCOM.GeminiTelescope
         public string Velocity
         {
             get { return m_Velocity; }
-            set { m_Velocity = value; }
+            set {
+                m_Velocity = value;
+           
+            }
         }
 
 
@@ -4497,9 +4507,9 @@ namespace ASCOM.GeminiTelescope
             DoCommandResult(cmd, MAX_TIMEOUT / 2, false, out result);
             if (result == null || result[0] == null || result[2] == null || result[3] == null)
                 throw new TimeoutException((m_AdditionalAlign ? "Align to" : "Sync to ") + "RA/DEC");
-            if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("RA value is invalid");
-            if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("DEC value is invalid");
-            if (result[3] == "No object!") throw new ASCOM.Utilities.Exceptions.InvalidValueException((m_AdditionalAlign ? "Align to" : "Sync to ") + "RA/DEC");
+            if (result[0] != "1") throw new ASCOM.InvalidValueException("RA value is invalid");
+            if (result[2] != "1") throw new ASCOM.InvalidValueException("DEC value is invalid");
+            if (result[3] == "No object!") throw new ASCOM.InvalidValueException((m_AdditionalAlign ? "Align to" : "Sync to ") + "RA/DEC");
 
             m_RightAscension = ra;// Update state machine variables with new RA and DEC.
             m_Declination = dec;
@@ -4539,9 +4549,9 @@ namespace ASCOM.GeminiTelescope
             DoCommandResult(cmd, MAX_TIMEOUT / 2, false, out result);
             if (result == null || result[0] == null || result[2] == null || result[3] == null)
                 throw new TimeoutException((!m_AdditionalAlign ? "Align to" : "Sync to ") + "RA/DEC");
-            if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("RA value is invalid");
-            if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("DEC value is invalid");
-            if (result[3] == "No object!") throw new ASCOM.Utilities.Exceptions.InvalidValueException((!m_AdditionalAlign ? "Align to" : "Sync to ") + "RA/DEC");
+            if (result[0] != "1") throw new ASCOM.InvalidValueException("RA value is invalid");
+            if (result[2] != "1") throw new ASCOM.InvalidValueException("DEC value is invalid");
+            if (result[3] == "No object!") throw new ASCOM.InvalidValueException((!m_AdditionalAlign ? "Align to" : "Sync to ") + "RA/DEC");
 
             m_RightAscension = ra;// Update state machine variables with new RA and DEC.
             m_Declination = dec;
@@ -4656,16 +4666,16 @@ namespace ASCOM.GeminiTelescope
             DoCommandResult(cmd, MAX_TIMEOUT / 2, false, out result);
 
             if (result == null || result[0] == null || result[2] == null || result[3] == null) throw new TimeoutException("SlewEquatorial");
-            if (result[3].StartsWith("1")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to object below horizon");
-            if (result[3].StartsWith("4")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Position unreachable");
+            if (result[3].StartsWith("1")) throw new ASCOM.InvalidValueException("Slew to object below horizon");
+            if (result[3].StartsWith("4")) throw new ASCOM.InvalidValueException("Position unreachable");
             if (result[3].StartsWith("5"))
             {
                 if (OnError != null && m_Connected && m_AllowErrorNotify) OnError("Please 'Synchronize' the mount before using Goto", "Mount Is Not Aligned");
-                throw new ASCOM.Utilities.Exceptions.InvalidValueException("Mount not aligned");
+                throw new ASCOM.InvalidValueException("Mount not aligned");
             }
-            if (result[3].StartsWith("6")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to outside of safety limits");
-            if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("RA coordinate is invalid or inaccessible");
-            if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("DEC coordinates is invalid or inaccessible");
+            if (result[3].StartsWith("6")) throw new ASCOM.InvalidValueException("Slew to outside of safety limits");
+            if (result[0] != "1") throw new ASCOM.InvalidValueException("RA coordinate is invalid or inaccessible");
+            if (result[2] != "1") throw new ASCOM.InvalidValueException("DEC coordinates is invalid or inaccessible");
             m_Velocity = "S";   //set the correct velocity until next poll update
         }
 
@@ -4691,16 +4701,16 @@ namespace ASCOM.GeminiTelescope
             DoCommandResult(cmd, MAX_TIMEOUT / 2, false, out result);
 
             if (result == null || result[0] == null || result[2] == null || result[3] == null) throw new TimeoutException("SlewEquatorialAsync");
-            if (result[3].StartsWith("1")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to object below horizon");
-            if (result[3].StartsWith("4")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Position unreachable");
+            if (result[3].StartsWith("1")) throw new ASCOM.InvalidValueException("Slew to object below horizon");
+            if (result[3].StartsWith("4")) throw new ASCOM.InvalidValueException("Position unreachable");
             if (result[3].StartsWith("5"))
             {
                 if (OnError != null && m_Connected && m_AllowErrorNotify) OnError("Please 'Synchronize' the mount before using Goto", "Mount Is Not Aligned");
-                throw new ASCOM.Utilities.Exceptions.InvalidValueException("Mount not aligned");
+                throw new ASCOM.InvalidValueException("Mount not aligned");
             }
-            if (result[3].StartsWith("6")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to outside of safety limits");
-            if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("RA coordinate is invalid or inaccessible");
-            if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("DEC coordinate is invalid or inaccessible");
+            if (result[3].StartsWith("6")) throw new ASCOM.InvalidValueException("Slew to outside of safety limits");
+            if (result[0] != "1") throw new ASCOM.InvalidValueException("RA coordinate is invalid or inaccessible");
+            if (result[2] != "1") throw new ASCOM.InvalidValueException("DEC coordinate is invalid or inaccessible");
 
             m_Velocity = "S";   //set the correct velocity until next poll update
         }
@@ -4714,6 +4724,11 @@ namespace ASCOM.GeminiTelescope
 
             TargetName = null;
 
+            if (azimuth < 0 || azimuth > 360)
+                throw new ASCOM.InvalidValueException("SyncToAltAz", azimuth.ToString(), "0..360");
+
+            if (altitude < -90 || altitude > 90)
+                throw new ASCOM.InvalidValueException("SyncToAltAz", altitude.ToString(), "-90..90");
 
             if (m_AdditionalAlign)
             {
@@ -4727,9 +4742,9 @@ namespace ASCOM.GeminiTelescope
             DoCommandResult(cmd, MAX_TIMEOUT / 2, false, out result);
             if (result == null || result[0] == null || result[2] == null || result[3] == null)
                 throw new TimeoutException((m_AdditionalAlign ? "Align to" : "Sync to ") + "Alt/Az");
-            if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Alt value is invalid");
-            if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Az value is invalid");
-            if (result[3] == "No object!") throw new ASCOM.Utilities.Exceptions.InvalidValueException((m_AdditionalAlign ? "Align to" : "Sync to ") + "Alt/Az");
+            if (result[0] != "1") throw new ASCOM.InvalidValueException("Alt value is invalid");
+            if (result[2] != "1") throw new ASCOM.InvalidValueException("Az value is invalid");
+            if (result[3] == "No object!") throw new ASCOM.InvalidValueException((m_AdditionalAlign ? "Align to" : "Sync to ") + "Alt/Az");
 
             m_Azimuth = azimuth; // Update state machine variables
             m_Altitude = altitude;
@@ -4767,11 +4782,11 @@ namespace ASCOM.GeminiTelescope
             DoCommandResult(cmd, MAX_TIMEOUT / 2, false, out result);
             if (result == null || result[0] == null || result[2] == null || result[3] == null)
                 throw new TimeoutException("Slew to Alt/Az");
-            if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Alt value is invalid or inaccessible");
-            if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Az value is invalid or inaccessible");
-            if (result[3].StartsWith("1")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: Object below horizon");
-            if (result[3].StartsWith("2")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: No object selected");
-            if (result[3].StartsWith("3")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: Manual control");
+            if (result[0] != "1") throw new ASCOM.InvalidValueException("Alt value is invalid or inaccessible");
+            if (result[2] != "1") throw new ASCOM.InvalidValueException("Az value is invalid or inaccessible");
+            if (result[3].StartsWith("1")) throw new ASCOM.InvalidValueException("Slew to Alt/Az: Object below horizon");
+            if (result[3].StartsWith("2")) throw new ASCOM.InvalidValueException("Slew to Alt/Az: No object selected");
+            if (result[3].StartsWith("3")) throw new ASCOM.InvalidValueException("Slew to Alt/Az: Manual control");
             m_Velocity = "S";   //set the correct velocity until next poll update
 
         }
@@ -4798,11 +4813,11 @@ namespace ASCOM.GeminiTelescope
 
             if (result == null || result[0] == null || result[2] == null || result[3] == null)
                 throw new TimeoutException("Slew to Alt/Az");
-            if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Alt value is invalid or inaccessible");
-            if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Az value is invalid or inaccessible");
-            if (result[3].StartsWith("1")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: Object below horizon");
-            if (result[3].StartsWith("2")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: No object selected");
-            if (result[3].StartsWith("3")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: Manual control");
+            if (result[0] != "1") throw new ASCOM.InvalidValueException("Alt value is invalid or inaccessible");
+            if (result[2] != "1") throw new ASCOM.InvalidValueException("Az value is invalid or inaccessible");
+            if (result[3].StartsWith("1")) throw new ASCOM.InvalidValueException("Slew to Alt/Az: Object below horizon");
+            if (result[3].StartsWith("2")) throw new ASCOM.InvalidValueException("Slew to Alt/Az: No object selected");
+            if (result[3].StartsWith("3")) throw new ASCOM.InvalidValueException("Slew to Alt/Az: Manual control");
 
             m_Velocity = "S";   //set the correct velocity until next poll update
         }

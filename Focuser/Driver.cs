@@ -184,7 +184,7 @@ namespace ASCOM.GeminiTelescope
                     GeminiHardware.Instance.Trace.Enter("IF:Link", value);
                     GeminiHardware.Instance.Connected = true;
                     if (!GeminiHardware.Instance.Connected)
-                        throw new DriverException("Cannot connect to Gemini Focuser", -1);
+                        throw new InvalidOperationException("Cannot connect to Gemini Focuser");
                     else
                     {
                         m_State  = FocuserState.None;

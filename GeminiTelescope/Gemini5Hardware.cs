@@ -429,10 +429,12 @@ namespace ASCOM.GeminiTelescope
                 if (DEC != null) m_Declination = m_Util.DMSToDegrees(DEC);
                 if (ALT != null) m_Altitude = m_Util.DMSToDegrees(ALT);
                 if (AZ != null) m_Azimuth = m_Util.DMSToDegrees(AZ);
+                if (V == "!") V = "N"; //stall = no tracking
                 if (V != null) m_Velocity = V;
                 if (HA != null) m_HourAngle = m_Util.HMSToHours(HA);
 
                 trc = "RA=" + RA + ", DEC=" + DEC + "ALT=" + ALT + "HA=" + HA + " AZ=" + AZ + " Velocity=" + Velocity;
+
 
                 string ST = res[11];
                 string SOP = res[10];
