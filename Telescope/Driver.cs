@@ -613,8 +613,8 @@ namespace ASCOM.GeminiTelescope
 
             get
             {
-                GeminiHardware.Instance.Trace.Enter("IT:CanSyncAltAz.Get", true);
-                return true;
+                GeminiHardware.Instance.Trace.Enter("IT:CanSyncAltAz.Get", false);
+                return false;
             }
         }
 
@@ -2198,6 +2198,9 @@ namespace ASCOM.GeminiTelescope
         public void SyncToAltAz(double Azimuth, double Altitude)
         {
             GeminiHardware.Instance.Trace.Enter("IT:SyncToAltAz", Azimuth, Altitude);
+
+            throw new ASCOM.MethodNotImplementedException("SyncToAltAz");   // Gemini doesn't process Sync to Alt/Az in GEM mode
+
             AssertConnect();
 
             GeminiHardware.Instance.SyncHorizonCoordinates(Azimuth, Altitude);
