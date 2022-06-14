@@ -3554,8 +3554,8 @@ namespace ASCOM.GeminiTelescope
 
             DiscardInBuffer(); //clear all received data
 
-            //longitude, latitude, UTC offset
-            Transmit(":GV#:Gg#:Gt#:GG#");
+            //high precision mode, longitude, latitude, UTC offset
+            Transmit(":u#:GV#:Gg#:Gt#:GG#");
 
             //verify that Gemini is at least Level 4
             command = new CommandItem(":GV", MAX_TIMEOUT, true);
