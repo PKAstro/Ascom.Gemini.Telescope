@@ -131,6 +131,9 @@ namespace ASCOM.GeminiTelescope
         internal double m_Altitude;
         internal double m_Azimuth;
         internal string m_TargetName = null;
+
+        internal bool m_VariableMoveAxis = false;
+
         public string TargetName
         {
             get
@@ -1028,6 +1031,8 @@ namespace ASCOM.GeminiTelescope
           {"es",">604:"}
         };
 
+
+
         #endregion
 
         #region Public Events
@@ -1195,6 +1200,9 @@ namespace ASCOM.GeminiTelescope
 
             if (!int.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "GeminiStopMode", ""), out m_GeminiStopMode))
                 m_GeminiStopMode = 0;
+
+            if (!bool.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Variable Move Axis", ""), out m_VariableMoveAxis))
+                m_VariableMoveAxis = false;
 
             TraceLevel = m_TraceLevel;
 
@@ -1638,6 +1646,19 @@ namespace ASCOM.GeminiTelescope
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "UTCOffset", value.ToString());
             }
         }
+
+
+        public bool VariableMoveAxis
+        {
+            get { return m_VariableMoveAxis; }
+            set
+            {
+                Profile.DeviceType = "Telescope";
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Variable Move Axis", value.ToString());
+                m_VariableMoveAxis = value;
+            }
+        }
+
 
         /// <summary>
         /// Get/Set Hanbox Form Setting 

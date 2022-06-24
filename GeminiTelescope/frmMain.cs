@@ -873,6 +873,7 @@ namespace ASCOM.GeminiTelescope
             setupForm.AsyncPulseGuide = GeminiHardware.Instance.AsyncPulseGuide;
             setupForm.ReportPierSide = GeminiHardware.Instance.ReportPierSide;
             setupForm.PrecisionPulseGuide = GeminiHardware.Instance.PrecisionPulseGuide;
+            setupForm.VariableMoveAxis = GeminiHardware.Instance.VariableMoveAxis;
 
             string[] optics = GeminiHardware.Instance.OpticsNames.Split('~');
             string[] focallengths = GeminiHardware.Instance.FocalLength.Split('~');
@@ -961,6 +962,8 @@ namespace ASCOM.GeminiTelescope
                 GeminiHardware.Instance.PrecisionPulseGuide = setupForm.PrecisionPulseGuide;
 
                 GeminiHardware.Instance.ScanCOMPorts = setupForm.AllowPortScan;
+
+                GeminiHardware.Instance.VariableMoveAxis = setupForm.VariableMoveAxis;
 
                 if (setupForm.UseJoystick && !string.IsNullOrEmpty(setupForm.JoystickName))
                 {

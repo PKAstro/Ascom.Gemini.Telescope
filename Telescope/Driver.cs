@@ -1284,6 +1284,7 @@ namespace ASCOM.GeminiTelescope
         }
 
         private bool TrackingState = true;  //set when MoveAxis is initiated, restored when it ended
+        private string RADivisors = "";     //set by MoveAxis before variable rate is set to be restored later
 
         public void MoveAxis(TelescopeAxes Axis, double Rate)
         {
@@ -1292,6 +1293,12 @@ namespace ASCOM.GeminiTelescope
             AssertConnect();
             if (GeminiHardware.Instance.AtPark) throw new ASCOM.InvalidOperationException(SharedResources.MSG_INVALID_AT_PARK);
 
+
+            if (GeminiHardware.Instance.dVersion >= 5.21 && GeminiHardware.Instance.VariableMoveAxis)
+            {
+                VariableMoveAxis(Axis, Rate);
+                return;
+            }
 
             string[] cmds = { null, null };
 
@@ -1370,6 +1377,111 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Instance.WaitForVelocity("GCS", GeminiHardware.Instance.MAX_TIMEOUT);
             GeminiHardware.Instance.Velocity = "S"; //slew, as per ASCOM spec
             GeminiHardware.Instance.Trace.Exit("IT:MoveAxis", Axis, Rate);
+        }
+
+        private void VariableMoveAxis(TelescopeAxes axis, double rate)
+        {
+            switch(axis)
+            {
+                case TelescopeAxes.axisPrimary: VariableMoveAxisRA(rate); break;
+                case TelescopeAxes.axisSecondary: VariableMoveAxisDEC(rate); break;
+                default:
+                    throw new ASCOM.InvalidValueException("MoveAxis", axis.ToString(), "Primary,Secondary");
+            }
+        }
+
+        private void VariableMoveAxisDEC(double rate)
+        {
+            GeminiHardware.Instance.Trace.Enter("IT:MoveAxisDEC", rate);
+
+            if (rate == 0) // stop motion
+            {
+                GeminiHardware.Instance.DoCommandResult(">454:0", GeminiHardware.Instance.MAX_TIMEOUT / 2, false);
+            }
+            else
+            {
+                double spd = stepsPerDegree();
+                int divisor = (int)Math.Round(12e6 / (spd * rate));
+                string[] cmds = new string[]
+                {
+                    $">452:{divisor}",
+                    ">454:1"
+                };
+
+                GeminiHardware.Instance.Trace.Info(4, "IT:MoveAxisDEC", spd, divisor);
+
+                GeminiHardware.Instance.DoCommandResult(cmds, GeminiHardware.Instance.MAX_TIMEOUT / 2, false);
+                GeminiHardware.Instance.WaitForVelocity("GCS", GeminiHardware.Instance.MAX_TIMEOUT);
+                GeminiHardware.Instance.Velocity = "S"; //slew, as per ASCOM spec
+            }
+            GeminiHardware.Instance.Trace.Exit("IT:MoveAxisDEC", rate);
+
+        }
+
+       
+
+        private void VariableMoveAxisRA(double rate)
+        {
+            GeminiHardware.Instance.Trace.Enter("IT:MoveAxisRA", rate);
+            if (rate == 0)
+            {
+                // stop motion
+                GeminiHardware.Instance.DoCommandResult(">453:0", GeminiHardware.Instance.MAX_TIMEOUT / 2, false);
+                if (RADivisors != "")
+                    GeminiHardware.Instance.DoCommandResult(">451:" + RADivisors, GeminiHardware.Instance.MAX_TIMEOUT, false);
+
+                RADivisors = "";
+
+                if (!TrackingState)
+                {
+                    GeminiHardware.Instance.DoCommandResult(":hN", GeminiHardware.Instance.MAX_TIMEOUT, false);
+                    GeminiHardware.Instance.WaitForVelocity("N", GeminiHardware.Instance.MAX_TIMEOUT);
+                    GeminiHardware.Instance.Tracking = false;
+                }
+            }
+            else
+            {
+                TrackingState = GeminiHardware.Instance.Tracking;
+
+                //save
+                RADivisors = GeminiHardware.Instance.DoCommandResult("<451:", GeminiHardware.Instance.MAX_TIMEOUT, false);
+
+                double spd = stepsPerDegree();
+                int divisor = (int)Math.Round(12e6 / (spd * rate));
+                string[] cmds = new string[]
+                {
+                    $">451:{divisor}",
+                    ">453:1"
+                };
+
+                GeminiHardware.Instance.Trace.Info(4, "IT:MoveAxisRA", spd, divisor);
+
+                GeminiHardware.Instance.DoCommandResult(cmds, GeminiHardware.Instance.MAX_TIMEOUT / 2, false);
+                GeminiHardware.Instance.WaitForVelocity("GCS", GeminiHardware.Instance.MAX_TIMEOUT);
+                GeminiHardware.Instance.Velocity = "S"; //slew, as per ASCOM spec
+            }
+            GeminiHardware.Instance.Trace.Exit("IT:MoveAxisRA", rate);
+        }
+
+
+        private double stepsPerDegree()
+        {
+            string[] mountpar = null;
+            double spd = 0;
+
+            GeminiHardware.Instance.DoCommandResult(new string[] { "<21:", "<23:", "<25:" }, GeminiHardware.Instance.MAX_TIMEOUT / 2, false, out mountpar);
+
+            if (mountpar != null)
+            {
+                string wormGearRatio = mountpar[0];
+                string spurGearRatio = mountpar[1];
+                string encoderResolution = mountpar[2];
+
+                if (spurGearRatio != null && wormGearRatio != null && encoderResolution != null)
+                    spd = (Math.Abs(double.Parse(wormGearRatio)) * double.Parse(spurGearRatio) * double.Parse(encoderResolution)) / 360.0;
+            }
+            if (spd == 0) throw new TimeoutException("Can't calculate stepsPerDegree");
+            return spd;
         }
 
         public string Name
@@ -2536,6 +2648,15 @@ namespace ASCOM.GeminiTelescope
                         rate = rate * SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0;  // convert to rate in deg/sec
                         m_Rates[idx] = new Rate(rate, rate);
                     }
+
+                    // add variable rate from 0 to slew for satellite tracking
+                    if (GeminiHardware.Instance.dVersion >= 5.21 && GeminiHardware.Instance.VariableMoveAxis)
+                    {
+                        Array.Resize(ref m_Rates, m_Rates.Length + 1);
+                        int idx = result.Length;
+                        m_Rates[idx] = new Rate(0, m_Rates[0].Maximum); 
+                    }
+
                     break;
             }
         }

@@ -142,6 +142,8 @@ namespace ASCOM.GeminiTelescope
                 int idx = comboBoxTZ.Items.Add(tz);
             }
 
+            ckVariableMoveAxis.Checked = GeminiHardware.Instance.VariableMoveAxis;
+
             chkSetLanguage.Checked = GeminiHardware.Instance.SetLanguage;
 
             m_DoneInitialize = true;
@@ -634,6 +636,14 @@ namespace ASCOM.GeminiTelescope
                     return cmbJoystick.SelectedItem.ToString();
                 return string.Empty;
             }
+        }
+
+        public bool VariableMoveAxis {
+            get
+            {
+                return ckVariableMoveAxis.Checked;
+            }
+            set { ckVariableMoveAxis.Checked = value; }
         }
 
         private void btnJoysticConfig_Click(object sender, EventArgs e)

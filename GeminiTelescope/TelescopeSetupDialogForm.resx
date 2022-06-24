@@ -148,7 +148,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;buttonGps.ZOrder" xml:space="preserve">
-    <value>15</value>
+    <value>16</value>
   </data>
   <metadata name="pbGeminiSettings.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
@@ -178,7 +178,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;pbGeminiSettings.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>12</value>
   </data>
   <metadata name="button1.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
@@ -259,7 +259,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cmdOK.ZOrder" xml:space="preserve">
-    <value>22</value>
+    <value>23</value>
   </data>
   <data name="cmdCancel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
@@ -289,7 +289,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cmdCancel.ZOrder" xml:space="preserve">
-    <value>21</value>
+    <value>22</value>
   </data>
   <data name="tableLayoutPanel1.ColumnCount" type="System.Int32, mscorlib">
     <value>4</value>
@@ -772,7 +772,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;groupBox1.ZOrder" xml:space="preserve">
-    <value>19</value>
+    <value>20</value>
   </data>
   <data name="labelVersion.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Left</value>
@@ -802,7 +802,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelVersion.ZOrder" xml:space="preserve">
-    <value>18</value>
+    <value>19</value>
   </data>
   <data name="labelTime.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
@@ -832,7 +832,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelTime.ZOrder" xml:space="preserve">
-    <value>17</value>
+    <value>18</value>
   </data>
   <data name="tableLayoutPanel3.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
@@ -1093,7 +1093,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;groupBox3.ZOrder" xml:space="preserve">
-    <value>16</value>
+    <value>17</value>
   </data>
   <data name="groupBox4.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
@@ -1183,7 +1183,7 @@
     <value>True</value>
   </data>
   <data name="checkBoxShowHandbox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>478, 154</value>
+    <value>478, 131</value>
   </data>
   <data name="checkBoxShowHandbox.Size" type="System.Drawing.Size, System.Drawing">
     <value>125, 17</value>
@@ -1204,7 +1204,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;checkBoxShowHandbox.ZOrder" xml:space="preserve">
-    <value>14</value>
+    <value>15</value>
   </data>
   <data name="tableLayoutPanel2.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
@@ -1435,7 +1435,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;groupBox2.ZOrder" xml:space="preserve">
-    <value>13</value>
+    <value>14</value>
   </data>
   <metadata name="timerUpdate.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
@@ -1615,7 +1615,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;groupBox5.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>13</value>
   </data>
   <data name="chkJoystick.Location" type="System.Drawing.Point, System.Drawing">
     <value>476, 282</value>
@@ -1645,7 +1645,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;chkJoystick.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>11</value>
   </data>
   <data name="cmbJoystick.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
@@ -1669,13 +1669,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cmbJoystick.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>10</value>
   </data>
   <data name="chkVoice.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="chkVoice.Location" type="System.Drawing.Point, System.Drawing">
-    <value>478, 177</value>
+    <value>478, 154</value>
   </data>
   <data name="chkVoice.Size" type="System.Drawing.Size, System.Drawing">
     <value>130, 17</value>
@@ -1696,7 +1696,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;chkVoice.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>8</value>
   </data>
   <data name="btnJoysticConfig.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1771,7 +1771,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btnJoysticConfig.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>9</value>
   </data>
   <data name="picASCOM.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -1798,7 +1798,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;picASCOM.ZOrder" xml:space="preserve">
-    <value>20</value>
+    <value>21</value>
   </data>
   <data name="label11.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1825,7 +1825,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label11.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="cbLogging.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
@@ -1867,13 +1867,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cbLogging.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="chkAsyncPulseGuide.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="chkAsyncPulseGuide.Location" type="System.Drawing.Point, System.Drawing">
-    <value>478, 200</value>
+    <value>478, 177</value>
   </data>
   <data name="chkAsyncPulseGuide.Size" type="System.Drawing.Size, System.Drawing">
     <value>153, 17</value>
@@ -1894,13 +1894,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;chkAsyncPulseGuide.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="chkPierSide.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="chkPierSide.Location" type="System.Drawing.Point, System.Drawing">
-    <value>478, 246</value>
+    <value>478, 223</value>
   </data>
   <data name="chkPierSide.Size" type="System.Drawing.Size, System.Drawing">
     <value>103, 17</value>
@@ -1921,7 +1921,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;chkPierSide.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="checkBox1.Location" type="System.Drawing.Point, System.Drawing">
     <value>263, 235</value>
@@ -2212,7 +2212,7 @@
     <value>NoControl</value>
   </data>
   <data name="chkPrecisionPulse.Location" type="System.Drawing.Point, System.Drawing">
-    <value>478, 223</value>
+    <value>478, 200</value>
   </data>
   <data name="chkPrecisionPulse.Size" type="System.Drawing.Size, System.Drawing">
     <value>129, 17</value>
@@ -2233,7 +2233,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;chkPrecisionPulse.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="tableLayoutPanel9.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
@@ -2524,7 +2524,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;groupBox8.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="chkSetLanguage.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2533,7 +2533,7 @@
     <value>NoControl</value>
   </data>
   <data name="chkSetLanguage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>478, 131</value>
+    <value>478, 108</value>
   </data>
   <data name="chkSetLanguage.Size" type="System.Drawing.Size, System.Drawing">
     <value>149, 17</value>
@@ -2554,6 +2554,36 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;chkSetLanguage.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="ckVariableMoveAxis.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="ckVariableMoveAxis.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="ckVariableMoveAxis.Location" type="System.Drawing.Point, System.Drawing">
+    <value>478, 246</value>
+  </data>
+  <data name="ckVariableMoveAxis.Size" type="System.Drawing.Size, System.Drawing">
+    <value>139, 17</value>
+  </data>
+  <data name="ckVariableMoveAxis.TabIndex" type="System.Int32, mscorlib">
+    <value>42</value>
+  </data>
+  <data name="ckVariableMoveAxis.Text" xml:space="preserve">
+    <value>Variable MoveAxis Rate</value>
+  </data>
+  <data name="&gt;&gt;ckVariableMoveAxis.Name" xml:space="preserve">
+    <value>ckVariableMoveAxis</value>
+  </data>
+  <data name="&gt;&gt;ckVariableMoveAxis.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ckVariableMoveAxis.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;ckVariableMoveAxis.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
