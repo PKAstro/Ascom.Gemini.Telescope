@@ -51,7 +51,7 @@
             "Gemini PEC table",
             "ASCOM platform settings",
             "ASCOM all profile and settings from Gemini",
-            "ASCOM latest two log files"});
+            "ASCOM latest log files"});
             this.lbCollect.Location = new System.Drawing.Point(15, 40);
             this.lbCollect.Name = "lbCollect";
             this.lbCollect.Size = new System.Drawing.Size(431, 139);

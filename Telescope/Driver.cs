@@ -1294,7 +1294,7 @@ namespace ASCOM.GeminiTelescope
             if (GeminiHardware.Instance.AtPark) throw new ASCOM.InvalidOperationException(SharedResources.MSG_INVALID_AT_PARK);
 
 
-            if (GeminiHardware.Instance.dVersion >= 5.21 && GeminiHardware.Instance.VariableMoveAxis)
+            if (GeminiHardware.Instance.dVersion >= 6 && GeminiHardware.Instance.VariableMoveAxis)
             {
                 VariableMoveAxis(Axis, Rate);
                 return;
@@ -2650,7 +2650,7 @@ namespace ASCOM.GeminiTelescope
                     }
 
                     // add variable rate from 0 to slew for satellite tracking
-                    if (GeminiHardware.Instance.dVersion >= 5.21 && GeminiHardware.Instance.VariableMoveAxis)
+                    if (GeminiHardware.Instance.dVersion >= 6 && GeminiHardware.Instance.VariableMoveAxis)
                     {
                         Array.Resize(ref m_Rates, m_Rates.Length + 1);
                         int idx = result.Length;

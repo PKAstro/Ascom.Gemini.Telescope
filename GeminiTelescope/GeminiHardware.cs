@@ -4057,16 +4057,25 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Get current RightAscention propery
         /// retrieved from the latest polled value from the mount, no actual command is executed
+        /// unless doing satellite tracking (variable MoveAxis rate selected and slewing in L6+)
         /// </summary>
         public double RightAscension
-        { get { return m_RightAscension; } }
+        { get {
+                // for satellite tracking need real-time coordinate updates
+                if (VariableMoveAxis && Slewing) UpdatePolledVariables(false);
+                return m_RightAscension; } }
 
         /// <summary>
         /// Get current Declination propery
         /// retrieved from the latest polled value from the mount, no actual command is executed
+        /// unless doing satellite tracking (variable MoveAxis rate selected and slewing in L6+)
         /// </summary>
         public double Declination
-        { get { return m_Declination; } }
+        { get {
+                // for satellite tracking need real-time coordinate updates
+                if (VariableMoveAxis && Slewing) UpdatePolledVariables(false);
+                return m_Declination;
+            } }
 
 
         /// <summary>
@@ -4074,7 +4083,11 @@ namespace ASCOM.GeminiTelescope
         /// retrieved from the latest polled value from the mount, no actual command is executed
         /// </summary>
         public double Altitude
-        { get { return m_Altitude; } }
+        { get {
+                // for satellite tracking need real-time coordinate updates
+                if (VariableMoveAxis && Slewing) UpdatePolledVariables(false);
+
+                return m_Altitude; } }
 
         /// <summary>
         /// Get current Azimuth propery

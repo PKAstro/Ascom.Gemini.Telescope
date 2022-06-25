@@ -146,12 +146,17 @@ namespace ASCOM.GeminiTelescope
                 System.IO.DirectoryInfo[] dirs = di.GetDirectories("Logs *").OrderByDescending(x => x.LastWriteTime).ToArray();
                 if (dirs.Length > 0)
                 {
-                    var fis = dirs[0].GetFiles("ASCOM." + SharedResources.TELESCOPE_DRIVER_NAME + "*.*").OrderByDescending(x => x.LastWriteTime).Take(2);
+                    var fis = dirs[0].GetFiles("ASCOM." + SharedResources.TELESCOPE_DRIVER_NAME + "*.*").OrderByDescending(x => x.LastWriteTime);
 
+                    double totalSize = 0;
                     foreach (var fi in fis)
                     {
                         File.Copy(fi.FullName, Folder + "\\" + fi.Name);
                         log += $"File: {fi.FullName}...";
+                        totalSize += fi.Length;
+                        if (totalSize > 500.0 * 1024 * 1024) break; // up to 500MB
+                        if (DateTime.Now - fi.LastWriteTime >= TimeSpan.FromDays(7)) // and most recent 7 days
+                            break;
                     }
                 }
 
