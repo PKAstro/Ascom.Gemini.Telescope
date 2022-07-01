@@ -4358,10 +4358,15 @@ namespace ASCOM.GeminiTelescope
                     DateTime geminiDateTime = DateTime.Now;
                     string l_Time = DoCommandResult(":GL", MAX_TIMEOUT, false);
                     string l_Date = DoCommandResult(":GC", MAX_TIMEOUT, false);
-                    double l_TZOffset = double.Parse(DoCommandResult(":GG", MAX_TIMEOUT, false));
+                    double l_TZOffset = 0;
+
+                    double.TryParse(GeminiHardware.Instance.DoCommandResult(":GG", GeminiHardware.Instance.MAX_TIMEOUT, false), System.Globalization.NumberStyles.Float, GeminiHardware.Instance.m_GeminiCulture, out l_TZOffset);
+
                     if (DoublePrecision) // Time will be returned in decimal hours so convert it to HH:mm:ss format
                     {
-                        TimeSpan l_TimeTimeSpan = TimeSpan.FromHours(double.Parse(l_Time));
+                        double hours = 0;
+                        double.TryParse(l_Time, System.Globalization.NumberStyles.Float, GeminiHardware.Instance.m_GeminiCulture, out hours);
+                        TimeSpan l_TimeTimeSpan = TimeSpan.FromHours(hours);
                         l_Time = string.Format("{0:D2}:{1:D2}:{2:D2}", l_TimeTimeSpan.Hours, l_TimeTimeSpan.Minutes, l_TimeTimeSpan.Seconds);
                     }
                     geminiDateTime = DateTime.ParseExact(l_Date + " " + l_Time, "MM/dd/yy HH:mm:ss", new System.Globalization.DateTimeFormatInfo()); // Parse to a local datetime using the given format
