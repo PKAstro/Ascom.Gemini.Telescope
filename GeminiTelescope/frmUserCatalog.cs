@@ -534,16 +534,7 @@ namespace ASCOM.GeminiTelescope
                     MessageBox.Show("Can't sync on Solar System objects!", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 else
                 {
-                    int solarIndex = obj.GetSolarIndex();                 
-                    var res = GeminiHardware.Instance.DoCommandResult($":M{solarIndex}", GeminiHardware.Instance.MAX_TIMEOUT, false);
-                    
-                    switch (res[0])
-                    {
-                        case '0': break;
-                        default:
-                            MessageBox.Show(res.Substring(1), SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                            break;
-                    }
+                    GotoSolarObject(obj);
                 }
                 return;
             }
@@ -574,6 +565,19 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        internal static void GotoSolarObject(CatalogObject obj)
+        {
+            int solarIndex = obj.GetSolarIndex();
+            var res = GeminiHardware.Instance.DoCommandResult($":M{solarIndex}", GeminiHardware.Instance.MAX_TIMEOUT, false);
+
+            switch (res[0])
+            {
+                case '0': break;
+                default:
+                    MessageBox.Show(res.Substring(1), SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    break;
+            }
+        }
 
         private void pbToFile_Click(object sender, EventArgs e)
         {
@@ -820,6 +824,11 @@ namespace ASCOM.GeminiTelescope
             //gvAllObjects.BeginEdit(true);
 #endif
         }
+
+        private void lbCatalogs_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 
     public class CatalogObject
@@ -828,9 +837,9 @@ namespace ASCOM.GeminiTelescope
         public RACoord RA { get; set; }
         public DECCoord DEC { get; set; }
         public string Catalog { get; set; }
-        private int SolarNumber { get; set; }
+        internal int SolarNumber { get; set; }
 
-        private bool _solar;
+        internal bool _solar;
         //pre-computed site/date-time variables shared by all instances:
         private static double LST = 0;
         private static double lat = 0;
@@ -939,7 +948,7 @@ namespace ASCOM.GeminiTelescope
 
         public override string ToString()
         {
-            return string.Format("{0},{1},{2}#", Name, RA.ToString(":",":"), DEC.ToString(":",":"));
+            return string.Format("{0},{1},{2}#", Name, RA?.ToString(":",":"), DEC?.ToString(":",":"));
         }
 
         internal static bool TryParseDouble(string s, string catalog, out CatalogObject obj)

@@ -45,6 +45,7 @@
             this.txtTerm.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtTerm.Size = new System.Drawing.Size(694, 329);
             this.txtTerm.TabIndex = 0;
+            this.txtTerm.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtTerm_KeyDown);
             this.txtTerm.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtTerm_KeyUp);
             this.txtTerm.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtTerm_PreviewKeyDown);
             // 

@@ -219,6 +219,7 @@ namespace ASCOM.GeminiTelescope
             Commands.Add(">182:", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
             Commands.Add(">509:", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
             Commands.Add(">511:", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
+            Commands.Add(">512:", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
             Commands.Add(">221:", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
             Commands.Add(">222:", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
             Commands.Add(">411:", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
@@ -250,6 +251,7 @@ namespace ASCOM.GeminiTelescope
                 Commands.Remove(">182:");
                 Commands.Remove(">509:");
                 Commands.Remove(">511:");
+                Commands.Remove(">512:");
                 Commands.Remove(">221:");
                 Commands.Remove(">222:");
                 Commands.Remove(">411:");
@@ -259,6 +261,10 @@ namespace ASCOM.GeminiTelescope
                 Commands.Add(":S0", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
                 Commands.Add("<91:", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
                 Commands.Add("<551", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
+            }
+            if (GeminiHardware.Instance.dVersion >= 5.3 && !Commands.ContainsKey(":Sc"))
+            {
+                Commands.Add(":Sc", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
             }
         }
 

@@ -81,8 +81,8 @@ namespace Indigo
                         m_bResizingFromCollapse = false;
                     }
 
-                    foreach (Control c in Controls)
-                        c.Visible = !value;
+                    //foreach (Control c in Controls)
+                    //    c.Visible = !value;
 
                     Invalidate();
                 }

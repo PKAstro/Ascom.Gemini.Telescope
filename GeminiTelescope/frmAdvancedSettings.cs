@@ -24,6 +24,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using ASCOM.GeminiTelescope.Properties;
+using System.Diagnostics;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -140,6 +141,9 @@ namespace ASCOM.GeminiTelescope
                     }
                 }
             }
+
+            // external encoder settings collapsed by default
+            this.groupBox5.IsCollapsed = true;
         }
 
         void pbButton_EnabledChanged(object sender, EventArgs e)
@@ -207,7 +211,10 @@ namespace ASCOM.GeminiTelescope
             else
                 cbGeometry.Enabled = true;
 
-
+            if (GeminiHardware.Instance.dVersion < 6.03)
+                checkBox9.Enabled = checkBox10.Enabled = false;
+            else
+                checkBox9.Enabled = checkBox10.Enabled = true;
         }
 
 
@@ -492,9 +499,20 @@ namespace ASCOM.GeminiTelescope
             Cursor.Current = Cursors.WaitCursor;
             props.ClearProfile(p);
             props.SyncWithGemini(false, p);
+            geminiPropertiesBindingSource.BindingComplete += GeminiPropertiesBindingSource_BindingComplete;
             geminiPropertiesBindingSource.ResetBindings(false);
             Cursor.Current = Cursors.Default;
             GeminiHardware.Instance.Trace.Exit("Props:GetSettings", m_ParentPanel.Text);
+        }
+
+        private void GeminiPropertiesBindingSource_BindingComplete(object sender, BindingCompleteEventArgs e)
+        {
+            if (e.BindingCompleteState != BindingCompleteState.Success)
+            {
+                GeminiHardware.Instance.Trace.Error("GeminiProps", e.Binding.BindingMemberInfo.BindingField, e.ErrorText);
+                Debug.WriteLine($"GeminiProps Error: {e.Binding.BindingMemberInfo.BindingField}: {e.ErrorText}");
+                e.Cancel = false;
+            }
         }
 
         /// <summary>

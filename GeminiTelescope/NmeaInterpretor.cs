@@ -13,6 +13,7 @@ namespace ASCOM.GeminiTelescope
     //**************************************
     //     *******************************
     using System;
+    using System.Diagnostics;
     using System.Globalization;
     public class NmeaInterpreter
     {
@@ -74,13 +75,84 @@ namespace ASCOM.GeminiTelescope
         private bool m_QuitThread = false;
         #endregion
 
+        public static NmeaInterpreter _instance = null;
+
+
+        public static NmeaInterpreter Instance
+        {
+            get
+            {
+                return _instance;
+            }
+        }
+
+        bool odd = false;
+
         public NmeaInterpreter()
         {
             GeminiHardware.Instance.Trace.Enter("NmeaInterpreter");
 
             comPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(comPort_DataReceived);
+            comPort.PinChanged += ComPort_PinChanged;
             timeOut = new Timer(new TimerCallback(timeOut_Elapsed),null,  Timeout.Infinite, Timeout.Infinite);
             GeminiHardware.Instance.Trace.Exit("NmeaInterpreter");
+            MilliSeconds = 0;
+            odd = false;
+            _instance = this;
+        }
+
+        ~NmeaInterpreter()
+        {
+            _instance = null;
+        }
+
+        DateTime prev = DateTime.MinValue;
+        
+        Stopwatch stopWatch = new Stopwatch();
+
+        long seconds = 0;
+        public double MilliSeconds
+        {
+            get
+            {
+                lock (stopWatch)
+                {
+                    return seconds * 1000 + stopWatch.Elapsed.TotalMilliseconds;
+                }
+            }
+
+            set
+            {
+                lock (stopWatch)
+                {
+                    seconds = 0;
+                    stopWatch.Stop();
+                    stopWatch.Reset();
+                    stopWatch.Start();
+                    prev = DateTime.Now;
+                }
+            }
+        }
+
+  
+        private void ComPort_PinChanged(object sender, SerialPinChangedEventArgs e)
+        {
+            if (e.EventType == SerialPinChange.CtsChanged)
+            {
+                var el = stopWatch.ElapsedMilliseconds;
+                // var m = (DateTime.Now - prev).TotalMilliseconds;
+
+                odd = !odd;
+                if (el > 800)
+                {
+                    Debug.WriteLine($"Sec={seconds} elapsed={el} Tick: {MilliSeconds}");
+                    lock (stopWatch)
+                    {
+                        seconds++;
+                        stopWatch.Restart();
+                    }
+                }
+            }
         }
 
 
@@ -113,6 +185,7 @@ namespace ASCOM.GeminiTelescope
             switch (GetWords(sentence)[0])
             {
                 case "$GPRMC":
+                case "$GNRMC":
                     // A "Recommended Minimum" sentence was found!
                     return ParseGPRMC(sentence);
                 case "$GPGSV":
@@ -544,15 +617,18 @@ namespace ASCOM.GeminiTelescope
                             comPort.DataBits = 8;
                             comPort.Parity = Parity.None;
                             comPort.StopBits = StopBits.One;
-                            comPort.Handshake = Handshake.None;
+                            comPort.Handshake = Handshake.XOnXOff;
                             comPort.ReadTimeout = 1000;
                             comPort.ReceivedBytesThreshold = 20;
-
                             m_DataReceivedEvent.Reset();
-                            comPort.Open();
 
                             comPort.DtrEnable = true;
                             comPort.RtsEnable = true;
+
+
+                            comPort.Open();
+
+                          
 
                             timeOut.Change(3000, 0);
 
@@ -560,6 +636,19 @@ namespace ASCOM.GeminiTelescope
                             m_QuitThread = false;
                             m_DataThread = new Thread(new ThreadStart(ProcessDataThread));
                             m_DataThread.Start();
+                            MilliSeconds = 0;
+                            stopWatch.Stop();
+                            seconds = 0;
+                            odd = false;
+                            Process.GetCurrentProcess().ProcessorAffinity = new IntPtr(2); // Uses the second Core or Processor for the Test
+                            Process.GetCurrentProcess().PriorityClass =
+                        ProcessPriorityClass.High;      // Prevents "Normal" processes 
+                                                        // from interrupting Threads
+                            Thread.CurrentThread.Priority =
+                        ThreadPriority.Highest;     // Prevents "Normal" Threads 
+                                                    // from interrupting this thread
+
+                            stopWatch.Start();
                         }
                         catch (Exception ex)
                         {

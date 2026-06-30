@@ -125,6 +125,7 @@ namespace ASCOM.GeminiTelescope
             this.radioButtonInches = new System.Windows.Forms.RadioButton();
             this.chkSetLanguage = new System.Windows.Forms.CheckBox();
             this.ckVariableMoveAxis = new System.Windows.Forms.CheckBox();
+            this.chkFlipGoto = new System.Windows.Forms.CheckBox();
             buttonGps = new System.Windows.Forms.Button();
             pbGeminiSettings = new System.Windows.Forms.Button();
             button1 = new System.Windows.Forms.Button();
@@ -865,11 +866,19 @@ namespace ASCOM.GeminiTelescope
             this.ckVariableMoveAxis.Name = "ckVariableMoveAxis";
             this.ckVariableMoveAxis.UseVisualStyleBackColor = true;
             // 
+            // chkFlipGoto
+            // 
+            resources.ApplyResources(this.chkFlipGoto, "chkFlipGoto");
+            this.chkFlipGoto.ForeColor = System.Drawing.Color.White;
+            this.chkFlipGoto.Name = "chkFlipGoto";
+            this.chkFlipGoto.UseVisualStyleBackColor = true;
+            // 
             // TelescopeSetupDialogForm
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
+            this.Controls.Add(this.chkFlipGoto);
             this.Controls.Add(this.ckVariableMoveAxis);
             this.Controls.Add(this.chkSetLanguage);
             this.Controls.Add(this.groupBox8);
@@ -1022,5 +1031,6 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.TextBox textBoxObstruction;
         private System.Windows.Forms.CheckBox chkSetLanguage;
         private System.Windows.Forms.CheckBox ckVariableMoveAxis;
+        private System.Windows.Forms.CheckBox chkFlipGoto;
     }
 }

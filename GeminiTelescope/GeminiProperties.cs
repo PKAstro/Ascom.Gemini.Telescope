@@ -27,6 +27,7 @@ using System.Xml;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
+using System.Diagnostics;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -118,7 +119,7 @@ namespace ASCOM.GeminiTelescope
             string res = null;
             try
             {
-                res = GeminiHardware.Instance.DoCommandResult(s, 2000, false);
+                res = GeminiHardware.Instance.DoCommandResult(s, GeminiHardware.Instance.MAX_TIMEOUT, false);
                 if (res == null) throw new TimeoutException();
             }
             catch
@@ -313,7 +314,9 @@ namespace ASCOM.GeminiTelescope
             {
                 string prop = get_PropAsync("<160:");
                 int hc;
-                if (!int.TryParse(prop, out hc)) return null; 
+                if (!int.TryParse(prop, out hc)) return null;
+                if (hc < 161 || hc >= 161 + HandController_names.Length)
+                    return "";
                 return HandController_names[hc - 161];
             }
         }
@@ -478,7 +481,7 @@ namespace ASCOM.GeminiTelescope
                 string [] bn = Brightness_names;
                 if (GeminiHardware.Instance.GeminiLevel > 4)
                     bn  = Brightness_namesL5;
-                if (res <= bn.Length) return res.ToString();
+                if (res <= bn.Length || res == 255) return bn[0];
                 else
                     return bn[res];
             }
@@ -1280,6 +1283,69 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        [Sequence(21)]
+        public bool RAGearReverse
+        {
+            get { return (bool)get_Profile("RAGearReverse", false); }
+            set { mProfile["RAGearReverse"] = value; IsDirty = true; }
+        }
+
+
+        private bool RAGearReverse_Gemini
+        {
+            get
+            {
+                if (GeminiHardware.Instance.dVersion >= 6.03)
+                {
+                    int res = get_int_Prop("<31:");
+                    if (res == 1) return true;
+                }
+                return false;
+            }
+            set {
+                if (GeminiHardware.Instance.dVersion >= 6.03)
+                {
+                    var cmd = new string[] {
+                        value ? ">31:1" : ">31:0",
+                        ":Q#"   // need :Q# to activate the reversal
+                    };
+                    GeminiHardware.Instance.DoCommandResult(cmd, GeminiHardware.Instance.MAX_TIMEOUT, false);
+                }
+            }
+        }
+
+        [Sequence(21)]
+        public bool DECGearReverse
+        {
+            get { return (bool)get_Profile("DECGearReverse", false); }
+            set { mProfile["DECGearReverse"] = value; IsDirty = true; }
+        }
+
+        private bool DECGearReverse_Gemini
+        {
+            get
+            {
+                if (GeminiHardware.Instance.dVersion >= 6.03)
+                {
+                    int res = get_int_Prop("<32:");
+                    if (res == 1) return true;
+                }
+                return false;
+            }
+            set
+            {
+                if (GeminiHardware.Instance.dVersion >= 6.03)
+                {
+                    var cmd = new string[] {
+                        value ? ">32:1" : ">32:0",
+                        ":Q#"   // need :Q# to activate the reversal
+                    };
+                    GeminiHardware.Instance.DoCommandResult(cmd, GeminiHardware.Instance.MAX_TIMEOUT, false);
+                }
+            }
+        }
+
+
 
         [Sequence(7)]
         public bool UseEncoders
@@ -1734,7 +1800,10 @@ namespace ASCOM.GeminiTelescope
                         if (write && pGemini.GetSetMethod(true) != null && p.GetGetMethod() != null)
                             pGemini.SetValue(this, p.GetValue(this, null), null);
                         else if (!write && p.GetSetMethod() != null && pGemini.GetGetMethod(true) != null)
+                        {
+                            Debug.WriteLine($"GetValue {name}={pGemini.GetValue(this, null)}");
                             p.SetValue(this, pGemini.GetValue(this, null), null);
+                        }
                 }
                 catch (Exception ex)
                 {
@@ -1821,7 +1890,7 @@ namespace ASCOM.GeminiTelescope
                 butc_asked = true;
             }
 
-            GeminiHardware.Instance.Trace.Error(err);
+            GeminiHardware.Instance.Trace.Error("Gemini Controller", err);
             if (err!="")
             {
                 var r = MessageBox.Show(err, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button3);

@@ -123,9 +123,10 @@
             this.lbCatalogs.FormattingEnabled = true;
             this.lbCatalogs.Location = new System.Drawing.Point(3, 16);
             this.lbCatalogs.Name = "lbCatalogs";
-            this.lbCatalogs.Size = new System.Drawing.Size(261, 139);
+            this.lbCatalogs.Size = new System.Drawing.Size(261, 140);
             this.lbCatalogs.Sorted = true;
             this.lbCatalogs.TabIndex = 0;
+            this.lbCatalogs.SelectedIndexChanged += new System.EventHandler(this.lbCatalogs_SelectedIndexChanged);
             // 
             // panel1
             // 
@@ -179,10 +180,10 @@
             this.gvAllObjects.ShowRowErrors = false;
             this.gvAllObjects.Size = new System.Drawing.Size(617, 224);
             this.gvAllObjects.TabIndex = 0;
-            this.gvAllObjects.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gvAllObjects_ColumnHeaderMouseClick);
-            this.gvAllObjects.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gvAllObjects_CellMouseDoubleClick);
-            this.gvAllObjects.SelectionChanged += new System.EventHandler(this.gvAllObjects_SelectionChanged);
             this.gvAllObjects.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gvAllObjects_CellContentClick);
+            this.gvAllObjects.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gvAllObjects_CellMouseDoubleClick);
+            this.gvAllObjects.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gvAllObjects_ColumnHeaderMouseClick);
+            this.gvAllObjects.SelectionChanged += new System.EventHandler(this.gvAllObjects_SelectionChanged);
             // 
             // groupBox3
             // 
@@ -393,8 +394,8 @@
             // 
             // groupBox4
             // 
-            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox4.Controls.Add(this.numHorizon);
             this.groupBox4.Controls.Add(this.label1);
             this.groupBox4.Controls.Add(this.dtDateTime);
@@ -476,8 +477,8 @@
             // 
             // textSearch
             // 
-            this.textSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textSearch.Location = new System.Drawing.Point(6, 68);
             this.textSearch.Name = "textSearch";
             this.textSearch.Size = new System.Drawing.Size(302, 20);
@@ -506,8 +507,8 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmUserCatalog";
             this.Text = "Object Catalog Manager";
-            this.Load += new System.EventHandler(this.frmUserCatalog_Load);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmUserCatalog_FormClosed);
+            this.Load += new System.EventHandler(this.frmUserCatalog_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);

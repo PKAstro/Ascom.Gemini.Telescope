@@ -68,7 +68,8 @@ namespace ASCOM.GeminiTelescope
             comboBoxComPort.Items.Add("");
             foreach (string s in System.IO.Ports.SerialPort.GetPortNames())
             {
-                comboBoxComPort.Items.Add(s);
+                if (s.Trim() != "")
+                    comboBoxComPort.Items.Add(s);
             }
             buttonQuery.Text = Resources.Query;
             labelStatus.Text = Resources.Status + ":";

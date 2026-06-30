@@ -500,6 +500,12 @@ namespace ASCOM.GeminiTelescope
             set { chkPierSide.Checked = value; }
         }
 
+        public bool FlipUsingGoto
+        {
+            get { return chkFlipGoto.Checked; }
+            set { chkFlipGoto.Checked = value; }
+        }
+
         public bool PrecisionPulseGuide
         {
             get { return chkPrecisionPulse.Checked; }

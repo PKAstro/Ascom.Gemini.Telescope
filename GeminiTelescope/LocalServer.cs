@@ -683,6 +683,9 @@ namespace ASCOM.GeminiTelescope
             GCThread.Name = "Garbage Collection Thread";
             GCThread.Start();
 
+            SystemEvents.TimeChanged += new EventHandler(SystemEvents_TimeChanged);
+
+
             //
             // Start the message loop. This serializes incoming calls to our
             // served COM objects, making this act like the VB6 equivalent!
@@ -702,6 +705,20 @@ namespace ASCOM.GeminiTelescope
 
         }
 
+        static DateTime LastTimeChange = DateTime.MinValue;
+
+        static void SystemEvents_TimeChanged(object sender, EventArgs e)
+        {
+            if (DateTime.Now - LastTimeChange < TimeSpan.FromSeconds(5)) return;
+
+            frmMain frm = Application.OpenForms[0] as frmMain;
+            if (frm != null)
+            {
+                LastTimeChange = DateTime.Now;
+                frm.TimeChanged();
+            }
+        }
+
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             try
@@ -716,13 +733,16 @@ namespace ASCOM.GeminiTelescope
                             GeminiHardware.Instance.Trace.Except(ex);
                             GeminiHardware.Instance.Trace.Error("CurrentDomain_Exception", ex.Message, ex.Source, ex.StackTrace, ex.InnerException);
                         }
-                        MessageBox.Show(SharedResources.TELESCOPE_DRIVER_NAME + " has encountered an error and must now close\r\n\r\n" + ex.ToString(), SharedResources.TELESCOPE_DRIVER_NAME + "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        if (e.IsTerminating)
+                        {
+                            MessageBox.Show(SharedResources.TELESCOPE_DRIVER_NAME + " has encountered an error and must now close\r\n\r\n" + ex.ToString(), SharedResources.TELESCOPE_DRIVER_NAME + "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            System.Diagnostics.Process.GetCurrentProcess().Kill();
+                        }
                     }
                 }
             }
             finally
             {
-                System.Diagnostics.Process.GetCurrentProcess().Kill();
             }
         }
 
@@ -747,9 +767,11 @@ namespace ASCOM.GeminiTelescope
             }
             finally
             {
+#if !DEBUG
                 System.Diagnostics.Process.GetCurrentProcess().Kill();
+#endif
             }
         }
-        #endregion
+#endregion
     }
 }

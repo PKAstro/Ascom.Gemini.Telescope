@@ -57,8 +57,10 @@ namespace ASCOM.GeminiTelescope
             this.parkAtZenithToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuParkHere = new System.Windows.Forms.ToolStripMenuItem();
             this.unparkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.setCustomParkPositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.rebootGeminiAndForceAColdStartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ButtonConnect = new System.Windows.Forms.Button();
             this.ButtonSetup = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -74,6 +76,7 @@ namespace ASCOM.GeminiTelescope
             this.viewHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.collectReportsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.terminalMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openLogFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutGeminiDriverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitDriverMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -83,6 +86,7 @@ namespace ASCOM.GeminiTelescope
             this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.objectAndCoordinatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.minorPlanetsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.keepThisWindowOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -100,6 +104,7 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew3 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew4 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew1 = new ASCOM.GeminiTelescope.TButton();
+            this.viewErrorsMessagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.TableLayoutPanel3.SuspendLayout();
@@ -248,8 +253,10 @@ namespace ASCOM.GeminiTelescope
             this.parkAtZenithToolStripMenuItem,
             this.toolStripMenuParkHere,
             this.unparkToolStripMenuItem,
+            this.toolStripSeparator7,
+            this.setCustomParkPositionToolStripMenuItem,
             this.toolStripSeparator4,
-            this.setCustomParkPositionToolStripMenuItem});
+            this.rebootGeminiAndForceAColdStartToolStripMenuItem});
             this.contextMenuStrip2.Name = "contextMenuStrip1";
             this.contextMenuStrip2.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.contextMenuStrip2.ShowImageMargin = false;
@@ -297,10 +304,10 @@ namespace ASCOM.GeminiTelescope
             resources.ApplyResources(this.unparkToolStripMenuItem, "unparkToolStripMenuItem");
             this.unparkToolStripMenuItem.Click += new System.EventHandler(this.unparkToolStripMenuItem_Click);
             // 
-            // toolStripSeparator4
+            // toolStripSeparator7
             // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            resources.ApplyResources(this.toolStripSeparator4, "toolStripSeparator4");
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            resources.ApplyResources(this.toolStripSeparator7, "toolStripSeparator7");
             // 
             // setCustomParkPositionToolStripMenuItem
             // 
@@ -308,6 +315,18 @@ namespace ASCOM.GeminiTelescope
             this.setCustomParkPositionToolStripMenuItem.Name = "setCustomParkPositionToolStripMenuItem";
             resources.ApplyResources(this.setCustomParkPositionToolStripMenuItem, "setCustomParkPositionToolStripMenuItem");
             this.setCustomParkPositionToolStripMenuItem.Click += new System.EventHandler(this.setCustomParkPositionToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            resources.ApplyResources(this.toolStripSeparator4, "toolStripSeparator4");
+            // 
+            // rebootGeminiAndForceAColdStartToolStripMenuItem
+            // 
+            this.rebootGeminiAndForceAColdStartToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.rebootGeminiAndForceAColdStartToolStripMenuItem.Name = "rebootGeminiAndForceAColdStartToolStripMenuItem";
+            resources.ApplyResources(this.rebootGeminiAndForceAColdStartToolStripMenuItem, "rebootGeminiAndForceAColdStartToolStripMenuItem");
+            this.rebootGeminiAndForceAColdStartToolStripMenuItem.Click += new System.EventHandler(this.rebootGeminiAndForceAColdStartToolStripMenuItem_Click);
             // 
             // ButtonConnect
             // 
@@ -347,8 +366,10 @@ namespace ASCOM.GeminiTelescope
             this.configureCatalogsToolStripMenuItem,
             this.toolStripSeparator5,
             this.viewHelpToolStripMenuItem,
+            this.viewErrorsMessagesToolStripMenuItem,
             this.collectReportsMenuItem,
             this.terminalMenuItem,
+            this.openLogFolderToolStripMenuItem,
             this.aboutGeminiDriverToolStripMenuItem,
             this.toolStripSeparator1,
             this.exitDriverMenuItem});
@@ -437,6 +458,13 @@ namespace ASCOM.GeminiTelescope
             resources.ApplyResources(this.terminalMenuItem, "terminalMenuItem");
             this.terminalMenuItem.Click += new System.EventHandler(this.terminalMenuItem_Click);
             // 
+            // openLogFolderToolStripMenuItem
+            // 
+            this.openLogFolderToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.openLogFolderToolStripMenuItem.Name = "openLogFolderToolStripMenuItem";
+            resources.ApplyResources(this.openLogFolderToolStripMenuItem, "openLogFolderToolStripMenuItem");
+            this.openLogFolderToolStripMenuItem.Click += new System.EventHandler(this.openLogFolderToolStripMenuItem_Click);
+            // 
             // aboutGeminiDriverToolStripMenuItem
             // 
             this.aboutGeminiDriverToolStripMenuItem.ForeColor = System.Drawing.Color.White;
@@ -476,6 +504,7 @@ namespace ASCOM.GeminiTelescope
             this.toolStripMenuItem6,
             this.toolStripMenuItem4,
             this.objectAndCoordinatesToolStripMenuItem,
+            this.minorPlanetsMenuItem,
             this.toolStripSeparator2,
             this.keepThisWindowOnTopToolStripMenuItem});
             this.contextMenuStrip3.Name = "contextMenuStrip1";
@@ -509,6 +538,13 @@ namespace ASCOM.GeminiTelescope
             this.objectAndCoordinatesToolStripMenuItem.Name = "objectAndCoordinatesToolStripMenuItem";
             resources.ApplyResources(this.objectAndCoordinatesToolStripMenuItem, "objectAndCoordinatesToolStripMenuItem");
             this.objectAndCoordinatesToolStripMenuItem.Click += new System.EventHandler(this.objectAndCoordinatesToolStripMenuItem_Click);
+            // 
+            // minorPlanetsMenuItem
+            // 
+            this.minorPlanetsMenuItem.ForeColor = System.Drawing.Color.White;
+            this.minorPlanetsMenuItem.Name = "minorPlanetsMenuItem";
+            resources.ApplyResources(this.minorPlanetsMenuItem, "minorPlanetsMenuItem");
+            this.minorPlanetsMenuItem.Click += new System.EventHandler(this.minorPlanetsMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -652,6 +688,13 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlew1_MouseDown);
             this.buttonSlew1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlew1_MouseUp);
             // 
+            // viewErrorsMessagesToolStripMenuItem
+            // 
+            this.viewErrorsMessagesToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.viewErrorsMessagesToolStripMenuItem.Name = "viewErrorsMessagesToolStripMenuItem";
+            resources.ApplyResources(this.viewErrorsMessagesToolStripMenuItem, "viewErrorsMessagesToolStripMenuItem");
+            this.viewErrorsMessagesToolStripMenuItem.Click += new System.EventHandler(this.viewErrorsMessagesToolStripMenuItem_Click);
+            // 
             // frmMain
             // 
             resources.ApplyResources(this, "$this");
@@ -771,6 +814,11 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.ToolStripMenuItem collectReportsMenuItem;
         private System.Windows.Forms.ToolStripMenuItem terminalMenuItem;
         private System.Windows.Forms.PictureBox picButtons;
+        private System.Windows.Forms.ToolStripMenuItem minorPlanetsMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openLogFolderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rebootGeminiAndForceAColdStartToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
+        private System.Windows.Forms.ToolStripMenuItem viewErrorsMessagesToolStripMenuItem;
     }
 }
 

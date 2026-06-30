@@ -25,7 +25,7 @@ using System.Timers;
 using System.IO.Ports;
 using System.IO;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;    
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Reflection;
@@ -33,6 +33,8 @@ using ASCOM.GeminiTelescope.Properties;
 using System.Threading;
 using System.Net;
 using System.Net.Sockets;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -99,7 +101,7 @@ namespace ASCOM.GeminiTelescope
 
                 if (GeminiHardware.Instance.dVersion >= 5.1) //set preferred stop mode for level 5.1 and greater
                 {
-                    GeminiHardware.Instance.GeminiStopMode = GeminiHardware.Instance.m_GeminiStopMode;
+//                    GeminiHardware.Instance.GeminiStopMode = GeminiHardware.Instance.m_GeminiStopMode;
                 }           
             } 
 
@@ -163,6 +165,18 @@ namespace ASCOM.GeminiTelescope
                     Trace.Error("DisconnectToEthernet", ex.Message);
                 }
             }
+            else
+            {
+                try
+                {
+                    if (HTTP_client != null) HTTP_client.Dispose();
+                    HTTP_client = null;
+                }
+                catch (Exception ex)
+                {
+                    Trace.Error("DisconnectToEthernet", $"HTTP: {ex.Message}");
+                }
+            }
             Trace.Exit(2, "DisconnectToEthernet");
         }
 
@@ -170,9 +184,44 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                return EthernetPort && (!UDP || (UDP_client != null));
+                return EthernetPort && (UDP && UDP_client != null) || (!UDP && HTTP_client != null);
             }
         }
+
+        internal HttpClient HTTP_client = null;
+
+      
+
+        public bool ConnectHTTP()
+        {
+            if (HTTP_client != null)
+            {
+                HTTP_client.Dispose();
+                HTTP_client = null;
+            }
+
+            string url = UseDHCP ?
+               "http://" + GeminiDHCPName :
+               "http://" + EthernetIP;
+
+       
+        
+
+            HTTP_client = new HttpClient();
+            HTTP_client.BaseAddress = new Uri(url);
+            HTTP_client.DefaultRequestHeaders.Add("Accept-Language", "en-US");
+            HTTP_client.DefaultRequestHeaders.Add("Connection", "keep-alive");
+
+            var authToken = Encoding.ASCII.GetBytes($"{EthernetUser}:{EthernetPassword}");
+            HTTP_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
+                    Convert.ToBase64String(authToken));
+
+            //if (BypassProxy) request.Proxy = null;
+            HTTP_client.Timeout = TimeSpan.FromMilliseconds(MAX_TIMEOUT * 2);
+            ServicePointManager.SetTcpKeepAlive(true, MAX_TIMEOUT * 10, MAX_TIMEOUT);
+            return true;
+        }
+
 
         public bool ConnectToEthernet()
         {
@@ -212,6 +261,10 @@ namespace ASCOM.GeminiTelescope
                 UDP_endpoint = new IPEndPoint(addr, UDPPort);
                 UDP_client = new UdpClient(UDPPort);
                 Trace.Info(2, "Initialized UDP endpoint and client");
+            }
+            else if (!UDP && HTTP_client == null)
+            {
+                ConnectHTTP();
             }
 
             Trace.Exit("ConnectToEthernet", true);
@@ -256,17 +309,41 @@ namespace ASCOM.GeminiTelescope
 
         internal override void UpdatePolledVariables(bool bUpdateAll)
         {
+            if (!Monitor.TryEnter(this.waitLock, 0))
+                return; //still processing returns from previous commands
+
+            Monitor.Exit(this.waitLock);
+
+            if (!GeminiHardware.Instance.Connected) return;
+
+
+
             if (GeminiLevel >= 5)
             {
                 // use macro command 00 to get all the values in one shot if this is Level 5 using UDP:
                 if (EthernetPort)
                 {
-                    if (UDP)
-                        __UpdatePolledVariablesUDP();
+                    if (Monitor.TryEnter(m_SerialPort, 0))
+                    {                  
+                        try
+                        {
+                            if (UDP)
+                                __UpdatePolledVariablesUDP();
+                            else
+                                __UpdatePolledVariablesSerial();
+                        }
+                        finally
+                        {
+                            Monitor.Exit(m_SerialPort);
+                        }
+                    }
                     else
-                        __UpdatePolledVariablesSerial();
+                    {
+                        Trace.Exit("UpdatePolledVariables5",  "busy", bUpdateAll);
+                    }
                     return;
                 }
+
             }
 
             Trace.Enter("UpdatePolledVariables5", bUpdateAll);
@@ -287,26 +364,45 @@ namespace ASCOM.GeminiTelescope
                     return; //don't tie up the serial port while pulse guiding -- timing is critical!
                 }
 
-                Trace.Enter("_UpdatePolledVariables5");
-                try
+                Trace.Enter("_UpdatePolledVariablesL5");
+                if (Monitor.TryEnter(m_SerialPort, 0))
                 {
-                    CommandItem command;
-                    int timeout = 3000; // polling should not hold up the queue for too long
-                    DiscardInBuffer(); //clear all received data
-                    Transmit(CompleteNativeCommand("<97:"));
-                    command = new CommandItem("<97:", timeout, true);
-                    string change = GetCommandResult(command);
-                    if (change != null && change.Length == 6)
+                    try
                     {
-                        m_CurrentUpdateState = change;
+                        CommandItem command;
+                        int timeout = 3000; // polling should not hold up the queue for too long
+                        DiscardInBuffer(); //clear all received data
+                        Transmit(CompleteNativeCommand("<97:"));
+                        command = new CommandItem("<97:", timeout, true);
+                        string change = GetCommandResult(command);
+                        if (change != null && change.Length == 6)
+                        {
+                            m_CurrentUpdateState = change;
+                        }
+                    }
+                    catch { }
+                    finally
+                    {
+                        Monitor.Exit(m_SerialPort);
                     }
                 }
-                catch { }
-
+                else
+                {
+                    Trace.Exit("_UpdatePolledVariables", "busy");
+                    return;    //
+                }
                 if (m_CurrentUpdateState != m_PreviousUpdateState) ProcessUpdates();
 
             }
-            base._UpdatePolledVariables();
+            try
+            {
+                base._UpdatePolledVariables();
+            }
+            catch (Exception ex)
+            {
+                if (GeminiLevel < 5 && Velocity == "S") return; // eat the timeout exception if slewing in L4
+                throw ex;
+            }
         }
 
         static byte [] macro_req = new byte[] { 0x05, 00, 00, 00 };
@@ -314,27 +410,42 @@ namespace ASCOM.GeminiTelescope
 
         private void __UpdatePolledVariablesUDP()
         {
+            if (!Monitor.TryEnter(this.waitLock, 0))
+            {
+                Trace.Enter("_UpdatePolledVariablesUDP", "waitLocked");
+                return; //still processing returns from previous commands
 
+            }
             Trace.Enter("_UpdatePolledVariablesUDP");
 
-            lock (m_SerialPort)
+            try
             {
-                try
+                DiscardInBuffer(); //clear all received data
+                GeminiHardware.Instance.TransmitUDP(macro_req);            
+            }
+            catch
+            {
+                if (Monitor.TryEnter(m_CommandQueue, this.MAX_TIMEOUT))
                 {
-                    DiscardInBuffer(); //clear all received data
-                    GeminiHardware.Instance.TransmitUDP(macro_req);
-                }
-                catch
-                {
-                    lock (m_CommandQueue)
+                    try
                     {
                         GeminiHardware.Instance.ResyncEthernet();
                     }
-                    TransmitUDP(macro_req);
+                    finally
+                    {
+                        Monitor.Exit(m_CommandQueue);
+                    }
                 }
+                else return;
+
+                TransmitUDP(macro_req);
             }
 
             macro = getUDPCommandResult(2000);
+
+            Monitor.Exit(this.waitLock);
+
+
             if (macro == null)
             {
                 Trace.Error("timeout", "UpdatePolledVariablesUDP");
@@ -349,24 +460,31 @@ namespace ASCOM.GeminiTelescope
         private void __UpdatePolledVariablesSerial()
         {
 
+            if (!Monitor.TryEnter(this.waitLock, 0))
+            {
+                Trace.Enter("_UpdatePolledVariablesSerial", "waitLocked");
+                return; //still processing returns from previous commands
+            }
+
             Trace.Enter("_UpdatePolledVariablesSerial");
 
             macro = "";
 
-            //lock (m_SerialPort)
+            try
             {
-                try
-                {
-                    DiscardInBuffer(); //clear all received data
-                    string cmd = CompleteNativeCommand("<81:");
-                    Transmit(cmd);
-                    CommandItem command = new CommandItem("<81:", 2000, true);
-                    macro = GetCommandResult(command);
-                }
-                catch
-                {
-                    return;
-                }
+                DiscardInBuffer(); //clear all received data
+                string cmd = CompleteNativeCommand("<81:");
+                Transmit(cmd);
+                CommandItem command = new CommandItem("<81:", 2000, true);
+                macro = GetCommandResult(command);
+            }
+            catch
+            {
+                return;
+            }
+            finally
+            {
+                Monitor.Exit(this.waitLock);
             }
 
             if (macro == null)
@@ -429,7 +547,13 @@ namespace ASCOM.GeminiTelescope
                 if (DEC != null) m_Declination = m_Util.DMSToDegrees(DEC);
                 if (ALT != null) m_Altitude = m_Util.DMSToDegrees(ALT);
                 if (AZ != null) m_Azimuth = m_Util.DMSToDegrees(AZ);
-                if (V == "!") V = "N"; //stall = no tracking
+                if (V == "!")
+                {
+                    V = "N"; //stall = no tracking
+                    Stalled = true;
+                }
+                else Stalled = false;
+
                 if (V != null) m_Velocity = V;
                 if (HA != null) m_HourAngle = m_Util.HMSToHours(HA);
 
@@ -537,7 +661,7 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                if (EthernetPort && UDP) // this is part of a polled macro command when using UDP
+                if (EthernetPort) // this is part of a polled macro command when using UDP
                 {
                     if (m_TimeToWestLimit == double.NaN) throw new TimeoutException();
                     return m_TimeToWestLimit;
@@ -604,6 +728,8 @@ namespace ASCOM.GeminiTelescope
                 m_HourAngle = value;
             }
         }
+
+        public bool Stalled { get; private set; } = false;
 
 
 

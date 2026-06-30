@@ -31,6 +31,9 @@ using System.Net;
 using System.IO;
 using System.Web;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Collections.Concurrent;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -44,7 +47,7 @@ namespace ASCOM.GeminiTelescope
         public event ReceiveResult OnReceive;
 
         private string EthernetResult = "";
-        private  HttpWebResponse Response = null;
+        private  Task<byte[]> Response = null;
 
         private Int32 PacketCount = 1;
      
@@ -93,9 +96,13 @@ namespace ASCOM.GeminiTelescope
                 if (trynbr > 0)
                 {
                     // since we didn't get a proper response, try to reset the socket and see if can get a response:
-                    lock (GeminiHardware.Instance.m_CommandQueue)
+                    if (Monitor.TryEnter(GeminiHardware.Instance.m_CommandQueue, MAX_TIMEOUT))
                     {
-                        GeminiHardware.Instance.ResyncEthernet();
+                        try
+                        {
+                            GeminiHardware.Instance.ResyncEthernet();
+                        } 
+                        finally { Monitor.Exit(GeminiHardware.Instance.m_CommandQueue); }
                     }
                 }
 
@@ -167,33 +174,40 @@ namespace ASCOM.GeminiTelescope
             }
             AddOneMoreError();
             Trace.Exit("RetransmitUDP", "Failed to retransmit!");
+            //Disconnect();
             return null;    // no luck, give up.
         }
 
         internal void TransmitUDP(string s)
         {
-            OnTransmit?.Invoke(s);
+            //lock (m_SerialPort)
+            {
+                OnTransmit?.Invoke(s);
 
-            UDP_buff = (UDP_buff==UDP_datagram1? UDP_datagram2 : UDP_datagram1);
-            Array.Copy(System.BitConverter.GetBytes(PacketCount), 0, UDP_buff, 0, 4);
-            Trace.Info(0, "TransmitUDP packet#, cmd", PacketCount, s);
+                UDP_buff = (UDP_buff == UDP_datagram1 ? UDP_datagram2 : UDP_datagram1);
+                Array.Copy(System.BitConverter.GetBytes(PacketCount), 0, UDP_buff, 0, 4);
+                Trace.Info(0, "TransmitUDP packet#, cmd", PacketCount, s);
 
-            PacketCount++;
-            Array.Copy(m_BinaryEncoding.GetBytes(s), 0, UDP_buff, 8, s.Length);
-            UDP_buff[s.Length + 8] = 0;
-            UDP_len_lastdatagram = s.Length + 9;
-            GeminiHardware.Instance.UDP_client.Send(UDP_buff, UDP_len_lastdatagram, GeminiHardware.Instance.UDP_endpoint);
+                PacketCount++;
+                Array.Copy(m_BinaryEncoding.GetBytes(s), 0, UDP_buff, 8, s.Length);
+                UDP_buff[s.Length + 8] = 0;
+                UDP_len_lastdatagram = s.Length + 9;
+                GeminiHardware.Instance.UDP_client.Send(UDP_buff, UDP_len_lastdatagram, GeminiHardware.Instance.UDP_endpoint);
+            }
         }
        
         internal void TransmitUDP(byte[] cmd)
-        {        
-            UDP_buff = (UDP_buff == UDP_datagram1 ? UDP_datagram2 : UDP_datagram1);
-            Array.Copy(System.BitConverter.GetBytes(PacketCount), 0, UDP_buff, 0, 4);
-            Trace.Info(0, "TransmitUDP packet#, cmd", PacketCount, ASCIIEncoding.ASCII.GetString(cmd));
-            PacketCount++; 
-            Array.Copy(cmd, 0, UDP_buff, 8, cmd.Length);
-            UDP_len_lastdatagram = cmd.Length + 8;
-            GeminiHardware.Instance.UDP_client.Send(UDP_buff, UDP_len_lastdatagram, GeminiHardware.Instance.UDP_endpoint);
+        {
+            //lock (m_SerialPort)
+            {
+                UDP_buff = (UDP_buff == UDP_datagram1 ? UDP_datagram2 : UDP_datagram1);
+                Array.Copy(System.BitConverter.GetBytes(PacketCount), 0, UDP_buff, 0, 4);
+                Trace.Info(0, "TransmitUDP packet#, cmd", PacketCount, ASCIIEncoding.ASCII.GetString(cmd));
+                PacketCount++;
+                Array.Copy(cmd, 0, UDP_buff, 8, cmd.Length);
+                UDP_len_lastdatagram = cmd.Length + 8;
+                GeminiHardware.Instance.UDP_client.Send(UDP_buff, UDP_len_lastdatagram, GeminiHardware.Instance.UDP_endpoint);
+            }
         }
         
         
@@ -206,7 +220,7 @@ namespace ASCOM.GeminiTelescope
         /// returns actual packet sequence number that was sent.
         /// </summary>
         private int UDPSendNACK()
-        {
+        {            
             Array.Copy(System.BitConverter.GetBytes(PacketCount), 0, rbuff, 0, 4);
             Trace.Info(0, "ReTransmitUDP packet#, cmd", PacketCount);
             rbuff[8] = 0x15;
@@ -218,7 +232,7 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Instance.UDP)
             {
-                lock (m_SerialPort)
+                if(Monitor.TryEnter(m_SerialPort, MAX_TIMEOUT))
                 {
                     try
                     {
@@ -228,6 +242,14 @@ namespace ASCOM.GeminiTelescope
                         GeminiHardware.Instance.ResyncEthernet();
                         TransmitUDP(s);
                     }
+                    finally
+                    {
+                        Monitor.Exit(m_SerialPort);
+                    }
+                }
+                else
+                {
+                    Trace.Error("Transmit timeout", s);
                 }
                 return;
             }
@@ -236,45 +258,28 @@ namespace ASCOM.GeminiTelescope
 
             EthernetResult = "";
             
-            if (Response != null) Response.Close();
             Response = null;
 
             if (s == String.Empty) return;
 
-            string url = UseDHCP?
-                "http://" + GeminiDHCPName + "/ser.cgx?SE=" + s :
-                "http://" + EthernetIP + "/ser.cgx?SE=" + s;
+            string url = "ser.cgx?SE=" + s;
 
             url = url.Replace("#", "%23");
 
+            if (GeminiHardware.Instance.HTTP_client == null)
+                throw new Exception("HTTP not connected");
             m_SerialErrorOccurred.Reset();
 
             Trace.Info(4, "Before Ethernet Transmit", s);
             lock (m_SerialPort)
             {
-                Trace.Info(0, "Ethernet Transmit", s);
-
-                StringBuilder sb = new StringBuilder();
-
-                // used on each read operation
-                byte[] buf = new byte[8192];
-                // prepare the web page we will be asking for
-                HttpWebRequest request = (HttpWebRequest)
-                    WebRequest.Create(url);
-
-                request.Headers = new WebHeaderCollection();
-                request.Headers.Add("Accept-Language: en-US");
-                if (BypassProxy) request.Proxy = null;
-
-                request.Credentials = new NetworkCredential(EthernetUser, EthernetPassword);
-                request.PreAuthenticate = true;
-                request.Timeout = MAX_TIMEOUT;
-
-
+                Trace.Info(0, "Ethernet HTTP Transmit", s);
+                Response = null;
                 try
                 {
-                    Response = (HttpWebResponse)request.GetResponse();
-//                    response.Close();
+                    Response = GeminiHardware.Instance.HTTP_client.GetByteArrayAsync(url);
+
+               
                 }
                 catch (Exception ex)
                 {
@@ -318,12 +323,28 @@ namespace ASCOM.GeminiTelescope
             if (m_SerialPort.IsOpen)
             {
                 Trace.Info(4, "Before Serial Transmit", s);
-                lock (m_SerialPort)
+                if (Monitor.TryEnter(m_SerialPort, MAX_TIMEOUT))
                 {
-                    Trace.Info(0, "Serial Transmit", s);
-                    m_SerialPort.Write(m_BinaryEncoding.GetBytes(s), 0, s.Length);
-                    m_SerialPort.BaseStream.Flush();
-                    Trace.Info(4, "Finished Port.Write");
+                    try
+                    {
+                        Trace.Info(0, "Serial Transmit", s);
+                        m_SerialPort.Write(m_BinaryEncoding.GetBytes(s), 0, s.Length);
+                        m_SerialPort.BaseStream.Flush();
+                        Trace.Info(4, "Finished Port.Write");
+#if DEBUG
+                        System.Diagnostics.Trace.WriteLine($"Serial Sent: [{s}]");
+#endif
+
+                    }
+                    finally
+                    {
+                        Monitor.Exit(m_SerialPort);
+                    }
+
+                }
+                else
+                {
+                    throw new TimeoutException("Serial port lock error: " + s);
                 }
             }
             if (m_SerialErrorOccurred.WaitOne(0))
@@ -341,7 +362,7 @@ namespace ASCOM.GeminiTelescope
             return GetCommandResult(command, bResyncOnError, ref bReturn);
         }
 
-                /// <summary>
+                      /// <summary>
         /// Wait for a proper response from Gemini for a given command. Command has already been sent.
         /// 
         /// </summary>
@@ -353,7 +374,7 @@ namespace ASCOM.GeminiTelescope
             if (m_EthernetPort)
                 return GetCommandResultEthernet(command, bResyncOnError, ref bReturn);
             else
-                return GetCommandResultSerial(command, bResyncOnError, ref bReturn);
+                return GetCommandResultSerial(command, bResyncOnError, ref bReturn);     
         }
 
 
@@ -366,37 +387,30 @@ namespace ASCOM.GeminiTelescope
 
             if (Response == null) return null;
 
-            StringBuilder sb = new StringBuilder();
+            try {
 
-            // used on each read operation
-            byte[] buf = new byte[8192];
+                var b = Response.Result;
+                string r = "";// Encoding.UTF8.GetString(Response.Result, 0, Response.Result.Length);
+                for (int i = 0; i < b.Length; ++i)
+                    r += (char)b[i];
 
-            // we will read data via the response stream
-            Stream resStream = Response.GetResponseStream();
+                return r;// Encoding.UTF8.GetString(Response.Result, 0, Response.Result.Length);
 
-            string tempString = null;
-            int count = 0;
-
-            do
-            {
-                // fill the buffer with data
-                count = resStream.Read(buf, 0, buf.Length);
-
-                // make sure we read some data
-                if (count != 0)
-                {
-                    // translate from bytes to ASCII text
-                    tempString = m_BinaryEncoding.GetString(buf, 0, count);
-
-                    // continue building the string
-                    sb.Append(tempString);
-                }
             }
-            while (count > 0); // any more data to read?
-
-            Response.Close();
-            Response = null;
-            return sb.ToString();
+            catch (Exception ex)
+            {
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("401"))
+                {
+                    if (m_AllowErrorNotify)
+                    {
+                        Trace.Except(ex);
+                        OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Invalid Gemini user-id or password.");
+                    }
+                    m_SerialErrorOccurred.Set();
+                }
+               
+            }
+            return null;
         }
 
         IPEndPoint iep0 = new IPEndPoint(0, 11110);
@@ -505,75 +519,82 @@ wait_again:
 
             int timeout = command.m_Timeout;
 
+            if (!UDP) timeout *= 2; //HTTP / serial is slower
+
+            if (!Monitor.TryEnter(waitLock, timeout)) // allow only one thread to wait on result at a time
+                return null;
 
             try
             {
-                Trace.Info(0, "Ethernet wait for response", command.m_Command);
 
-                string res  = "";
-
-                if (EthernetResult.Length == 0)
                 {
-                    res = getEthernetCommandResult(timeout);
+                    Trace.Info(0, "Ethernet wait for response", command.m_Command);
 
-                    if (res == null && EthernetResult.Length == 0)
-                        throw new Exception("Ethernet connection error");
-                    if (res != null)
-                        EthernetResult += res;
-                }
+                    string res = "";
 
-                Trace.Info(0, "Ethernet Received", command.m_Command);
+                    if (EthernetResult.Length == 0)
+                    {
+                        res = getEthernetCommandResult(timeout);
 
-                bool bNeedChecksum = (command.m_Command[0] == '<' || command.m_Command[0] == '>');
+                        if (res == null && EthernetResult.Length == 0)
+                            throw new Exception("Ethernet connection error");
+                        if (res != null)
+                            EthernetResult += res;
+                    }
+
+                    Trace.Info(0, "Ethernet Received", command.m_Command);
+
+                    bool bNeedChecksum = (command.m_Command[0] == '<' || command.m_Command[0] == '>');
 
 
-                switch (gemini_result)
-                {
-                    // a specific number of characters expected as the return value
-                    case GeminiCommand.ResultType.NumberofChars:
-                        result = ReadNumberE(char_count);
-                        break;
+                    switch (gemini_result)
+                    {
+                        // a specific number of characters expected as the return value
+                        case GeminiCommand.ResultType.NumberofChars:
+                            result = ReadNumberE(char_count);
+                            break;
 
-                    // value '1' or a string terminated by '#'
-                    case GeminiCommand.ResultType.OneOrHash:
-                        result = ReadNumberE(1); ;  // check if first character is 1, and return if it is, no hash expected
-                        if (result != "1")
-                        {
-                            result += ReadToE('#', bNeedChecksum);
+                        // value '1' or a string terminated by '#'
+                        case GeminiCommand.ResultType.OneOrHash:
+                            result = ReadNumberE(1); ;  // check if first character is 1, and return if it is, no hash expected
+                            if (result != "1")
+                            {
+                                result += ReadToE('#', bNeedChecksum);
+                                if (command.m_Raw) //Raw should return the full string including #
+                                    result += "#";
+                            }
+                            break;
+
+                        // value '0' or a string terminated by '#'
+                        case GeminiCommand.ResultType.ZeroOrHash:
+                            result = ReadNumberE(1);
+                            if (result != "0")
+                            {
+                                result += ReadToE('#', bNeedChecksum);
+                                if (command.m_Raw) //Raw should return the full string including #
+                                    result += "#";
+                            }
+                            break;
+
+                        // string terminated by '#'
+                        case GeminiCommand.ResultType.HashChar:
+                            result = ReadToE('#', bNeedChecksum);
                             if (command.m_Raw) //Raw should return the full string including #
                                 result += "#";
-                        }
-                        break;
+                            break;
 
-                    // value '0' or a string terminated by '#'
-                    case GeminiCommand.ResultType.ZeroOrHash:
-                        result = ReadNumberE(1);
-                        if (result != "0")
-                        {
-                            result += ReadToE('#', bNeedChecksum);
-                            if (command.m_Raw) //Raw should return the full string including #
-                                result += "#";
-                        }
-                        break;
-
-                    // string terminated by '#'
-                    case GeminiCommand.ResultType.HashChar:
-                        result = ReadToE('#', bNeedChecksum);
-                        if (command.m_Raw) //Raw should return the full string including #
-                            result += "#";
-                        break;
-
-                    // '0' or two strings, each terminated with '#' (:SC command)
-                    case GeminiCommand.ResultType.ZeroOrTwoHash:
-                        result = ReadNumberE(1);
-                        if (result != "0")
-                        {
-                            result += ReadToE('#', bNeedChecksum);
-                            if (command.m_Raw) result += '#';
-                            result += ReadToE('#', bNeedChecksum);
-                            if (command.m_Raw) result += '#';
-                        }
-                        break;
+                        // '0' or two strings, each terminated with '#' (:SC command)
+                        case GeminiCommand.ResultType.ZeroOrTwoHash:
+                            result = ReadNumberE(1);
+                            if (result != "0")
+                            {
+                                result += ReadToE('#', bNeedChecksum);
+                                if (command.m_Raw) result += '#';
+                                result += ReadToE('#', bNeedChecksum);
+                                if (command.m_Raw) result += '#';
+                            }
+                            break;
+                    }
                 }
             }
             catch (Exception ex)
@@ -591,6 +612,7 @@ wait_again:
             }
             finally
             {
+                Monitor.Exit(waitLock);
                 tmrReadTimeout.Stop();
             }
 
@@ -616,7 +638,7 @@ wait_again:
 
                 if ((((int)chksum) & m_ChecksumMask) != (ComputeChecksum(result) & m_ChecksumMask))  // bad checksum -- ignore the return value! 
                 {
-                    Trace.Error("Bad Checksum", command.m_Command, result);
+                    Trace.Error("Bad Checksum", command.m_Command, result, $"0x{chksum:X}");
 
                     if (OnError != null && m_Connected && m_AllowErrorNotify) OnError(SharedResources.TELESCOPE_DRIVER_NAME, Resources.EthernetError);
                     AddOneMoreError();
@@ -658,6 +680,8 @@ wait_again:
 
             return DeEscapedString;
         }
+
+        internal object waitLock = new object();
 
         /// <summary>
         /// Wait for a proper response from Gemini for a given command. Command has already been sent.
@@ -703,61 +727,79 @@ wait_again:
                 tmrReadTimeout.Start();
             }
 
+            if (!Monitor.TryEnter(waitLock, command.m_Timeout))
+                return null;
+
             try
             {
-                Trace.Info(0, "Serial wait for response", command.m_Command);
-
-                switch (gemini_result)
                 {
-                    // a specific number of characters expected as the return value
-                    case GeminiCommand.ResultType.NumberofChars:
-                        result = ReadNumber(char_count);
-                        break;
+                    Trace.Info(0, "Serial wait for response", command.m_Command);
 
-                    // value '1' or a string terminated by '#'
-                    case GeminiCommand.ResultType.OneOrHash:
-                        result = ReadNumber(1); ;  // check if first character is 1, and return if it is, no hash expected
-                        if (result != "1")
-                        {
-                            result += ReadTo('#');
+#if DEBUG
+                    System.Diagnostics.Trace.WriteLine($"{DateTime.Now:HH:mm:ss.fff} [{Thread.CurrentThread.ManagedThreadId}]  Waiting for result command... {command.m_Command} [{gemini_result.ToString()}]");
+#endif
+
+                    switch (gemini_result)
+                    {
+                        // a specific number of characters expected as the return value
+                        case GeminiCommand.ResultType.NumberofChars:
+                            result = ReadNumber(char_count);
+                            break;
+
+                        // value '1' or a string terminated by '#'
+                        case GeminiCommand.ResultType.OneOrHash:
+                            result = ReadNumber(1); ;  // check if first character is 1, and return if it is, no hash expected
+                            if (result != "1")
+                            {
+                                result += ReadTo('#');
+                                if (command.m_Raw) //Raw should return the full string including #
+                                    result += "#";
+                            }
+                            break;
+
+                        // value '0' or a string terminated by '#'
+                        case GeminiCommand.ResultType.ZeroOrHash:
+                            result = ReadNumber(1);
+                            if (result != "0")
+                            {
+                                result += ReadTo('#');
+                                if (command.m_Raw) //Raw should return the full string including #
+                                    result += "#";
+                            }
+                            break;
+
+                        // string terminated by '#'
+                        case GeminiCommand.ResultType.HashChar:
+                            result = ReadTo('#');
+
+#if DEBUG
+                            System.Diagnostics.Trace.WriteLine($"{DateTime.Now:HH:mm:ss.fff} [{Thread.CurrentThread.ManagedThreadId}] Result command... {command.m_Command} [{result}]");
+#endif
+
                             if (command.m_Raw) //Raw should return the full string including #
                                 result += "#";
-                        }
-                        break;
+                            break;
 
-                    // value '0' or a string terminated by '#'
-                    case GeminiCommand.ResultType.ZeroOrHash:
-                        result = ReadNumber(1);
-                        if (result != "0")
-                        {
-                            result += ReadTo('#');
-                            if (command.m_Raw) //Raw should return the full string including #
-                                result += "#";
-                        }
-                        break;
-
-                    // string terminated by '#'
-                    case GeminiCommand.ResultType.HashChar:
-                        result = ReadTo('#');
-                        if (command.m_Raw) //Raw should return the full string including #
-                            result += "#";
-                        break;
-
-                    // '0' or two strings, each terminated with '#' (:SC command)
-                    case GeminiCommand.ResultType.ZeroOrTwoHash:
-                        result = ReadNumber(1);
-                        if (result != "0")
-                        {
-                            result += ReadTo('#');
-                            if (command.m_Raw) result += '#';
-                            result += ReadTo('#');
-                            if (command.m_Raw) result += '#';
-                        }
-                        break;
+                        // '0' or two strings, each terminated with '#' (:SC command)
+                        case GeminiCommand.ResultType.ZeroOrTwoHash:
+                            result = ReadNumber(1);
+                            if (result != "0")
+                            {
+                                result += ReadTo('#');
+                                if (command.m_Raw) result += '#';
+                                result += ReadTo('#');
+                                if (command.m_Raw) result += '#';
+                            }
+                            break;
+                    }
                 }
             }
             catch (Exception ex)
             {
+#if DEBUG
+                System.Diagnostics.Trace.WriteLine($"[{Thread.CurrentThread.ManagedThreadId}] EXCEPTION {ex}... {command.m_Command} [{gemini_result.ToString()}]");
+#endif
+                if (GeminiLevel < 5 && Velocity == "S") return null;    //Eat timeout exceptions when slewing in L4
                 if (m_AllowErrorNotify)
                 {
                     Trace.Except(ex);
@@ -775,6 +817,7 @@ wait_again:
             finally
             {
                 tmrReadTimeout.Stop();
+                Monitor.Exit(waitLock);
             }
 
 
@@ -795,12 +838,12 @@ wait_again:
             if (!string.IsNullOrEmpty(result) && (command.m_Command[0] == '<' || command.m_Command[0] == '>') && !command.m_Raw)
             {
                 byte chksum = (byte)result[result.Length - 1];
-
+                var r = result;
                 result = result.Substring(0, result.Length - 1); //remove checksum character
 
                 if ((((int)chksum) & m_ChecksumMask) != (ComputeChecksum(result) & m_ChecksumMask))  // bad checksum -- ignore the return value! 
                 {
-                    Trace.Error("Bad Checksum", command.m_Command, result);
+                    Trace.Error("Bad Checksum", command.m_Command, r);
 
                     GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial comm error (bad checksum) while processing command '" + command.m_Command + "'");
                     if (OnError != null && m_Connected && m_AllowErrorNotify) OnError(SharedResources.TELESCOPE_DRIVER_NAME, Resources.SerialError);
@@ -829,14 +872,17 @@ wait_again:
             if (!Connected || m_BackgroundWorker == null || !m_BackgroundWorker.IsAlive) return;    //not ready yet
             if (IgnoreErrors) return;   // driver asked us not to report errors, perhaps Gemini is too busy to respond during a slew or a flip...
 
-            if (Connected && DateTime.Now - m_LastDataTick > TimeSpan.FromSeconds(SharedResources.MAXIMUM_DISCONNECT_TIME))
+            var dt = TimeSpan.FromSeconds(SharedResources.MAXIMUM_DISCONNECT_TIME);
+            if (GeminiLevel >= 5)
+                dt = TimeSpan.FromSeconds(10);      //L5 doesn't go silent for long periods when busy
+            if (Connected && DateTime.Now - m_LastDataTick > dt)
             {
                 string msg = "No response for " + (SharedResources.MAXIMUM_DISCONNECT_TIME).ToString() + " secs";
                 Trace.Error(msg, "Teminating connection!");
                 GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, msg + " Terminating connection!");
                 if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, Resources.TerminatingConnection);
 
-                ThreadPool.QueueUserWorkItem(new WaitCallback(a => Disconnect()));
+                ThreadPool.QueueUserWorkItem(new WaitCallback(a => Disconnect(true)));
 
                 while (m_Connected) System.Threading.Thread.Sleep(500);
                 return;
@@ -849,7 +895,8 @@ wait_again:
             if (m_FirstErrorTick + SharedResources.MAXIMUM_ERROR_INTERVAL/5 < System.Environment.TickCount)
             {
                 m_FirstErrorTick = System.Environment.TickCount;
-                if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, Resources.EthernetError);
+                if (OnError != null && m_Connected &&
+                    (m_AllowErrorNotify)) OnError(SharedResources.TELESCOPE_DRIVER_NAME, Resources.EthernetError);
             }
 
             if (++m_TotalErrors > SharedResources.MAXIMUM_ERRORS)
@@ -863,7 +910,8 @@ wait_again:
                 {
                     Trace.Info(0, "Resetting communications port");
 
-                    m_CommandQueue.Clear();
+                    CommandItem it;
+                    while(m_CommandQueue.TryDequeue(out it));   //clear queue
                     DiscardInBuffer();
                     if (!m_EthernetPort)
                     {
@@ -938,6 +986,9 @@ wait_again:
                 }
                 if (m_SerialTimeoutExpired.WaitOne(0))
                 {
+#if DEBUG
+                    Debug.WriteLine($"TIMEOUT WAITING FOR '{terminate}'-terminated command");
+#endif
                     if (outp.Length > 0 && (m_PassThroughPort != null && m_PassThroughPort.PortActive))
                         m_PassThroughPort.PassStringToPort(outp);
                     throw new TimeoutException("ReadTo");

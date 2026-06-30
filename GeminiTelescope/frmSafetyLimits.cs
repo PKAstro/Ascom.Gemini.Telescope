@@ -34,6 +34,8 @@ namespace ASCOM.GeminiTelescope
         const int MI250EastDefault = 92;
         const int MI250WestDefault = 95;
 
+        bool loading = true;
+
         public frmSafetyLimits(GeminiProperties props)
         {
 
@@ -156,7 +158,7 @@ namespace ASCOM.GeminiTelescope
 
         private void chkNudge_CheckedChanged(object sender, EventArgs e)
         {
-            if (chkNudge.Checked)
+            if (chkNudge.Checked && !loading)
             {
                 DialogResult res = MessageBox.Show("This feature bypasses the built-in Gemini slew-disabling mechanism when at safety limit. Do you really want to do this?", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
                 if (res != DialogResult.Yes)
@@ -173,6 +175,7 @@ namespace ASCOM.GeminiTelescope
                 numericUpDown3.Enabled = false;
                 ckEnableFlipPoints.Enabled = false;
             }
+            loading = false;
         }
     }
 }

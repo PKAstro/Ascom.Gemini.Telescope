@@ -38,6 +38,8 @@ using System.Drawing;
 using ASCOM.GeminiTelescope.Properties;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -112,7 +114,7 @@ namespace ASCOM.GeminiTelescope
 
         public Encoding m_BinaryEncoding = Encoding.GetEncoding("Latin1");
 
-        internal Queue m_CommandQueue; //Queue used for messages to the gemini
+        internal ConcurrentQueue<CommandItem> m_CommandQueue; //Queue used for messages to the gemini
         internal System.Threading.Thread m_BackgroundWorker; // Thread to run for communications
 
         internal bool m_CancelAsync = false; // when to stop the background thread
@@ -244,6 +246,14 @@ namespace ASCOM.GeminiTelescope
         internal bool m_ParkWasExecuted = false;
 
         private string m_LastParkOperation = "";
+
+        internal string m_AllErrors = "";
+
+        public void addErrorMessage(string msg)
+        {
+            var s = DateTime.Now.ToString("HH:mm:ss.fff") + " " + msg + "\r\n";
+            m_AllErrors += s;          
+        }
 
         internal string LastParkOperation
         {
@@ -588,6 +598,20 @@ namespace ASCOM.GeminiTelescope
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ReportPierSide", value.ToString());
             }
         }
+
+        internal bool m_FlipUsingGoto = false;
+
+        public bool FlipUsingGoto
+        {
+            get { return m_FlipUsingGoto; }
+            set
+            {
+                m_FlipUsingGoto = value;
+                Profile.DeviceType = "Telescope";
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "FlipUsingGoto", value.ToString());
+            }
+        }
+
 
         internal bool m_PrecisionPulseGuide = true;
 
@@ -1072,7 +1096,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public GeminiHardwareBase()
         {
-            Initialize();
+            Initialize();         
         }
 
         public void Initialize()
@@ -1085,7 +1109,7 @@ namespace ASCOM.GeminiTelescope
             m_Transform = new ASCOM.Astrometry.Transform.Transform();
 
             m_SerialPort = new SerialPort();
-            m_CommandQueue = new Queue();
+            m_CommandQueue = new ConcurrentQueue<CommandItem>();
             m_Clients = 0;
 
             m_WaitForCommand = new System.Threading.AutoResetEvent(false);
@@ -1173,6 +1197,7 @@ namespace ASCOM.GeminiTelescope
 
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AsyncPulseGuide", true.ToString());
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ReportPierSide", true.ToString());
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "FlipUsingGoto", false.ToString());
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AskForAdvancedSync", true.ToString());
 
             }
@@ -1322,6 +1347,9 @@ namespace ASCOM.GeminiTelescope
 
             if (!bool.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ReportPierSide", ""), out m_ReportPierSide))
                 m_ReportPierSide = true;
+
+            if (!bool.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "FlipUsingGoto", ""), out m_FlipUsingGoto))
+                m_FlipUsingGoto = false;
 
             if (!bool.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "PrecisionPulseGuide", ""), out m_PrecisionPulseGuide))
                 m_PrecisionPulseGuide = true;
@@ -1607,9 +1635,11 @@ namespace ASCOM.GeminiTelescope
                 double result = 4;
 
                 if (!double.TryParse(m_GeminiVersion, System.Globalization.NumberStyles.Float, m_GeminiCulture, out result))
+                {
                     return 4;
+                }
                 else
-                    return result/100.0;
+                    return result / 100.0;
             }
 
         }
@@ -2202,8 +2232,13 @@ namespace ASCOM.GeminiTelescope
             //    be signaled in order: //was: if (System.Threading.ManualResetEvent.WaitAll(events, timeout < 0? -1 : total_timeout)) 
 
             if (events[ci.Length - 1].WaitOne(timeout < 0 ? -1 : total_timeout))
-                return ci[ci.Length - 1].m_Result;
+            {
+#if DEBUG
+                System.Diagnostics.Trace.WriteLine($"Result command... {ci[ci.Length - 1].m_Command} = [{ci[ci.Length-1].m_Result}]");
+#endif
 
+                return ci[ci.Length - 1].m_Result;
+            }
             return null;
         }
 
@@ -2296,7 +2331,7 @@ namespace ASCOM.GeminiTelescope
         {
             Trace.Enter(4, "GeminiHardware:DoPulseCommand");
 
-            lock (m_CommandQueue)
+////            lock (m_CommandQueue)
                 Transmit(cmd[0] + "#" + cmd[1] + "#");    //force the transmit ahead of anything in the queue
 
             EndOfPulseGuide = duration;
@@ -2311,8 +2346,8 @@ namespace ASCOM.GeminiTelescope
             else
             {
                 System.Threading.Thread.Sleep(duration);
-                lock (m_CommandQueue)
-                    Transmit(c);
+////                lock (m_CommandQueue)
+                Transmit(c);
             }
 
             Trace.Exit(4, "GeminiHardware:DoPulseCommand");
@@ -2333,8 +2368,8 @@ namespace ASCOM.GeminiTelescope
             // compute duration from time left to pulse-guide
             int duration = (int)EndOfPulseGuide;
             if (duration > 0) System.Threading.Thread.Sleep(duration);
-            lock (m_CommandQueue)
-                Transmit(cmd);
+////            lock (m_CommandQueue)
+            Transmit(cmd);
         }
 
 
@@ -2413,12 +2448,18 @@ namespace ASCOM.GeminiTelescope
             get
             {
                 // return number of msecs left until the end of last pulse-guiding command
-                lock (pulse_lock)
+                if (Monitor.TryEnter(pulse_lock, MAX_TIMEOUT))
                 {
-                    TimeSpan ts = (m_endOfPulseGuide - DateTime.Now);
-                    if (ts.TotalMilliseconds > 0) return ts.TotalMilliseconds;
-                    return 0;
+                    try
+                    {
+                        TimeSpan ts = (m_endOfPulseGuide - DateTime.Now);
+                        if (ts.TotalMilliseconds > 0) return ts.TotalMilliseconds;
+                        return 0;
+                    }
+                    finally { Monitor.Exit(pulse_lock); }
                 }
+                else
+                    throw new TimeoutException("Lock timeout EndOfPulseGuide" );
             }
             set
             {
@@ -2443,7 +2484,7 @@ namespace ASCOM.GeminiTelescope
 
                 if (l_Velocity == "!") l_Velocity = "N";    // stall = no tracking
                 if (l_Velocity != null) Velocity = l_Velocity;  //set main velocity value, since we just got it
-                if (l_Velocity == "G" || l_Velocity == "C") return true; // If G or C (?) then we are pulse guiding 
+                if (l_Velocity == "G" /*|| l_Velocity == "C"*/) return true; // If G or C (?) then we are pulse guiding 
                 else return false; // Some other rate so we are not pulse guiding
             }
         }
@@ -2726,6 +2767,32 @@ namespace ASCOM.GeminiTelescope
         }
 
 
+        //perform meridian flip by doing a goto with a flip (:MM#) command
+        // to the current coordinates (:Mf# doesn't always work in v5.x) 
+        internal string DoFlipUsingGoto()
+        {
+            Trace.Enter(4, "DoFlipUsingGoto");
+            //var cmd = $":Sr{RightAscension:0.000000}#:PC Flip Object#:Sd{Declination:0.000000}#";
+
+            string[] cmd = { ":Sr" + HoursToHMS(RightAscension),
+                             ":ON" + "Meridian Flip Target",
+                             ":Sd" + DegreesToDMS(Declination),
+                             ":MM"};
+
+            try
+            {
+                var r = DoCommandResult(cmd, 2000, false);
+                //if (r != null)
+                //   r = DoCommandResult(":MM#", 2000, true);
+                return r;
+            }
+            catch (Exception ex)
+            {
+                Trace.Info(4, "DoFlipUsingGoto", "Exception", ex);
+                return null;
+            }
+        }
+
         public string DoMeridianFlip()
         {
             Trace.Enter(4, "DoMeridianFlip");
@@ -2739,7 +2806,12 @@ namespace ASCOM.GeminiTelescope
 
             try
             {
-                DoCommandResult(new string[] { ":Mf#", "\x6" }, 5000, true, out res);
+                if (FlipUsingGoto)
+                {
+                    return DoFlipUsingGoto();
+                }
+                else
+                    DoCommandResult(new string[] { ":Mf#", "\x6" }, 5000, true, out res);
             }
             catch (Exception ex)
             {
@@ -2864,8 +2936,8 @@ namespace ASCOM.GeminiTelescope
                     m_TargetAzimuth = SharedResources.INVALID_DOUBLE;
                     TargetName = null;
 
-                    lock (m_CommandQueue)
-                        m_CommandQueue.Clear();
+                    CommandItem it;
+                    while (m_CommandQueue.TryDequeue(out it)) ;   //clear queue
 
                     // process initial ping to Gemini
                     // and take it through the boot process if it's not booted yet
@@ -2885,6 +2957,7 @@ namespace ASCOM.GeminiTelescope
                         m_BackgroundWorker = new System.Threading.Thread(BackgroundWorker_DoWork);
                         m_BackgroundWorker.Start();
 
+                      
 
                         try
                         {
@@ -2982,6 +3055,7 @@ namespace ASCOM.GeminiTelescope
             {
                 Trace.Info(2, "Setting HIGH PRECISION");
                 DoCommandResult(":U", MAX_TIMEOUT, false);
+                DoublePrecision = true;
             }
 
             Trace.Info(2, "Updating refraction");
@@ -2994,6 +3068,10 @@ namespace ASCOM.GeminiTelescope
 
                 SetLatitude(m_Latitude);
                 SetLongitude(m_Longitude);
+
+                if (!int.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "UTCOffset", ""), out m_UTCOffset))
+                    m_UTCOffset = -(int)(TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).TotalHours);
+
                 UTCOffset = m_UTCOffset;
             }
 
@@ -3272,7 +3350,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Disconnect this client. If no more clients, close the port, disconnect from the mount.
         /// </summary>
-        internal void Disconnect()
+        internal void Disconnect(bool force = false)
         {
             Trace.Enter("Disconnect()");
 
@@ -3283,11 +3361,11 @@ namespace ASCOM.GeminiTelescope
                 Trace.Info(2, "Current connect state", m_Connected);
 
                 m_Clients -= 1;
-                if (m_Clients < 0) m_Clients = 0;
+                if (m_Clients < 0 || force) m_Clients = 0;
 
                 Trace.Info(2, "Remaining clients", m_Clients);
 
-                if (m_Clients <= 0)
+                if (m_Clients <= 0 || force)
                 {
                     try
                     {
@@ -3297,11 +3375,15 @@ namespace ASCOM.GeminiTelescope
                         m_Connected = false;
                         // no new commands will be queued after m_Connected is set to false, clear out
                         // anything remaining:
-                        if (m_CommandQueue != null) m_CommandQueue.Clear();
+                        if (m_CommandQueue != null)
+                        {
+                            CommandItem it;
+                            while (m_CommandQueue.TryDequeue(out it)) ;   //clear queue
+                        }
 
-                        // wait for the thread to die for 5 seconds,
+                        // wait for the thread to die for 5 seconds,                        
                         // then kill it -- we don't want to tie up the serial comm
-                        if (m_BackgroundWorker != null)
+                            if (m_BackgroundWorker != null)
                         {
                             Trace.Info(2, "Stopping bkgd thread");
                             m_WaitForCommand.Set(); // wake up the background thread
@@ -3348,6 +3430,8 @@ namespace ASCOM.GeminiTelescope
             Trace.Exit("Disconnect()");
         }
 
+        public ManualResetEvent evExit = new ManualResetEvent(false);
+
         public void CloseStatusForm()
         {
             Trace.Info(4, "Before closing status form");
@@ -3390,6 +3474,7 @@ namespace ASCOM.GeminiTelescope
             {
                 object[] commands = null;
 
+                if (m_Connected)
                 lock (m_CommandQueue)
                 {
                     // process multiple commands, if more than one is queued up:
@@ -3399,19 +3484,16 @@ namespace ASCOM.GeminiTelescope
                         // gemini doesn't like too many long commands (buffer size problem?)
                         // remove up to x commands at a time
                         int cnt = Math.Min(MaxCommands, m_CommandQueue.Count);
-
-                        //if (EthernetPort && UDP)
-                        //{
-                        //    cnt++;
-                        //    commands = new object[cnt]; // m_CommandQueue.ToArray();
-                        //    for (int i = 0; i < cnt-1; ++i) commands[i] = m_CommandQueue.Dequeue();
-                        //    commands[cnt - 1] = new  CommandItem(":CE*", 1000, true);
-
-                        //}
-                        //else
+                  
                         {
                             commands = new object[cnt]; // m_CommandQueue.ToArray();
-                            for (int i = 0; i < cnt; ++i) commands[i] = m_CommandQueue.Dequeue();
+                            for (int i = 0; i < cnt; ++i)
+                            {
+                                CommandItem it;
+
+                                while (!m_CommandQueue.TryDequeue(out it)) System.Threading.Thread.Sleep(10);
+                                commands[i] = it;
+                            }
                         }
                     }
                 }
@@ -3440,10 +3522,10 @@ namespace ASCOM.GeminiTelescope
                                     serial_cmd = CompleteStandardCommand(ci.m_Command);
                             }
                             all_commands += serial_cmd;
-                            if (ci.WaitObject == null) ci.m_Timeout = 2000;    // default timeout for requests where the user doesn't care
+                            if (ci.WaitObject == null) ci.m_Timeout = 5000;    // default timeout for requests where the user doesn't care                           
                         }
 
-                        DiscardInBuffer();
+                        //DiscardInBuffer();
 
                         if (all_commands.Length >= MaxLength) MaxLength = all_commands.Length;
 
@@ -3495,14 +3577,15 @@ namespace ASCOM.GeminiTelescope
                         if (bNeedStatusUpdate || (DateTime.Now - m_LastUpdate).TotalMilliseconds > SharedResources.GEMINI_POLLING_INTERVAL)
                         {
                             m_AllowErrorNotify = false; //don't bother the user with timeout errors during polling  -- these are not very important
-                            UpdatePolledVariables(bNeedStatusUpdate); //update variables if one of them was altered by a processed command
+                            if (m_CommandQueue.IsEmpty) 
+                                UpdatePolledVariables(bNeedStatusUpdate); //update variables if one of them was altered by a processed command
                             m_AllowErrorNotify = true;
                         }
                     }
                     else
                     {
                         //                        m_AllowErrorNotify = false; //don't bother the user with timeout errors during polling  -- these are not very important
-                        UpdatePolledVariables(false);
+                        if (m_CommandQueue.IsEmpty) UpdatePolledVariables(false);
                         //                        m_AllowErrorNotify = true;
                     }
                 }
@@ -3600,6 +3683,10 @@ namespace ASCOM.GeminiTelescope
                     // add and remove commands as needed for Level 5
                     if (GeminiLevel > 4) GeminiCommands.GeminiCommandsL5();
                     if (GeminiLevel > 5) GeminiCommands.GeminiCommandsL6();
+
+                    addErrorMessage($"{DateTime.Now.ToShortDateString()} {SharedResources.TELESCOPE_DRIVER_NAME} {Application.ProductVersion}");
+                    addErrorMessage($"Gemini version: {dVersion}\n");
+
                 }
             }
 
@@ -3663,10 +3750,19 @@ namespace ASCOM.GeminiTelescope
 
         object poll_lock = new object();
 
+        DateTime last_update = DateTime.MinValue;
+
         internal virtual void UpdatePolledVariables(bool bUpdateAll)
         {
             if (Monitor.TryEnter(poll_lock, 100))
             {
+                // update no more than 3x per second
+                if (DateTime.Now - last_update < TimeSpan.FromMilliseconds(300))
+                {
+                    Trace.Enter("UpdatePolledVariables", "delayed by 300msec", bUpdateAll);
+                    return;
+                }
+                last_update = DateTime.Now;
                 Trace.Enter("UpdatePolledVariables", bUpdateAll);
                 _UpdatePolledVariables();
                 //two calls needed to fetch all the variables:
@@ -3687,194 +3783,264 @@ namespace ASCOM.GeminiTelescope
         /// 
         internal virtual void _UpdatePolledVariables()
         {
+#if DEBUG
+            //return;
+#endif
             if (!CanPoll) return; //don't tie up the serial port while pulse guiding -- timing is critical!
 
+            if (!Monitor.TryEnter(waitLock, 0))
+                return; //still processing returns from previous commands
+
+            if (!GeminiHardware.Instance.Connected) return;
+
+            Monitor.Exit(waitLock);
+
+
             Trace.Enter("_UpdatePolledVariables");
+                try
+                {
+                    CommandItem command;
+
+                    // Gemini gets slow to respond when slewing, so increase timeout if we're in the middle of it:
+                    //                int timeout = (m_Velocity == "S" ? MAX_TIMEOUT*2 : MAX_TIMEOUT);
+
+                    int timeout = 3000; // polling should not hold up the queue for too long
+
+                    int level = 0;
+                    string vars;
+
+                    m_PollUpdateCount++;
+
+                    if ((m_PollUpdateCount & 1) == 0)   // update set #1
+                    {
+                        level = 1;
+                        vars = m_ShortPolledVariablesString1;
+                    }
+                    else
+                    {
+                        level = 2;          // update set #2
+                        vars = m_ShortPolledVariablesString2;
+                    }
+
+#if DEBUG
+                    System.Diagnostics.Trace.Write("Poll commands: " + vars + "\r\n");
+#endif
+
+                    Trace.Info(4, "Poll commands", vars);
+                    //Get RA and DEC etc
+                    DiscardInBuffer(); //clear all received data
+                    Transmit(vars);
+
+                    string trc = "";
+
+
+                    if ((level & 1) != 0)
+                    {
+                        command = new CommandItem(":GR", timeout, true);
+                        string RA = GetCommandResult(command);
+                        if (RA == null)
+                        {
+                            Trace.Error("timeout", command.m_Command);
+                            return;
+                        }
+
+                        command = new CommandItem(":GD", timeout, true);
+                        string DEC = GetCommandResult(command);
+                        if (DEC == null)
+                        {
+                            Trace.Error("timeout", command.m_Command);
+                            return;
+                        }
+
+                        command = new CommandItem(":GA", timeout, true);
+                        string ALT = GetCommandResult(command);
+                        if (ALT == null)
+                        {
+                            Trace.Error("timeout", command.m_Command);
+                            return;
+                        }
+
+
+                        command = new CommandItem(":GZ", timeout, true);
+                        string AZ = GetCommandResult(command);
+
+                        if (AZ == null)
+                        {
+                            Trace.Error("timeout", command.m_Command);
+                            return;
+                        }
+
+                        command = new CommandItem(":Gv", timeout, true);
+                        string V = GetCommandResult(command);
+                        if (V == null)
+                        {
+                            Trace.Error("timeout", command.m_Command);
+                            return;
+                        }
+                        if (V == "!") V = "N";  // stall == no tracking
+
+                        if (RA != null) m_RightAscension = m_Util.HMSToHours(RA);
+                        if (DEC != null) m_Declination = m_Util.DMSToDegrees(DEC);
+                        if (ALT != null) m_Altitude = m_Util.DMSToDegrees(ALT);
+                        if (AZ != null) m_Azimuth = m_Util.DMSToDegrees(AZ);
+                        if (V == "!") V = "N"; //stall = no tracking
+
+                        if (V != null) m_Velocity = V;
+                        trc = "RA=" + RA + ", DEC=" + DEC + "ALT=" + ALT + " AZ=" + AZ + " Velocity=" + Velocity;
+                        pollString1 = trc;
+                    }
+
+                    if ((level & 2) != 0)
+                    {
+                        command = new CommandItem(":GS", timeout, true);
+                        string ST = GetCommandResult(command);
+                        if (ST == null)
+                        {
+                            Trace.Error("timeout", command.m_Command);
+                            return;
+                        }
+                        command = new CommandItem(":Gm", timeout, true);
+                        string SOP = GetCommandResult(command);
+                        if (SOP == null)
+                        {
+                            Trace.Error("timeout", command.m_Command);
+                            return;
+                        }
+
+                        command = new CommandItem("<99:", timeout, true);
+                        string STATUS = GetCommandResult(command);
+                        if (STATUS == null)
+                        {
+                            Trace.Error("timeout", command.m_Command);
+                            return;
+                        }
+
+
+                        command = new CommandItem(":h?", timeout, true);
+                        string HOME = GetCommandResult(command);
+                        if (HOME == null)
+                        {
+                            Trace.Error("timeout", command.m_Command);
+                            return;
+                        }
+
+                        if (Velocity == "N") m_Tracking = false;
+                        else
+                            m_Tracking = true;
+
+                        if (ST != null)
+                        {
+                            m_SiderealTime = m_Util.HMSToHours(ST);
+                        }
+                        if (SOP != null) m_SideOfPier = SOP;
+
+                        if (HOME != null)
+                            m_ParkState = HOME;
+
+                        if ((m_ParkWasExecuted || m_AtPark || m_AtHome) && Velocity != "N") //unparked!
+                        {
+                            m_AtPark = false;
+                            m_AtHome = false;
+                            LastParkOperation = "";
+                            m_ParkWasExecuted = false;
+                        }
+
+                        if (STATUS != null)
+                        {
+                            int.TryParse(STATUS, out m_GeminiStatusByte);
+
+                            // if reached safety limit, send out one notification 
+                            if ((m_GeminiStatusByte & 16) != 0 && !m_SafetyNotified)
+                            {
+                                if (OnSafetyLimit != null) OnSafetyLimit();
+                                m_SafetyNotified = true;
+                            }
+                            else if ((m_GeminiStatusByte & 16) == 0) m_SafetyNotified = false;
+                        }
+
+                        trc += " SOP=" + SOP + " HOME=" + HOME + " Status=" + m_GeminiStatusByte.ToString();
+                        pollString2 = trc;
+                    }
+
+
+                    Trace.Info(4, trc);
+
+#if DEBUG
+                    System.Diagnostics.Trace.Write("Done polling: " + trc + "\r\n");
+#endif
+
+                    m_LastUpdate = System.DateTime.Now;
+                }
+                catch (Exception e)
+                {
+                    Trace.Except(e);
+                    try
+                    {
+                        m_SerialPort.DiscardOutBuffer();
+                        DiscardInBuffer();
+                    }
+                    catch { }
+                }
+
+                Trace.Exit("UpdatePolledVariables");
+        }
+
+        DateTime updateCoordinatesLastTime = DateTime.MinValue;
+
+        object lockUpdateCoordinate = new object();
+        /// <summary>
+        /// Update coordinates as needed, for example during satellite tracking operation
+        /// where more frequent updates are required
+        /// </summary>
+        internal virtual void _UpdateCoordinatesOnly()
+        {
+            if (DateTime.Now - updateCoordinatesLastTime < TimeSpan.FromMilliseconds(200)) return;
+
+            if (!Monitor.TryEnter(lockUpdateCoordinate, 0)) return;
+
+            Trace.Enter("_UpdateCoordinatesOnly");
             try
             {
-                CommandItem command;
-
-                // Gemini gets slow to respond when slewing, so increase timeout if we're in the middle of it:
-                //                int timeout = (m_Velocity == "S" ? MAX_TIMEOUT*2 : MAX_TIMEOUT);
-
-                int timeout = 3000; // polling should not hold up the queue for too long
-
-                int level = 0;
-                string vars;
-
-                m_PollUpdateCount++;
-
-                if ((m_PollUpdateCount & 1) == 0)   // update set #1
-                {
-                    level = 1;
-                    vars = m_ShortPolledVariablesString1;
-                }
-                else
-                {
-                    level = 2;          // update set #2
-                    vars = m_ShortPolledVariablesString2;
-                }
-
-#if DEBUG
-                System.Diagnostics.Trace.Write("Poll commands: " + vars + "\r\n");
-#endif
-
-                Trace.Info(4, "Poll commands", vars);
                 //Get RA and DEC etc
-                DiscardInBuffer(); //clear all received data
-                Transmit(vars);
 
-                string trc = "";
-
-
-                if ((level & 1) != 0)
+                string[] cmds = new string[]
                 {
-                    command = new CommandItem(":GR", timeout, true);
-                    string RA = GetCommandResult(command);
-                    if (RA == null)
-                    {
-                        Trace.Error("timeout", command.m_Command);
-                        return;
-                    }
+                    ":GR",":GD", ":GA", ":GZ", ":Gv"
+                };
 
-                    command = new CommandItem(":GD", timeout, true);
-                    string DEC = GetCommandResult(command);
-                    if (DEC == null)
-                    {
-                        Trace.Error("timeout", command.m_Command);
-                        return;
-                    }
+                string[] result = null;
 
-                    command = new CommandItem(":GA", timeout, true);
-                    string ALT = GetCommandResult(command);
-                    if (ALT == null)
-                    {
-                        Trace.Error("timeout", command.m_Command);
-                        return;
-                    }
-
-
-                    command = new CommandItem(":GZ", timeout, true);
-                    string AZ = GetCommandResult(command);
-
-                    if (AZ == null)
-                    {
-                        Trace.Error("timeout", command.m_Command);
-                        return;
-                    }
-
-                    command = new CommandItem(":Gv", timeout, true);
-                    string V = GetCommandResult(command);
-                    if (V == null)
-                    {
-                        Trace.Error("timeout", command.m_Command);
-                        return;
-                    }
-                    if (V == "!") V = "N";  // stall == no tracking
-
-                    if (RA != null) m_RightAscension = m_Util.HMSToHours(RA);
-                    if (DEC != null) m_Declination = m_Util.DMSToDegrees(DEC);
-                    if (ALT != null) m_Altitude = m_Util.DMSToDegrees(ALT);
-                    if (AZ != null) m_Azimuth = m_Util.DMSToDegrees(AZ);
-                    if (V == "!") V = "N"; //stall = no tracking
-
-                    if (V != null) m_Velocity = V;
-                    trc = "RA=" + RA + ", DEC=" + DEC + "ALT=" + ALT + " AZ=" + AZ + " Velocity=" + Velocity;
-                    pollString1 = trc;
+                DoCommandResult(cmds, cmds.Length * 3000, false, out result);
+                if (result == null || result.Length != cmds.Length)
+                {
+                    Trace.Error("_UpdateCoordinatesOnly invalid result");
+                    return;
                 }
 
-                if ((level & 2) != 0)
-                {
-                    command = new CommandItem(":GS", timeout, true);
-                    string ST = GetCommandResult(command);
-                    if (ST == null)
-                    {
-                        Trace.Error("timeout", command.m_Command);
-                        return;
-                    }
-                    command = new CommandItem(":Gm", timeout, true);
-                    string SOP = GetCommandResult(command);
-                    if (SOP == null)
-                    {
-                        Trace.Error("timeout", command.m_Command);
-                        return;
-                    }
+                string RA = result[0], DEC = result[1], ALT = result[2], AZ = result[3], V = result[4];
 
-                    command = new CommandItem("<99:", timeout, true);
-                    string STATUS = GetCommandResult(command);
-                    if (STATUS == null)
-                    {
-                        Trace.Error("timeout", command.m_Command);
-                        return;
-                    }
+                if (V!=null && V == "!") V = "N";  // stall == no tracking
 
+                if (RA != null) m_RightAscension = m_Util.HMSToHours(RA);
+                if (DEC != null) m_Declination = m_Util.DMSToDegrees(DEC);
+                if (ALT != null) m_Altitude = m_Util.DMSToDegrees(ALT);
+                if (AZ != null) m_Azimuth = m_Util.DMSToDegrees(AZ);
+                if (V == "!") V = "N"; //stall = no tracking
+                if (V != null) m_Velocity = V;
 
-                    command = new CommandItem(":h?", timeout, true);
-                    string HOME = GetCommandResult(command);
-                    if (HOME == null)
-                    {
-                        Trace.Error("timeout", command.m_Command);
-                        return;
-                    }
+                updateCoordinatesLastTime = DateTime.Now;
 
-                    if (Velocity == "N") m_Tracking = false;
-                    else
-                        m_Tracking = true;
-
-                    if (ST != null)
-                    {
-                        m_SiderealTime = m_Util.HMSToHours(ST);
-                    }
-                    if (SOP != null) m_SideOfPier = SOP;
-
-                    if (HOME != null)
-                        m_ParkState = HOME;
-
-                    if ((m_ParkWasExecuted || m_AtPark || m_AtHome) && Velocity != "N") //unparked!
-                    {
-                        m_AtPark = false;
-                        m_AtHome = false;
-                        LastParkOperation = "";
-                        m_ParkWasExecuted = false;
-                    }
-
-                    if (STATUS != null)
-                    {
-                        int.TryParse(STATUS, out m_GeminiStatusByte);
-
-                        // if reached safety limit, send out one notification 
-                        if ((m_GeminiStatusByte & 16) != 0 && !m_SafetyNotified)
-                        {
-                            if (OnSafetyLimit != null) OnSafetyLimit();
-                            m_SafetyNotified = true;
-                        }
-                        else if ((m_GeminiStatusByte & 16) == 0) m_SafetyNotified = false;
-                    }
-
-                    trc += " SOP=" + SOP + " HOME=" + HOME + " Status=" + m_GeminiStatusByte.ToString();
-                    pollString2 = trc;
-                }
-
-
-                Trace.Info(4, trc);
-
-#if DEBUG
-                System.Diagnostics.Trace.Write("Done polling: " + trc + "\r\n");
-#endif
-
-                m_LastUpdate = System.DateTime.Now;
             }
             catch (Exception e)
             {
                 Trace.Except(e);
-                try
-                {
-                    m_SerialPort.DiscardOutBuffer();
-                    DiscardInBuffer();
-                } catch { }
+            }
+            finally
+            {
+                Monitor.Exit(lockUpdateCoordinate);
             }
 
-            Trace.Exit("UpdatePolledVariables");
+            Trace.Exit("_UpdateCoordinatesOnly");
         }
 
 
@@ -3900,13 +4066,14 @@ namespace ASCOM.GeminiTelescope
         public void Resync()
         {
             if (!m_Connected || m_BackgroundWorker == null || !m_BackgroundWorker.IsAlive) return;
+            if (evExit.WaitOne(0)) return;  // exiting
 
             Trace.Enter("Resync");
 
             if (m_SerialPort.IsOpen || GeminiHardware.Instance.UDP_client != null)
             {
-                lock (m_CommandQueue)
-                {
+                if (Monitor.TryEnter(m_CommandQueue, MAX_TIMEOUT))
+                try {
                     if (!m_SerialPort.IsOpen)
                         GeminiHardware.Instance.ResyncEthernet();
 
@@ -3957,6 +4124,7 @@ namespace ASCOM.GeminiTelescope
                     DiscardOutBuffer();
                     DiscardInBuffer();
                 }
+                    finally { Monitor.Exit(m_CommandQueue); }
             }
             Trace.Exit("Resync");
         }
@@ -4032,8 +4200,9 @@ namespace ASCOM.GeminiTelescope
                 // make sure we are fully connected/disconnected before returning a status,
                 // so that another worker thread doesn't come in with a request while a connect is 
                 // still in progress [pk]
-                if (!m_Connected) return false;
+                if (!m_Connected || IsConnecting) return false;
 
+             
                 lock (m_ConnectLock) { return m_Connected; }
             }
             set
@@ -4061,8 +4230,9 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public double RightAscension
         { get {
-                // for satellite tracking need real-time coordinate updates
-                if (VariableMoveAxis && Slewing) UpdatePolledVariables(false);
+                // for satellite tracking need near real-time coordinate updates
+                if (VariableMoveAxis && Slewing) _UpdateCoordinatesOnly();
+                    
                 return m_RightAscension; } }
 
         /// <summary>
@@ -4072,8 +4242,8 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public double Declination
         { get {
-                // for satellite tracking need real-time coordinate updates
-                if (VariableMoveAxis && Slewing) UpdatePolledVariables(false);
+                // for satellite tracking need near real-time coordinate updates
+                if (VariableMoveAxis && Slewing) _UpdateCoordinatesOnly();
                 return m_Declination;
             } }
 
@@ -4084,8 +4254,8 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public double Altitude
         { get {
-                // for satellite tracking need real-time coordinate updates
-                if (VariableMoveAxis && Slewing) UpdatePolledVariables(false);
+                // for satellite tracking need near real-time coordinate updates
+                if (VariableMoveAxis && Slewing) _UpdateCoordinatesOnly();
 
                 return m_Altitude; } }
 
@@ -4094,7 +4264,13 @@ namespace ASCOM.GeminiTelescope
         /// retrieved from the latest polled value from the mount, no actual command is executed
         /// </summary>
         public double Azimuth
-        { get { return m_Azimuth; } }
+        {
+            get {
+                // for satellite tracking need near real-time coordinate updates
+                if (VariableMoveAxis && Slewing) _UpdateCoordinatesOnly();
+                return m_Azimuth;
+            }
+        }
 
         /// <summary>
         /// Get current AtHome propery
@@ -4104,7 +4280,10 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                m_AtHome = (m_AtHome && Velocity == "N");
+                string home = null;
+                if (Velocity == "N")
+                    home = DoCommandResult(":h?", 2000, false);
+                if (home != "1") return false; //park/home command not completed
                 return m_AtHome;
             }
         }
@@ -4117,7 +4296,8 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                m_AtPark = (m_AtPark && Velocity == "N");
+                // if atPark, or park was executed and not at home, tracking is turned off:
+                m_AtPark = ((m_AtPark || (m_ParkState == "1" && !m_AtHome)) && Velocity == "N");
                 return m_AtPark;
             }
         }
@@ -4132,7 +4312,7 @@ namespace ASCOM.GeminiTelescope
         public void AbortSlew()
         {
             Trace.Enter(4, "GeminiHardware:AbortSlew");
-            lock (m_CommandQueue)
+            ////            lock (m_CommandQueue)
             {
                 m_SlewAborted.Set();
                 Transmit(":Q#");    //force the transmit ahead of anything in the queue
@@ -4166,11 +4346,16 @@ namespace ASCOM.GeminiTelescope
 
             m_SlewAborted.Reset();
 
+            m_ParkWasExecuted = false;
+            m_AtPark = false;
+            m_AtHome = false;
+
             if (((GeminiParkMode)mode) != GeminiParkMode.NoSlew)
             {
                 if (NudgeFromSafety && AtSafetyLimit)
                     DoNudgeFromSafety();
             }
+
 
             bool wait = true;
 
@@ -4223,8 +4408,6 @@ namespace ASCOM.GeminiTelescope
 
             if (m_SlewAborted.WaitOne(0))
             {
-                m_ParkWasExecuted = false;
-                m_AtPark = false;
                 m_Trace.Exit("DoPark", false);
                 return;
             }
@@ -4249,7 +4432,10 @@ namespace ASCOM.GeminiTelescope
         public bool DoParkAsync(GeminiParkMode mode)
         {
             if (!Connected) return false;
-            System.Threading.ThreadPool.QueueUserWorkItem(DoPark, mode);
+            if (mode == GeminiParkMode.SlewHome)
+                System.Threading.ThreadPool.QueueUserWorkItem(DoHome, mode);
+            else
+                System.Threading.ThreadPool.QueueUserWorkItem(DoPark, mode);
             return true;
         }
 
@@ -4258,13 +4444,17 @@ namespace ASCOM.GeminiTelescope
         /// Goto Home position
         /// </summary>
         /// <returns></returns>
-        public bool DoHome()
+        public void DoHome(object mode)
         {
             m_Trace.Enter("DoHome");
 
-            if (!Connected) return false;
-
+            if (!Connected) return ;
             m_SlewAborted.Reset();
+
+            m_ParkWasExecuted = false;
+            m_AtPark = false;
+            m_AtHome = false;
+            LastParkOperation = "";
 
             DoCommandResult(":hP", GeminiHardware.Instance.MAX_TIMEOUT, false);
             WaitForHomeOrPark("Home");
@@ -4276,7 +4466,7 @@ namespace ASCOM.GeminiTelescope
                 m_ParkWasExecuted = false;
                 m_AtHome = false;
                 m_Trace.Exit("DoHome - slew aborted", false);
-                return false;
+                return ;
             }
 
             DoCommandResult(":hN", MAX_TIMEOUT, false);
@@ -4284,13 +4474,13 @@ namespace ASCOM.GeminiTelescope
             if (!WaitForStop(120))    // wait for a stop for 2 minutes, then fail
             {
                 m_Trace.Error("Failed to stop DoHome");
-                return false;
+                return ;
             }
             m_ParkWasExecuted = true;
             LastParkOperation = "Home";
             m_AtHome = true;
+            m_AtPark = false;
             m_Trace.Exit("DoHome", true);
-            return true;
 
         }
 
@@ -4355,14 +4545,19 @@ namespace ASCOM.GeminiTelescope
             {
                 try
                 {
+                    bool precision = DoublePrecision;
+
                     DateTime geminiDateTime = DateTime.Now;
                     string l_Time = DoCommandResult(":GL", MAX_TIMEOUT, false);
+                    if (l_Time != null && l_Time.Contains(":"))
+                        precision = false;
+
                     string l_Date = DoCommandResult(":GC", MAX_TIMEOUT, false);
                     double l_TZOffset = 0;
 
                     double.TryParse(GeminiHardware.Instance.DoCommandResult(":GG", GeminiHardware.Instance.MAX_TIMEOUT, false), System.Globalization.NumberStyles.Float, GeminiHardware.Instance.m_GeminiCulture, out l_TZOffset);
 
-                    if (DoublePrecision) // Time will be returned in decimal hours so convert it to HH:mm:ss format
+                    if (precision) // Time will be returned in decimal hours so convert it to HH:mm:ss format
                     {
                         double hours = 0;
                         double.TryParse(l_Time, System.Globalization.NumberStyles.Float, GeminiHardware.Instance.m_GeminiCulture, out hours);
@@ -4456,13 +4651,33 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+
+        private bool m_HorizonsTracking = false;
+
+        public bool HorizonsTracking
+        {
+            get
+            {
+                Trace.Info(4, "GetHorizonsTracking", m_HorizonsTracking);
+                return m_HorizonsTracking;
+            }
+
+            set
+            {
+                Trace.Info(2, "SetHorizonsTracking", value);
+                m_HorizonsTracking = value;
+            }
+        }
+
+
         /// <summary>
         /// Get current SiderealTime propery
         /// retrieved from the latest polled value from the mount, no actual command is executed
         /// </summary>
         public string Velocity
         {
-            get { return m_Velocity; }
+            get {
+                return m_Velocity; }
             set {
                 m_Velocity = value;
            
@@ -4474,16 +4689,7 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                string res = DoCommandResult("<99:", MAX_TIMEOUT, false);
-                int status;
-                if (int.TryParse(res, out status))
-                {
-                    if ((status & 8) != 0) return true;
-                }
-                else
-                    throw new TimeoutException("Slewing property");
-
-                return false;
+                return m_Velocity == "S";               
             }
         }
         /// <summary>
@@ -4657,11 +4863,11 @@ namespace ASCOM.GeminiTelescope
 
             double distance = (double)clusters;
 
-            if (distance <= 0)
-            {
-                return "0";
-            }
-            else
+            //if (distance <= 0)
+            //{
+            //    return "0";
+            //}
+            //else
             {
                 int seconds = (int)(distance / rate);
                 return seconds.ToString();
@@ -4875,7 +5081,7 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                string s = DoCommandResult("<509:", 2000, false);
+                string s = DoCommandResult("<509:", 5000, false);
                 byte res = 0;
                 if (!byte.TryParse(s, out res)) return 0xff;
                 return res;
@@ -4891,7 +5097,7 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                string res = DoCommandResult(":GH", 2000, false);
+                string res = DoCommandResult(":GH", 5000, false);
                 return m_Util.HMSToHours(res);
             }
 
@@ -5155,7 +5361,7 @@ namespace ASCOM.GeminiTelescope
 #if DEBUG
             System.Diagnostics.Trace.WriteLine("Queue command..."+ci.m_Command);
 #endif
-            lock (m_CommandQueue)
+            ////            lock (m_CommandQueue)
             {
                 if (!m_Connected) return false;
                 m_CommandQueue.Enqueue(ci);
@@ -5175,7 +5381,7 @@ namespace ASCOM.GeminiTelescope
             foreach(CommandItem c in ci) System.Diagnostics.Trace.Write(c.m_Command + ", ");
             System.Diagnostics.Trace.WriteLine("");
 #endif
-            lock (m_CommandQueue)
+            ////            lock (m_CommandQueue)
             {
                 if (!m_Connected) return false;
                 for (int i = 0; i < ci.Length; ++i)

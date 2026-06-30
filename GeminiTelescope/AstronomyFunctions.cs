@@ -68,6 +68,16 @@ namespace ASCOM.GeminiTelescope
             EqPrecession(tNow, 0, ref ra, ref dec); 
         }
 
+        public static void FromJ2000(ref double ra, ref double dec)
+        {
+            // Rigorous equatorial precession computation from JNow to J2000
+            // with much better precision around DEC=90 than ASCOM.Transform class
+            double tNow = (DateUtcToJulian(DateTime.Now) - 2451545.0) / 36525;
+            EqPrecession(0, tNow, ref ra, ref dec);
+        }
+
+
+
 
         //----------------------------------------------------------------------------------------
         // Calculate Precession

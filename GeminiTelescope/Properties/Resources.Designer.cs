@@ -283,6 +283,16 @@ namespace ASCOM.GeminiTelescope.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap clear {
+            get {
+                object obj = ResourceManager.GetObject("clear", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to COM port.
         /// </summary>
         internal static string COMport {
@@ -540,6 +550,15 @@ namespace ASCOM.GeminiTelescope.Properties {
         internal static string dispGUIDE {
             get {
                 return ResourceManager.GetString("dispGUIDE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HOME.
+        /// </summary>
+        internal static string dispHOME {
+            get {
+                return ResourceManager.GetString("dispHOME", resourceCulture);
             }
         }
         
@@ -1615,6 +1634,15 @@ namespace ASCOM.GeminiTelescope.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cold Start Gemini.
+        /// </summary>
+        internal static string RebootColdStart {
+            get {
+                return ResourceManager.GetString("RebootColdStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to reboot Gemini controller?.
         /// </summary>
         internal static string RebootController {
@@ -2169,6 +2197,16 @@ namespace ASCOM.GeminiTelescope.Properties {
         internal static string WaitingForData {
             get {
                 return ResourceManager.GetString("WaitingForData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Warning {
+            get {
+                object obj = ResourceManager.GetObject("Warning", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

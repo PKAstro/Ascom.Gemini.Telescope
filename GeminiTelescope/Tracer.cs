@@ -138,14 +138,21 @@ namespace ASCOM.GeminiTelescope
             {
                 lock (m_Log)
                 {
+                    var msg = "TID:" + System.Threading.Thread.CurrentThread.ManagedThreadId + " [Error]: ";
 
-                    m_Log.LogStart(s, "TID:" + System.Threading.Thread.CurrentThread.ManagedThreadId + " [Error]: ");
+                    m_Log.LogStart(s, msg);
+
+                    var txt = "";
                     for (int i = 0; i < values.Length; ++i)
                     {
                         object o = values[i];
                         m_Log.LogContinue((o ?? "null") + (i != values.Length - 1 ? ", " : ""));
+                        txt += (o ?? "null") + (i != values.Length - 1 ? ", " : "");
                     }
+                   
                     m_Log.LogFinish("");
+
+                    GeminiHardware.Instance.addErrorMessage($"{s} {msg}\r\n");
                 }
             }
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -81,6 +82,13 @@ namespace ASCOM.GeminiTelescope
                 //    }
                 //}
 
+                if (obj.isSolar())
+                {
+                    txtRA.Text = new RACoord(0).ToString(":", ":");
+                    txtDEC.Text = new DECCoord(0).ToString(":", ":");
+                    lbCatalog.Text = obj.Catalog;
+                    return;
+                }
                 if (ckRA.Checked)
                 {
                     var ra = obj.RA.RA;
@@ -143,26 +151,47 @@ namespace ASCOM.GeminiTelescope
 
         private void btnGoto_Click(object sender, EventArgs e)
         {
-            double ra = GeminiHardware.Instance.m_Util.HMSToHours(txtRA.Text);
-            if (ckRA.Checked) //convert from HA
-            {
-                double sidereal_time = GeminiHardware.Instance.SiderealTime;
-                ra = ConditionHA(sidereal_time - ra);
-                if (ra >= 24) ra -= 24;
-                if (ra < 0) ra += 24;
-            }
-            double dec =  GeminiHardware.Instance.m_Util.DMSToDegrees(txtDEC.Text);
+            double ra = 0, dec = 0;
 
-            if (ra==0 && dec==0)
+            if (lbCatalog.Text != "Solar System")
             {
-                MessageBox.Show("Please select an object or enter RA/DEC coordinates!", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
+                ra = GeminiHardware.Instance.m_Util.HMSToHours(txtRA.Text);
+                if (ckRA.Checked) //convert from HA
+                {
+                    double sidereal_time = GeminiHardware.Instance.SiderealTime;
+                    ra = ConditionHA(sidereal_time - ra);
+                    if (ra >= 24) ra -= 24;
+                    if (ra < 0) ra += 24;
+                }
+                dec = GeminiHardware.Instance.m_Util.DMSToDegrees(txtDEC.Text);
 
+                if (ra == 0 && dec == 0)
+                {
+                    MessageBox.Show("Please select an object or enter RA/DEC coordinates!", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return;
+                }
+            }
             CatalogObject obj = null;
             string key = FindObject(txtObject.Text);
             if (key != null)
+            {
                 obj = frmUserCatalog.m_Objects[key];
+                if (obj.isSolar())
+                {
+                    if (GeminiHardware.Instance.GeminiLevel < 6)
+                    {
+                        MessageBox.Show("Solar system objects are only supported in Gemini L6 and above!", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        return;
+                    }
+                    if (sender == btnGoto)
+                        frmUserCatalog.GotoSolarObject(obj);
+                    else 
+                    {
+                        MessageBox.Show("Can't sync/align on Solar System objects!", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
+                    return;
+                }            
+            }
             else
             {
                 if (!chkJ2000.Checked && !ckRA.Checked)
@@ -179,7 +208,8 @@ namespace ASCOM.GeminiTelescope
                 txtObject.Text = key;
                 customAdded = true;
             }
-
+            
+                
             obj.GetCoords(out ra, out dec); //convert to correct epoch/refraction settings
 
             GeminiHardware.Instance.TargetRightAscension = ra;

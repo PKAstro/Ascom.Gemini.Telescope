@@ -1,4 +1,6 @@
-﻿namespace ASCOM.GeminiTelescope
+﻿using System.Windows.Forms;
+
+namespace ASCOM.GeminiTelescope
 {
     partial class frmAdvancedSettings
     {
@@ -72,6 +74,8 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.groupBox2 = new Indigo.CollapsibleGroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.checkBox10 = new System.Windows.Forms.CheckBox();
+            this.checkBox9 = new System.Windows.Forms.CheckBox();
             this.checkBox8 = new System.Windows.Forms.CheckBox();
             this.pbTracking = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
@@ -332,7 +336,7 @@
             this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 12);
             this.flowLayoutPanel1.MaximumSize = new System.Drawing.Size(550, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(481, 812);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(481, 855);
             this.flowLayoutPanel1.TabIndex = 39;
             // 
             // groupBox1
@@ -700,12 +704,12 @@
             this.groupBox2.Controls.Add(this.tableLayoutPanel2);
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.ForeColor = System.Drawing.Color.White;
-            this.groupBox2.FullSize = new System.Drawing.Size(471, 100);
+            this.groupBox2.FullSize = new System.Drawing.Size(471, 143);
             this.groupBox2.Location = new System.Drawing.Point(3, 173);
             this.groupBox2.MinimumSize = new System.Drawing.Size(471, 0);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 3, 3, 10);
-            this.groupBox2.Size = new System.Drawing.Size(471, 100);
+            this.groupBox2.Size = new System.Drawing.Size(471, 143);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Tracking";
@@ -715,12 +719,14 @@
             // 
             this.tableLayoutPanel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
             this.tableLayoutPanel2.ColumnCount = 5;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 33F));
-            this.tableLayoutPanel2.Controls.Add(this.checkBox8, 1, 2);
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.14142F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.14142F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.14142F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.57574F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 44F));
+            this.tableLayoutPanel2.Controls.Add(this.checkBox10, 3, 2);
+            this.tableLayoutPanel2.Controls.Add(this.checkBox9, 1, 2);
+            this.tableLayoutPanel2.Controls.Add(this.checkBox8, 1, 3);
             this.tableLayoutPanel2.Controls.Add(this.pbTracking, 4, 1);
             this.tableLayoutPanel2.Controls.Add(this.label6, 2, 1);
             this.tableLayoutPanel2.Controls.Add(this.label4, 0, 1);
@@ -733,12 +739,41 @@
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel2.MinimumSize = new System.Drawing.Size(465, 62);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 3;
+            this.tableLayoutPanel2.RowCount = 4;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(465, 74);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(465, 117);
             this.tableLayoutPanel2.TabIndex = 0;
+            // 
+            // checkBox10
+            // 
+            this.checkBox10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBox10.AutoSize = true;
+            this.checkBox10.BackColor = System.Drawing.Color.Transparent;
+            this.checkBox10.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBox10.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.geminiPropertiesBindingSource, "DECGearReverse", true));
+            this.checkBox10.Location = new System.Drawing.Point(321, 61);
+            this.checkBox10.Name = "checkBox10";
+            this.checkBox10.Size = new System.Drawing.Size(94, 17);
+            this.checkBox10.TabIndex = 40;
+            this.checkBox10.Text = "Reverse DEC:";
+            this.checkBox10.UseVisualStyleBackColor = false;
+            // 
+            // checkBox9
+            // 
+            this.checkBox9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBox9.AutoSize = true;
+            this.checkBox9.BackColor = System.Drawing.Color.Transparent;
+            this.checkBox9.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBox9.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.geminiPropertiesBindingSource, "RAGearReverse", true));
+            this.checkBox9.Location = new System.Drawing.Point(120, 61);
+            this.checkBox9.Name = "checkBox9";
+            this.checkBox9.Size = new System.Drawing.Size(87, 17);
+            this.checkBox9.TabIndex = 39;
+            this.checkBox9.Text = "Reverse RA:";
+            this.checkBox9.UseVisualStyleBackColor = false;
             // 
             // checkBox8
             // 
@@ -748,9 +783,9 @@
             this.checkBox8.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.geminiPropertiesBindingSource, "PECOnAuto", true));
             this.checkBox8.Dock = System.Windows.Forms.DockStyle.Right;
             this.checkBox8.ForeColor = System.Drawing.Color.Lime;
-            this.checkBox8.Location = new System.Drawing.Point(144, 51);
+            this.checkBox8.Location = new System.Drawing.Point(135, 91);
             this.checkBox8.Name = "checkBox8";
-            this.checkBox8.Size = new System.Drawing.Size(177, 20);
+            this.checkBox8.Size = new System.Drawing.Size(177, 23);
             this.checkBox8.TabIndex = 37;
             this.checkBox8.Text = "Enable PEC at Start of Tracking";
             this.checkBox8.UseVisualStyleBackColor = false;
@@ -765,7 +800,7 @@
             this.pbTracking.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.pbTracking.Image = ((System.Drawing.Image)(resources.GetObject("pbTracking.Image")));
             this.pbTracking.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.pbTracking.Location = new System.Drawing.Point(432, 24);
+            this.pbTracking.Location = new System.Drawing.Point(418, 29);
             this.pbTracking.Margin = new System.Windows.Forms.Padding(0);
             this.pbTracking.Name = "pbTracking";
             this.pbTracking.Size = new System.Drawing.Size(22, 22);
@@ -779,11 +814,11 @@
             this.label6.BackColor = System.Drawing.Color.Transparent;
             this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label6.ForeColor = System.Drawing.Color.Lime;
-            this.label6.Location = new System.Drawing.Point(219, 24);
+            this.label6.Location = new System.Drawing.Point(213, 29);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(102, 24);
+            this.label6.Size = new System.Drawing.Size(99, 29);
             this.label6.TabIndex = 13;
-            this.label6.Text = " DEC Comet  Rate Divisor:";
+            this.label6.Text = " DEC Divisor:";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label4
@@ -792,11 +827,11 @@
             this.label4.BackColor = System.Drawing.Color.Transparent;
             this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label4.ForeColor = System.Drawing.Color.Lime;
-            this.label4.Location = new System.Drawing.Point(3, 24);
+            this.label4.Location = new System.Drawing.Point(3, 29);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(102, 24);
+            this.label4.Size = new System.Drawing.Size(99, 29);
             this.label4.TabIndex = 4;
-            this.label4.Text = "RA Tracking Divisor:";
+            this.label4.Text = "RA Divisor:";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label5
@@ -807,7 +842,7 @@
             this.label5.ForeColor = System.Drawing.Color.Lime;
             this.label5.Location = new System.Drawing.Point(3, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(102, 24);
+            this.label5.Size = new System.Drawing.Size(99, 29);
             this.label5.TabIndex = 0;
             this.label5.Text = "Tracking Rate:";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -822,9 +857,9 @@
             this.comboBox3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBox3.ForeColor = System.Drawing.Color.Lime;
             this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(111, 3);
+            this.comboBox3.Location = new System.Drawing.Point(108, 3);
             this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(102, 21);
+            this.comboBox3.Size = new System.Drawing.Size(99, 21);
             this.comboBox3.TabIndex = 1;
             // 
             // numericUpDown1
@@ -834,7 +869,7 @@
             this.numericUpDown1.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "TrackingDivisorRA", true));
             this.numericUpDown1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown1.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown1.Location = new System.Drawing.Point(111, 27);
+            this.numericUpDown1.Location = new System.Drawing.Point(108, 32);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -846,7 +881,7 @@
             0,
             0});
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(102, 20);
+            this.numericUpDown1.Size = new System.Drawing.Size(99, 20);
             this.numericUpDown1.TabIndex = 9;
             this.numericUpDown1.Value = new decimal(new int[] {
             256,
@@ -861,14 +896,14 @@
             this.numericUpDown2.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "TrackingDivisorDEC", true));
             this.numericUpDown2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown2.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown2.Location = new System.Drawing.Point(327, 27);
+            this.numericUpDown2.Location = new System.Drawing.Point(318, 32);
             this.numericUpDown2.Maximum = new decimal(new int[] {
             65535,
             0,
             0,
             0});
             this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(102, 20);
+            this.numericUpDown2.Size = new System.Drawing.Size(97, 20);
             this.numericUpDown2.TabIndex = 11;
             // 
             // checkBox4
@@ -880,9 +915,9 @@
             this.checkBox4.Dock = System.Windows.Forms.DockStyle.Right;
             this.checkBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox4.ForeColor = System.Drawing.Color.Lime;
-            this.checkBox4.Location = new System.Drawing.Point(339, 3);
+            this.checkBox4.Location = new System.Drawing.Point(325, 3);
             this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(90, 18);
+            this.checkBox4.Size = new System.Drawing.Size(90, 23);
             this.checkBox4.TabIndex = 10;
             this.checkBox4.Text = "PEC is On:";
             this.checkBox4.UseVisualStyleBackColor = false;
@@ -894,7 +929,7 @@
             this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox3.ForeColor = System.Drawing.Color.White;
             this.groupBox3.FullSize = new System.Drawing.Size(471, 115);
-            this.groupBox3.Location = new System.Drawing.Point(3, 279);
+            this.groupBox3.Location = new System.Drawing.Point(3, 322);
             this.groupBox3.MinimumSize = new System.Drawing.Size(471, 0);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(3, 3, 3, 10);
@@ -1189,7 +1224,7 @@
             this.groupBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox4.ForeColor = System.Drawing.Color.White;
             this.groupBox4.FullSize = new System.Drawing.Size(471, 196);
-            this.groupBox4.Location = new System.Drawing.Point(3, 400);
+            this.groupBox4.Location = new System.Drawing.Point(3, 443);
             this.groupBox4.MinimumSize = new System.Drawing.Size(471, 0);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Padding = new System.Windows.Forms.Padding(3, 3, 3, 10);
@@ -1597,7 +1632,7 @@
             this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox5.ForeColor = System.Drawing.Color.White;
             this.groupBox5.FullSize = new System.Drawing.Size(471, 84);
-            this.groupBox5.Location = new System.Drawing.Point(3, 602);
+            this.groupBox5.Location = new System.Drawing.Point(3, 645);
             this.groupBox5.MinimumSize = new System.Drawing.Size(471, 0);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Padding = new System.Windows.Forms.Padding(3, 3, 3, 10);
@@ -1762,7 +1797,7 @@
             this.panel1.Controls.Add(this.pbSave);
             this.panel1.Controls.Add(this.chkSendSettings);
             this.panel1.Controls.Add(this.pbLoad);
-            this.panel1.Location = new System.Drawing.Point(3, 692);
+            this.panel1.Location = new System.Drawing.Point(3, 735);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(471, 117);
             this.panel1.TabIndex = 5;
@@ -1801,7 +1836,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
             this.CancelButton = this.button3;
-            this.ClientSize = new System.Drawing.Size(662, 812);
+            this.ClientSize = new System.Drawing.Size(730, 812);
             this.Controls.Add(this.flowLayoutPanel1);
             this.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -1854,6 +1889,16 @@
             this.ResumeLayout(false);
             this.PerformLayout();
 
+        }
+
+
+        private void PbController_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            {
+                Button pb = (Button)sender;
+                m_ParentPanel = pb.Parent;
+            }
         }
 
 
@@ -1957,5 +2002,7 @@
         private System.Windows.Forms.ComboBox cbRAMultiplier;
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.ComboBox cbBuzzer;
+        private CheckBox checkBox10;
+        private CheckBox checkBox9;
     }
 }

@@ -403,6 +403,7 @@ namespace ASCOM.GeminiTelescope
             {
                 AssertConnect();
                 System.Threading.Thread.Sleep(10); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
+                m_FoundHome = GeminiHardware.Instance.AtHome;// && m_FoundHome;
                 GeminiHardware.Instance.Trace.Enter("IT:AtHome.Get", m_FoundHome);
                 return m_FoundHome;
             }
@@ -634,7 +635,7 @@ namespace ASCOM.GeminiTelescope
             AssertConnect();
 
             if (Command == String.Empty) throw new ASCOM.InvalidValueException("CommandNative", Command, "valid Gemini command");
-            string result = GeminiHardware.Instance.DoCommandResult(Command, 1000, false);
+            string result = GeminiHardware.Instance.DoCommandResult(Command, 5000, false);
 
             if (result == null) return null;
             else
@@ -1191,7 +1192,7 @@ namespace ASCOM.GeminiTelescope
                         GeminiHardware.Instance.WaitForVelocity("TG", GeminiHardware.Instance.MAX_TIMEOUT);
              */
 
-            m_FoundHome = GeminiHardware.Instance.DoHome();
+            GeminiHardware.Instance.DoHome(GeminiHardwareBase.GeminiParkMode.SlewHome);
 
             GeminiHardware.Instance.Trace.Exit("IT:FindHome");
         }
@@ -1451,7 +1452,7 @@ namespace ASCOM.GeminiTelescope
                 string[] cmds = new string[]
                 {
                     $">451:{divisor}",
-                    ">453:1"
+                    ">  :1"
                 };
 
                 GeminiHardware.Instance.Trace.Info(4, "IT:MoveAxisRA", spd, divisor);
@@ -1834,6 +1835,19 @@ namespace ASCOM.GeminiTelescope
             {
                 GeminiHardware.Instance.Trace.Enter("IT:RightAscensionRate.Get");
                 AssertConnect();
+
+                string res = GeminiHardware.Instance.DoCommandResult("<130:", GeminiHardware.Instance.MAX_TIMEOUT, false);
+                GeminiHardware.Instance.Trace.Exit("IT:RightAscensionRate.Get", res);
+                switch (res)
+                {
+                    case "131": //DriveRates.driveSidereal                   
+                    case "132": // DriveRates.driveKing;
+                    case "133": // DriveRates.driveLunar;
+                    case "134": // DriveRates.driveSolar;
+                        return 0;   // one of the stock rates
+                }
+
+                // custom rate, compute from actual tracking rate
                 string rateDivisor = GeminiHardware.Instance.DoCommandResult("<411:", GeminiHardware.Instance.MAX_TIMEOUT, false);
                 string wormGearRatio = GeminiHardware.Instance.DoCommandResult("<21:", GeminiHardware.Instance.MAX_TIMEOUT, false);
                 string spurGearRatio = GeminiHardware.Instance.DoCommandResult("<23:", GeminiHardware.Instance.MAX_TIMEOUT, false);
@@ -2015,6 +2029,9 @@ namespace ASCOM.GeminiTelescope
                         if (res.StartsWith("1")) throw new ASCOM.InvalidOperationException("Object below horizon");
                         if (res.StartsWith("4")) throw new ASCOM.InvalidOperationException("Position unreachable");
                         if (res.StartsWith("3")) throw new ASCOM.InvalidOperationException("Manual control");
+                        if (res.StartsWith("5")) throw new ASCOM.InvalidOperationException("Not aligned");
+                        if (res.StartsWith("6")) throw new ASCOM.InvalidOperationException("Outside limits");
+                        if (res.StartsWith("7")) throw new ASCOM.InvalidOperationException("Mount is parked");
 
                         GeminiHardware.Instance.WaitForVelocity("S", GeminiHardware.Instance.MAX_TIMEOUT);
                         GeminiHardware.Instance.WaitForVelocity("TN", -1);  // :Mf is asynchronous, wait until done
@@ -2290,6 +2307,9 @@ namespace ASCOM.GeminiTelescope
                 AssertConnect();
                 System.Threading.Thread.Sleep(10); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
 
+                if (GeminiHardware.Instance.HorizonsTracking) // whatever speed we're moving at we are still tracking with Horizons/JPL
+                    return false;
+                else
                 if (GeminiHardware.Instance.Velocity == "S" || GeminiHardware.Instance.Velocity == "C")
                 {
                     return true;
@@ -2315,6 +2335,9 @@ namespace ASCOM.GeminiTelescope
 
             AssertConnect();
 
+            GeminiHardware.Instance.TargetAzimuth = Azimuth;
+            GeminiHardware.Instance.TargetAltitude = Altitude;
+            GeminiHardware.Instance.TargetName = "PC Object";
             GeminiHardware.Instance.SyncHorizonCoordinates(Azimuth, Altitude);
 
             GeminiHardware.Instance.Trace.Exit("IT:SyncToAltAz", Azimuth, Altitude);
@@ -2328,6 +2351,9 @@ namespace ASCOM.GeminiTelescope
             if (GeminiHardware.Instance.AtPark)
                 throw new ASCOM.InvalidOperationException(SharedResources.MSG_INVALID_AT_PARK);
 
+            GeminiHardware.Instance.TargetRightAscension = RightAscension;
+            GeminiHardware.Instance.TargetDeclination = Declination;
+            GeminiHardware.Instance.TargetName = "PC Object";
             GeminiHardware.Instance.SyncToEquatorialCoords(RightAscension, Declination);
             GeminiHardware.Instance.Trace.Exit("IT:SyncToCoordinates", RightAscension, Declination);
         }
@@ -2403,6 +2429,10 @@ namespace ASCOM.GeminiTelescope
             {
                 AssertConnect();
                 System.Threading.Thread.Sleep(10); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)                
+
+                if (m_AsyncSlewStarted) {   // if in async slew, check if we're done here and wait slew settle time, if necessary
+                    var na = internalSlewing;
+                }
                 bool res = GeminiHardware.Instance.Tracking;
                 GeminiHardware.Instance.Trace.Enter("IT:Tracking.Get", res);
                 return res;
@@ -2440,7 +2470,10 @@ namespace ASCOM.GeminiTelescope
                 GeminiHardware.Instance.Trace.Exit("IT:TrackingRate.Get", res);
                 switch (res)
                 {
-                    case "131": return DriveRates.driveSidereal;
+                    case "131": //sidereal
+                    case "136": //closed-loop
+                    case "137": //comet/user-defined
+                        return DriveRates.driveSidereal;
                     case "132": return DriveRates.driveKing;
                     case "133": return DriveRates.driveLunar;
                     case "134": return DriveRates.driveSolar;

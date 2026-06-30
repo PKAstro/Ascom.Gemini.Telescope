@@ -89,6 +89,23 @@ Source: ..\GeminiTelescope\bin\x86\Release\ASCOM.GeminiTelescope.pdb; DestDir: {
 Source: ..\GeminiTelescope\bin\x64\Release\Interop.SpeechLib.dll; DestDir: {cf}\ASCOM\Telescope\Gemini; Check: Is64BitInstallMode; Flags: ignoreversion
 Source: ..\GeminiTelescope\bin\x86\Release\Interop.SpeechLib.dll; DestDir: {cf}\ASCOM\Telescope\Gemini; Check: NotIs64BitInstallMode; Flags: ignoreversion
 
+Source: ..\GeminiTelescope\bin\x64\Release\MathNet.Numerics.dll; DestDir: {cf}\ASCOM\Telescope\Gemini; Check: Is64BitInstallMode; Flags: ignoreversion
+Source: ..\GeminiTelescope\bin\x86\Release\MathNet.Numerics.dll; DestDir: {cf}\ASCOM\Telescope\Gemini; Check: NotIs64BitInstallMode; Flags: ignoreversion
+Source: ..\GeminiTelescope\bin\x64\Release\MathNet.Numerics.xml; DestDir: {cf}\ASCOM\Telescope\Gemini; Check: Is64BitInstallMode; Flags: ignoreversion
+Source: ..\GeminiTelescope\bin\x86\Release\MathNet.Numerics.xml; DestDir: {cf}\ASCOM\Telescope\Gemini; Check: NotIs64BitInstallMode; Flags: ignoreversion
+
+Source: ..\GeminiTelescope\bin\x64\Release\Newtonsoft.Json.dll; DestDir: {cf}\ASCOM\Telescope\Gemini; Check: Is64BitInstallMode; Flags: ignoreversion
+Source: ..\GeminiTelescope\bin\x86\Release\Newtonsoft.Json.dll; DestDir: {cf}\ASCOM\Telescope\Gemini; Check: NotIs64BitInstallMode; Flags: ignoreversion
+Source: ..\GeminiTelescope\bin\x64\Release\Newtonsoft.Json.xml; DestDir: {cf}\ASCOM\Telescope\Gemini; Check: Is64BitInstallMode; Flags: ignoreversion
+Source: ..\GeminiTelescope\bin\x86\Release\Newtonsoft.Json.xml; DestDir: {cf}\ASCOM\Telescope\Gemini; Check: NotIs64BitInstallMode; Flags: ignoreversion
+
+Source: ..\GeminiTelescope\bin\x64\Release\ColorMaps\color cube; DestDir: {cf}\ASCOM\Telescope\Gemini\ColorMaps; Check: Is64BitInstallMode; Flags: ignoreversion
+Source: ..\GeminiTelescope\bin\x86\Release\ColorMaps\color cube; DestDir: {cf}\ASCOM\Telescope\Gemini\ColorMaps; Check: NotIs64BitInstallMode; Flags: ignoreversion
+
+
+
+
+
 Source: ..\Telescope\bin\x64\Release\ASCOM.GeminiTelescope.Telescope.dll; DestDir: {cf}\ASCOM\Telescope\Gemini\GeminiTelescopeServedClasses; Check: Is64BitInstallMode; Flags: ignoreversion; Tasks: ; Languages: 
 Source: ..\Telescope\bin\x64\Release\ASCOM.GeminiTelescope.Telescope.pdb; DestDir: {cf}\ASCOM\Telescope\Gemini\GeminiTelescopeServedClasses; Check: Is64BitInstallMode; Flags: ignoreversion
 Source: ..\Telescope\bin\x86\Release\ASCOM.GeminiTelescope.Telescope.dll; DestDir: {cf}\ASCOM\Telescope\Gemini\GeminiTelescopeServedClasses; Check: NotIs64BitInstallMode; Flags: ignoreversion
@@ -137,6 +154,8 @@ Source: ..\Catalogs\Sharpless HII Regions.guc; DestDir: {commonappdata}\ASCOM\Ge
 Source: ..\Catalogs\Solar System.gu6; DestDir: {commonappdata}\ASCOM\Gemini Telescope .NET\Catalogs; Flags: ignoreversion
 Source: ..\Catalogs\VDB reflection nebulae.guc; DestDir: {commonappdata}\ASCOM\Gemini Telescope .NET\Catalogs; Flags: ignoreversion
 Source: ..\Catalogs\Washington Double Star Catalog.guc; DestDir: {commonappdata}\ASCOM\Gemini Telescope .NET\Catalogs; Flags: ignoreversion
+Source: ..\Catalogs\jpl_Solar System.txt; DestDir: {commonappdata}\ASCOM\Gemini Telescope .NET\Catalogs; Flags: ignoreversion
+Source: ..\Catalogs\jpl_sbdb_all.txt; DestDir: {commonappdata}\ASCOM\Gemini Telescope .NET\Catalogs; Flags: ignoreversion
 
 
 [Icons]
@@ -169,19 +188,19 @@ begin
 
   // Test for ASCOM platform
   if not FileExists(ExpandConstant('{cf32}\ASCOM\Interface\AscomMasterInterfaces.tlb')) then begin
-    MsgBox('ASCOM Platform 5 or later is not installed. You must install the latest ASCOM Platform before installing this update. You can download this from http:\\www.ascom.com\downloads', mbCriticalError, MB_OK);
+    MsgBox('ASCOM Platform 5 or later is not installed. You must install the latest ASCOM Platform before installing this update. You can download this from https://www.ascom-standards.org', mbCriticalError, MB_OK);
     Result:= False;
   end;
 
   if Result then begin // Platform 5 is installed so now test if the 5.5 update or later is installed
     // Test for Platform 5.5 update
     if not FileExists(ExpandConstant('{cf}\ASCOM\.net\ASCOM.Utilities.dll')) then begin
-      MsgBox('ASCOM Platform 5.5 Update is not installed. You must install the ASCOM Platform 5.5 updater before installing this driver. You can download this from http:\\www.ascom.com\downloads', mbCriticalError, MB_OK);
+      MsgBox('ASCOM Platform 5.5 Update is not installed. You must install the ASCOM Platform 5.5 updater before installing this driver. You can download this from https://www.ascom-standards.org', mbCriticalError, MB_OK);
       Result:= False;
     end;
   end;
 
-  if Result then // check for .NET 3.5 SP1
+  if Result then // check for .NET 4.8 
   begin
 		RegQueryDWordValue(HKLM, 'Software\Microsoft\NET Framework Setup\NDP\v4\Client', 'Install', version);
 		RegQueryDWordValue(HKLM, 'Software\Microsoft\NET Framework Setup\NDP\v4\Client', 'Release', release);

@@ -27,6 +27,10 @@ namespace ASCOM.GeminiTelescope
             this.Hide();
         }
 
+
+        int historyDisplayLine = 0;
+        int lastHistoryLine = 0;
+
         private void txtTerm_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Return)
@@ -109,12 +113,69 @@ namespace ASCOM.GeminiTelescope
                     txtTerm.SelectionStart = txtTerm.Text.Length;
                     txtTerm.SelectionLength = 0;
                 }
+            else if (e.KeyCode == Keys.Tab)
+            {
+                int start = txtTerm.GetFirstCharIndexOfCurrentLine();
+                start--;
+                int currline = txtTerm.GetLineFromCharIndex(start);
+                if (currline > txtTerm.Lines.Length || currline == 0) return;
+                start++;
+                
+                int end = start + txtTerm.Lines[currline].Length;
+
+                // continue scroll through history
+                if (historyDisplayLine == currline)
+                {
+                    if (e.Modifiers != Keys.Shift)
+                    lastHistoryLine++;
+                    else
+                        lastHistoryLine--;                    
+                }
+                else
+                {
+                    historyDisplayLine = currline;
+                    lastHistoryLine = currline - 1;
+                    
+                }
+
+
+                while (lastHistoryLine > 0 && lastHistoryLine < currline && 
+                    !(txtTerm.Lines[lastHistoryLine].StartsWith(">") || txtTerm.Lines[lastHistoryLine].StartsWith("<") || txtTerm.Lines[lastHistoryLine].StartsWith(":")))
+                    if (e.Modifiers != Keys.Shift)
+                        lastHistoryLine++;
+                    else
+                        lastHistoryLine--;
+
+                if (lastHistoryLine < 0) lastHistoryLine = 0;
+                if (lastHistoryLine >= currline) lastHistoryLine = currline - 1;
+                ReplaceCurrentLine(txtTerm.Lines[lastHistoryLine], start, end);
+            }
+        }
+
+        private void ReplaceCurrentLine(string v, int start, int end)
+        {
+            txtTerm.Select(start, end);
+            txtTerm.SelectedText = v;
+            txtTerm.Refresh();
         }
 
         private void txtTerm_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             if (e.KeyCode == Keys.Return)
             {        
+                var idx = txtTerm.GetLineFromCharIndex(txtTerm.SelectionStart);
+                if (idx < txtTerm.Lines.Length)
+                {
+                    var line = txtTerm.Lines[idx];
+                    txtTerm.SelectionStart = txtTerm.GetFirstCharIndexOfCurrentLine() + line.Length;
+                }
+            }
+        }
+
+        private void txtTerm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Return)
+            {
                 var idx = txtTerm.GetLineFromCharIndex(txtTerm.SelectionStart);
                 if (idx < txtTerm.Lines.Length)
                 {

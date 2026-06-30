@@ -45,6 +45,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.pbClear = new System.Windows.Forms.Button();
             this.chkAutoTurnOnPEC = new System.Windows.Forms.CheckBox();
+            this.pbClearCal = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // chkEnablePEC
@@ -233,6 +234,22 @@
             this.chkAutoTurnOnPEC.UseVisualStyleBackColor = false;
             this.chkAutoTurnOnPEC.Click += new System.EventHandler(this.chkAutoTurnOnPEC_Click);
             // 
+            // pbClearCal
+            // 
+            this.pbClearCal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pbClearCal.AutoSize = true;
+            this.pbClearCal.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbClearCal.BackgroundImage")));
+            this.pbClearCal.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pbClearCal.FlatAppearance.BorderSize = 0;
+            this.pbClearCal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.pbClearCal.Location = new System.Drawing.Point(358, 158);
+            this.pbClearCal.Name = "pbClearCal";
+            this.pbClearCal.Size = new System.Drawing.Size(27, 19);
+            this.pbClearCal.TabIndex = 74;
+            this.pbClearCal.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.pbClearCal.UseVisualStyleBackColor = true;
+            this.pbClearCal.Click += new System.EventHandler(this.pbClearCal_Click);
+            // 
             // frmPEC
             // 
             this.AcceptButton = this.cmdOK;
@@ -240,6 +257,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(397, 245);
+            this.Controls.Add(this.pbClearCal);
             this.Controls.Add(this.chkAutoTurnOnPEC);
             this.Controls.Add(this.pbClear);
             this.Controls.Add(this.button1);
@@ -287,5 +305,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button pbClear;
         public System.Windows.Forms.CheckBox chkAutoTurnOnPEC;
+        private System.Windows.Forms.Button pbClearCal;
     }
 }

@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Drawing.Drawing2D;
 using System.Diagnostics;
+using System.Linq;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -188,7 +189,7 @@ namespace ASCOM.GeminiTelescope
 
             if (!string.IsNullOrEmpty(display) && display.Trim() != "")
                 OnInfo("Gemini Controller", display);
-        }
+                    }
 
         private void StartJoystick()
         {
@@ -521,6 +522,8 @@ namespace ASCOM.GeminiTelescope
                 this.BeginInvoke(new InfoBaloonDelegate(SetBaloonText), from, msg, ToolTipIcon.Error);
             else
                 SetBaloonText(from, msg, ToolTipIcon.Info);
+//            GeminiHardware.Instance.addErrorMessage($"{from}: {msg}");
+
         }
 
         void OnInfo(string from, string msg)
@@ -529,6 +532,8 @@ namespace ASCOM.GeminiTelescope
                 this.BeginInvoke(new InfoBaloonDelegate(SetBaloonText), from, msg, ToolTipIcon.Info);
             else
                 SetBaloonText(from, msg, ToolTipIcon.Info);
+
+//            GeminiHardware.Instance.addErrorMessage($"{from}: {msg}");
         }
 
         class msg
@@ -553,6 +558,7 @@ namespace ASCOM.GeminiTelescope
                 if (m_Messages.Count > 0 || (DateTime.Now - m_LastMessageTime < TimeSpan.FromSeconds(1.5)))
                 {
                     m_Messages.Add(new msg(title, text, icon));
+                    GeminiHardware.Instance.addErrorMessage($"{title}: {text}");
                     return;
                 }
 
@@ -571,6 +577,7 @@ namespace ASCOM.GeminiTelescope
                 m_LastMessageTime = DateTime.Now;
                 tmrBaloon.Start();
             }
+            GeminiHardware.Instance.addErrorMessage($"{title}: {text}");
         }
 
         /// <summary>
@@ -653,17 +660,20 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Instance.Connected)
             {
-                labelSlew.BackColor = (GeminiHardware.Instance.Velocity == "S" ? m_ActiveBkColor : m_InactiveBkColor);
+                labelSlew.BackColor = ((GeminiHardware.Instance.Velocity == "S" || GeminiHardware.Instance.Stalled)? 
+                    m_ActiveBkColor : m_InactiveBkColor);
 
                 // blink the text while slewing is active:
                 Color active = ((m_UpdateCount & 1) == 0 ? m_ActiveForeColor : m_InactiveForeColor);
 
-                labelSlew.ForeColor = (GeminiHardware.Instance.Velocity == "S" ? active : m_InactiveForeColor);
-                labelPARK.BackColor = (GeminiHardware.Instance.AtPark ? m_ActiveBkColor : m_InactiveBkColor);
-                labelPARK.ForeColor = (GeminiHardware.Instance.AtPark ? m_ActiveForeColor : m_InactiveForeColor);
+                labelSlew.ForeColor = ((GeminiHardware.Instance.Velocity == "S" || GeminiHardware.Instance.Stalled) ? active : m_InactiveForeColor);
+                labelPARK.BackColor = (GeminiHardware.Instance.AtPark || GeminiHardware.Instance.AtHome ? m_ActiveBkColor : m_InactiveBkColor);
+                labelPARK.ForeColor = (GeminiHardware.Instance.AtPark || GeminiHardware.Instance.AtHome ? m_ActiveForeColor : m_InactiveForeColor);
 
                 if (GeminiHardware.Instance.AtPark)
                     labelPARK.Text = Resources.dispPARK;
+                else if (GeminiHardware.Instance.AtHome)
+                    labelPARK.Text = Resources.dispHOME;
                 else
                     labelPARK.Text = GeminiHardware.Instance.SideOfPier == "E" ? Resources.dispEAST : Resources.dispWEST;
 
@@ -673,7 +683,7 @@ namespace ASCOM.GeminiTelescope
                 {
                     case "S": labelSlew.Text = Resources.dispSLEW; break;
                     case "C": labelSlew.Text = Resources.dispCENTER; break;
-                    case "N": labelSlew.Text = Resources.dispSTOP; break;
+                    case "N": labelSlew.Text = GeminiHardware.Instance.Stalled? "STALL" : Resources.dispSTOP; break;
                     case "G": labelSlew.Text = Resources.dispGUIDE; break;
                     default: labelSlew.Text = Resources.dispTRACK; break;
                 }
@@ -683,7 +693,7 @@ namespace ASCOM.GeminiTelescope
                     labelSlew.Text = Resources.dispLIMIT;
                     labelSlew.ForeColor = m_ActiveForeColor;
                     labelSlew.BackColor = m_ActiveBkColor;
-                    labelLimit.Text = "00:00:00";
+//                    labelLimit.Text = "00:00:00";
                 }
 
                 pbStop.Visible = (GeminiHardware.Instance.Velocity == "S");  //only show Stop! button when slewing
@@ -778,7 +788,7 @@ namespace ASCOM.GeminiTelescope
                 // don't bother with PEC status and
                 // distance to safety while slewing: this is too
                 // much for Gemini to handle
-                if (GeminiHardware.Instance.Velocity != "S")
+                if (GeminiHardware.Instance.Velocity != "S" || (GeminiHardware.Instance.GeminiLevel >= 5 && GeminiHardware.Instance.EthernetPort))
                 {
                     // update limit distance every 4th time
                     if (((m_UpdateCount & 3) == 0) || GeminiHardware.Instance.GeminiLevel > 4)
@@ -817,7 +827,7 @@ namespace ASCOM.GeminiTelescope
 
             if (double.IsNaN(seconds)) return;
 
-            if (seconds <= 0)
+            if (seconds == 0)
             {
                 if (this.InvokeRequired)
                     this.BeginInvoke(new SetTextCallback(SetLimitText), "@ LIMIT");
@@ -826,12 +836,21 @@ namespace ASCOM.GeminiTelescope
             }
             else
             {
-                TimeSpan ts = TimeSpan.FromSeconds(seconds);
-                string lmt = string.Format("{0:00}:{1:00}:{2:00}", ts.Hours, ts.Minutes, ts.Seconds);
+                seconds = (seconds % (24 * 3600));
+                if (seconds/3600.0 >= 12 && GeminiHardware.Instance.GeminiLevel >= 5)
+                {
+                    var s = GeminiHardware.Instance.DoCommandResult("<226:", 2000, false);
+                    if (s != null)
+                        double.TryParse(s, out seconds);
+                }
+                TimeSpan ts = TimeSpan.FromSeconds(Math.Abs(seconds));
+
+                string lmt = (seconds < 0? "-" : "") + string.Format("{0:00}:{1:00}:{2:00}", ts.Hours, ts.Minutes, ts.Seconds);
                 if (this.InvokeRequired)
                     this.BeginInvoke(new SetTextCallback(SetLimitText), lmt);
                 else
                     labelLimit.Text = lmt;
+                Debug.WriteLine($"TO LIMIT: {lmt}");
             }
         }
 
@@ -872,9 +891,10 @@ namespace ASCOM.GeminiTelescope
 
             setupForm.AsyncPulseGuide = GeminiHardware.Instance.AsyncPulseGuide;
             setupForm.ReportPierSide = GeminiHardware.Instance.ReportPierSide;
+            setupForm.FlipUsingGoto = GeminiHardware.Instance.FlipUsingGoto;
             setupForm.PrecisionPulseGuide = GeminiHardware.Instance.PrecisionPulseGuide;
             setupForm.VariableMoveAxis = GeminiHardware.Instance.VariableMoveAxis;
-
+            
             string[] optics = GeminiHardware.Instance.OpticsNames.Split('~');
             string[] focallengths = GeminiHardware.Instance.FocalLength.Split('~');
             string[] apertures = GeminiHardware.Instance.ApertureDiameter.Split('~');
@@ -958,6 +978,7 @@ namespace ASCOM.GeminiTelescope
                 GeminiHardware.Instance.AsyncPulseGuide = setupForm.AsyncPulseGuide;
 
                 GeminiHardware.Instance.ReportPierSide = setupForm.ReportPierSide;
+                GeminiHardware.Instance.FlipUsingGoto = setupForm.FlipUsingGoto;
 
                 GeminiHardware.Instance.PrecisionPulseGuide = setupForm.PrecisionPulseGuide;
 
@@ -1387,7 +1408,7 @@ namespace ASCOM.GeminiTelescope
                 GeminiHardware.Instance.Connected = false;
 
             GeminiHardware.Instance.CloseStatusForm();
-
+            GeminiHardware.Instance.evExit.Set();
         }
 
         private void focuserSetupDialogToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1692,13 +1713,14 @@ namespace ASCOM.GeminiTelescope
             {
                 Speech.SayIt(Resources.MedidianFlip, Speech.SpeechType.Command);
                 string res = GeminiHardware.Instance.DoMeridianFlip();
-                switch (res)
+                switch (res.First())
                 {
-                    case "1Object below horizon.":
+                    case '1':
                         Speech.SayIt(Resources.ObjectBelowHorizon, Speech.SpeechType.Error);
                         MessageBox.Show(this, Resources.ObjectBelowHorizon, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
-                    case "4Position unreachable.":
+
+                    case '4':
                         Speech.SayIt(Resources.ObjectUnreachable, Speech.SpeechType.Error);
                         MessageBox.Show(this, Resources.ObjectUnreachable, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
@@ -2036,6 +2058,82 @@ namespace ASCOM.GeminiTelescope
 
 
         Region N, S, W, E;
+
+
+
+        internal void TimeChanged()
+        {
+            if (frmMP != null)
+                frmMP.TimeChanged();
+        }
+
+        frmMinorPlanets frmMP = null;
+
+        private void minorPlanetsMenuItem_Click(object sender, EventArgs e)
+        {
+            if (frmMP == null || frmMP.IsDisposed)
+            {
+                frmMP = new frmMinorPlanets();
+
+                frmMP.Left = this.Right;
+                frmMP.Top = Cursor.Position.Y - frmMP.Height / 2;
+                if (frmMP.Left + frmMP.Width / 2 > Screen.FromControl(this).WorkingArea.Width)
+                    frmMP.Left = Screen.FromControl(this).WorkingArea.Width - frmMP.Width;
+
+                frmMP.Show(this);
+            }
+
+            frmMP.Visible = true;
+            frmMP.WindowState = FormWindowState.Normal;
+        }
+
+        private void openLogFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\ASCOM";
+
+            System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(path);
+            System.IO.DirectoryInfo[] dirs = di.GetDirectories("Logs *").OrderByDescending(x => x.LastWriteTime).ToArray();
+            if (dirs.Length > 0)
+                Process.Start(dirs[0].FullName);
+            else
+                Process.Start(path);
+        }
+
+        private void rebootGeminiAndForceAColdStartToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (GeminiHardware.Instance.Connected)
+            {
+                DialogResult res = MessageBox.Show("Do you really want to Cold Start Gemini?", "Telescope Cold Start", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if (res == DialogResult.Yes)
+                {
+
+                    this.UseWaitCursor = true;
+                    Speech.SayIt(Resources.RebootColdStart, Speech.SpeechType.Command);
+                    GeminiHardware.Instance.DoCommand(">65533:", false);
+                    //                GeminiHardware.Instance.DoCommand(":hP", false);
+                    this.UseWaitCursor = false;
+                }
+            }
+
+        }
+
+
+        frmErrors errorForm = null;
+     
+        private void viewErrorsMessagesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (errorForm == null)
+            {
+                errorForm = new frmErrors();
+                errorForm.err = GeminiHardware.Instance.m_AllErrors;
+                errorForm.Show(this);
+            }
+            else
+            {
+                errorForm.err = GeminiHardware.Instance.m_AllErrors;
+                errorForm.Visible = true;
+            }
+        }
 
         private void picButtons_MouseDown(object sender, MouseEventArgs e)
         {
